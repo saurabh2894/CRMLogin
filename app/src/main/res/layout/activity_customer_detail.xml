@@ -17,7 +17,7 @@
         android:id="@+id/MobileNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number" />
+        android:inputType="phone" />
 
 <EditText
     android:layout_width="match_parent"

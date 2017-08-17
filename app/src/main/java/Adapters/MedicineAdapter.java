@@ -28,11 +28,13 @@ import Model.MedicineDetail;
 public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MyViewHolder> {
 
         private ArrayList<MedicineDetail> medicineList;
+        public EditText MName, MQuantity;
+        public String MName_value,MQuantity_value;
+
 
         public MedicineAdapter(ArrayList<MedicineDetail> medicineList) {
-            //medicineList= new ArrayList<RetrieveItem>(medicineList.length);
-        this.medicineList = medicineList;
-        Log.d("mytag",medicineList.size()+"");
+                   this.medicineList = medicineList;
+                   Log.d("mytag",medicineList.size()+"");
         }
 
 
@@ -41,16 +43,12 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MyView
 
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public EditText MName, MQuantity;
-            public String MName_value,MQuantity_value;
+
 
             public MyViewHolder(View view) {
                 super(view);
                 MName = (EditText) view.findViewById(R.id.MName);
                 MQuantity = (EditText) view.findViewById(R.id.MQuantity);
-
-                MName_value= MName.getText().toString();
-                MQuantity_value=MQuantity.getText().toString();
 
             }
         }
@@ -75,12 +73,24 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MyView
             //holder.MQuantity.setText(medicineDetail.getMQuantity()+"");
 
         }
+        public MedicineDetail getData()
+        {
+            MName_value= MName.getText().toString();
+            MQuantity_value=MQuantity.getText().toString();
+            if(!MName_value.isEmpty())
+            {
+                MName.setEnabled(false);
+                MQuantity.setEnabled(false);
+            }
+            MedicineDetail detail = new MedicineDetail(MName_value,Integer.parseInt(MQuantity_value));
+            return detail;
 
+        }
 
         @Override
         public int getItemCount()
         {
-            return medicineList.size();
+            return medicineList.size()+1;
         }
 
 
