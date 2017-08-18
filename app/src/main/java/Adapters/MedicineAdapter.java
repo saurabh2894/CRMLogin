@@ -28,8 +28,6 @@ import Model.MedicineDetail;
 public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MyViewHolder> {
 
         private ArrayList<MedicineDetail> medicineList;
-        public EditText MName, MQuantity;
-        public String MName_value,MQuantity_value;
 
 
         public MedicineAdapter(ArrayList<MedicineDetail> medicineList) {
@@ -43,12 +41,12 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MyView
 
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-
+            public TextView MName, MQuantity;
 
             public MyViewHolder(View view) {
                 super(view);
-                MName = (EditText) view.findViewById(R.id.MName);
-                MQuantity = (EditText) view.findViewById(R.id.MQuantity);
+                MName = (TextView) view.findViewById(R.id.MName);
+                MQuantity = (TextView) view.findViewById(R.id.MQuantity);
 
             }
         }
@@ -68,29 +66,16 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MyView
         public void onBindViewHolder(MyViewHolder holder, int position) {
 
 
-            //MedicineDetail medicineDetail = medicineList.get(position);
-            //holder.MName.setText(medicineDetail.getMName());
-            //holder.MQuantity.setText(medicineDetail.getMQuantity()+"");
-
-        }
-        public MedicineDetail getData()
-        {
-            MName_value= MName.getText().toString();
-            MQuantity_value=MQuantity.getText().toString();
-            if(!MName_value.isEmpty())
-            {
-                MName.setEnabled(false);
-                MQuantity.setEnabled(false);
-            }
-            MedicineDetail detail = new MedicineDetail(MName_value,Integer.parseInt(MQuantity_value));
-            return detail;
+            MedicineDetail medicineDetail = medicineList.get(position);
+            holder.MName.setText(medicineDetail.getMName());
+            holder.MQuantity.setText(medicineDetail.getMQuantity()+"");
 
         }
 
         @Override
         public int getItemCount()
         {
-            return medicineList.size()+1;
+            return medicineList.size();
         }
 
 

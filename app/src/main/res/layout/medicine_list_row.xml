@@ -12,7 +12,7 @@
     android:background="?android:attr/selectableItemBackground"
     android:orientation="horizontal">
 
-    <EditText
+    <TextView
         android:id="@+id/MName"
         android:textColor="@color/MName"
         android:textSize="16dp"
@@ -22,7 +22,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content" />
 
-    <EditText
+    <TextView
         android:id="@+id/MQuantity"
         android:layout_below="@id/MQuantity"
         android:layout_marginLeft="20dp"
