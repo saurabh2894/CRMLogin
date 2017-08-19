@@ -52,8 +52,6 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MyView
         }
 
 
-
-
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())

@@ -17,8 +17,6 @@ public class MedicineDetail {
         this.MQuantity = MQuantity;
 
     }
-
-
     public String getMName() {
         return MName;
     }
