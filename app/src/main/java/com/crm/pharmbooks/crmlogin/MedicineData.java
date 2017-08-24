@@ -96,18 +96,20 @@ public class MedicineData extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                MedicineDetail medicineDetail = medicineDetailList.get(position);
 
 
-                CustomDialogClass cdd=new CustomDialogClass(MedicineData.this);
+
+                CustomDialogClass cdd=new CustomDialogClass(position,MedicineData.this);
                 cdd.show();
+                if(cdd.isShowing()) {
+                    Log.d("mytag","lol");
+
+
+                }
 
 
 
-
-
-
-                Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -161,6 +163,16 @@ public class MedicineData extends AppCompatActivity {
 
     }
 
+
+    public void lol(int position)
+    {
+        MedicineDetail detail = null;
+        String name = detail.getMName();
+        Integer number = detail.getMQuantity();
+
+        medicineDetailList.add(position, new MedicineDetail(name, number));
+        mAdapter.notifyDataSetChanged();
+    }
     public void sendR() {
         String url = "https://pharmcrm.herokuapp.com/api/save/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
