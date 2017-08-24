@@ -25,13 +25,13 @@ import java.util.Map;
 
 import static com.crm.pharmbooks.crmlogin.Login.MyPREFERENCES;
 
-public class CustomerDetail extends AppCompatActivity {
+public class TransactionalMessage extends AppCompatActivity {
 
     EditText Name;
     EditText MobileNo;
-    EditText Address;
+    EditText BillAmount;
     Button Next;
-    String Name_var, MobileNo_var, Address_var;
+    String Name_var, MobileNo_var, BillAmount_var;
     int result;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +39,16 @@ public class CustomerDetail extends AppCompatActivity {
         setContentView(R.layout.activity_customer_detail);
         Name = (EditText)findViewById(R.id.Name);
         MobileNo = (EditText) findViewById(R.id.MobileNo);
-        Address = (EditText) findViewById(R.id.Address);
+        BillAmount = (EditText) findViewById(R.id.BillAmount);
         Next = (Button) findViewById(R.id.Next);
 
-       Next.setOnClickListener(new View.OnClickListener() {
+        Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Name_var = Name.getText().toString();
                 MobileNo_var = MobileNo.getText().toString();
-                Address_var = Address.getText().toString();
-                sendR(Name_var, MobileNo_var, Address_var);
+                BillAmount_var = BillAmount.getText().toString();
+                sendR(Name_var, MobileNo_var, BillAmount_var);
 
             }
         });
@@ -58,7 +58,7 @@ public class CustomerDetail extends AppCompatActivity {
 
 
 
-    public void sendR(final String Name_var, final String MobileNo_var, final String Address_var){
+    public void sendR(final String Name_var, final String MobileNo_var, final String BillAmount_var){
 
 
         String url = "https://pharmcrm.herokuapp.com/api/save/";
@@ -75,27 +75,27 @@ public class CustomerDetail extends AppCompatActivity {
                             if(result == 1)
                             {
 
-                                SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                //SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                                //SharedPreferences.Editor editor = sharedpreferences.edit();
 
-                                editor.putString("Name", String.valueOf(Name));
-                                editor.commit();
+                                //editor.putString("Name", String.valueOf(Name));
+                                //editor.commit();
 
-                                Intent i = new Intent(getApplicationContext(),MedicineData.class);
-                                startActivity(i);
+                                //Intent i = new Intent(getApplicationContext(),MedicineData.class);
+                                //startActivity(i);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(CustomerDetail.this,response,Toast.LENGTH_LONG).show();
-                        Toast.makeText(CustomerDetail.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
+                        Toast.makeText(TransactionalMessage.this,response,Toast.LENGTH_LONG).show();
+                        Toast.makeText(TransactionalMessage.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(CustomerDetail.this,error.toString(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(TransactionalMessage.this,error.toString(),Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
@@ -103,7 +103,7 @@ public class CustomerDetail extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("Cname",Name_var);
                 params.put("Cnumber",MobileNo_var);
-                params.put("Cadd",Address_var);
+                params.put("Camt",BillAmount_var);
 
                 return params;
             }
@@ -115,5 +115,4 @@ public class CustomerDetail extends AppCompatActivity {
 
     }
 
-    }
-
+}

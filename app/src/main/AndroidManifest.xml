@@ -23,7 +23,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".CustomerDetail" />
-        <activity android:name=".MedicineData"></activity>
+        <activity android:name=".MedicineData" />
+        <activity android:name=".DashBoard" />
+        <activity android:name=".TransactionalMessage"></activity>
     </application>
 
 </manifest>
