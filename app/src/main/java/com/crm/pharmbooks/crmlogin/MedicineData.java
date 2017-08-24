@@ -96,24 +96,6 @@ public class MedicineData extends AppCompatActivity {
 
         });*/
     }
-    /*public static ArrayList<MedicineDetail> getListdata() {
-        JSONObject responseDetailsJSON = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
-        //HashMap<String,Integer> medicineMap = new HashMap<?,?>();
-
-        ArrayList<MedicineDetail> medicineList = new Vector<MedicineDetail>(medicineMap.keySet().size());
-
-        for(MedicineDetail key: medicineMap.keySet()) {
-            medicineList.add(key);
-            JSONObject medicineDetailsJSON = new JSONObject();
-            medicineDetailsJSON.key.getMName();
-            medicineDetailsJSON.key.getMQuantity();
-            jsonArray.add(medicineDetailsJSON);
-        }
-        responseDetailsJSON.put("medicine",jsonArray);
-        return medicineList;
-
-    }*/
 
 
     public JSONObject getJsonFromMyFormObject(ArrayList<MedicineDetail> medicineDetailList) throws JSONException {
