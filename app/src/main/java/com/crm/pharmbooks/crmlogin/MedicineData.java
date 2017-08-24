@@ -1,6 +1,9 @@
 package com.crm.pharmbooks.crmlogin;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
@@ -12,13 +15,16 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -39,6 +45,8 @@ import java.util.Vector;
 
 import Adapters.MedicineAdapter;
 import Model.MedicineDetail;
+
+import static android.R.id.message;
 
 
 public class MedicineData extends AppCompatActivity {
@@ -71,14 +79,43 @@ public class MedicineData extends AppCompatActivity {
         });
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mAdapter = new MedicineAdapter(medicineDetailList);
+
+        recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
+
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        // set the adapter
         recyclerView.setAdapter(mAdapter);
 
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                MedicineDetail medicineDetail = medicineDetailList.get(position);
+
+
+                CustomDialogClass cdd=new CustomDialogClass(MedicineData.this);
+                cdd.show();
+
+
+
+
+
+
+                Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+              //Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
+
+            }
+        }));
 
         /*fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

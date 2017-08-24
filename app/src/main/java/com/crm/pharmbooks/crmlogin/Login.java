@@ -69,7 +69,7 @@ public class Login extends AppCompatActivity {
                             res = object.getInt("res");
                             if(res == 1)
                             {
-                                Intent i = new Intent(getApplicationContext(),CustomerDetail.class);
+                                Intent i = new Intent(getApplicationContext(),MedicineData.class);
                                 startActivity(i);
                                 SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedpreferences.edit();
