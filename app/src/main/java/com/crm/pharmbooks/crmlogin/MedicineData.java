@@ -53,7 +53,7 @@ public class MedicineData extends AppCompatActivity {
     private ArrayList<MedicineDetail> medicineDetailList = new ArrayList<>();
     private RecyclerView recyclerView;
     private MedicineAdapter mAdapter;
-    private FloatingActionButton fab;
+    //private FloatingActionButton fab;
     private EditText MedicineName, MedicineQuantity;
     private Button addButton;
     String MedicineName_value,MedicineQuantity_value;
@@ -64,7 +64,7 @@ public class MedicineData extends AppCompatActivity {
         setContentView(R.layout.activity_medicine_data);
         MedicineName = (EditText)findViewById(R.id.MedicineName);
         MedicineQuantity = (EditText) findViewById(R.id.MedicineQuantity);
-        addButton = (Button) findViewById(R.id.addButtonId);
+        addButton = (Button) findViewById(R.id.addButton);
 
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +103,6 @@ public class MedicineData extends AppCompatActivity {
                 cdd.show();
                 if(cdd.isShowing()) {
                     Log.d("mytag","lol");
-
 
                 }
 
@@ -173,6 +172,9 @@ public class MedicineData extends AppCompatActivity {
         medicineDetailList.add(position, new MedicineDetail(name, number));
         mAdapter.notifyDataSetChanged();
     }
+
+
+
     public void sendR() {
         String url = "https://pharmcrm.herokuapp.com/api/save/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,

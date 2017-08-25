@@ -3,11 +3,15 @@ package com.crm.pharmbooks.crmlogin;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+
+import Adapters.MedicineAdapter;
 import Model.MedicineDetail;
 
 /**
@@ -22,7 +26,12 @@ public class CustomDialogClass extends Dialog implements
     public int position;
     public Button yes, no;
     public EditText MedicineName,MedicineQuantity;
-    String var_name, var_quantity;
+    String MedicineName_value,MedicineQuantity_value;
+    private MedicineAdapter mAdapter;
+    private ArrayList<MedicineDetail> medicineDetailList = new ArrayList<>();
+
+
+
 
     public CustomDialogClass(int position,Activity a) {
         super(a);
@@ -54,11 +63,27 @@ public class CustomDialogClass extends Dialog implements
         switch (v.getId()) {
             case R.id.btn_yes:
             {
-                var_name = MedicineName.getText().toString();
+                /*var_name = MedicineName.getText().toString();
                 var_quantity = MedicineQuantity.getText().toString();
-                MedicineDetail detail = new MedicineDetail(var_name,Integer.parseInt(var_quantity));
-                MedicineData.
+                MedicineDetail detail = new MedicineDetail(var_name,Integer.parseInt(var_quantity));*/
+                mAdapter = new MedicineAdapter(medicineDetailList);
+
+                MedicineName_value = MedicineName.getText().toString();
+                MedicineQuantity_value = MedicineQuantity.getText().toString();
+
+
+                MedicineDetail detail = new MedicineDetail(MedicineName_value,Integer.parseInt(MedicineQuantity_value));
+                String name = detail.getMName();
+                Integer number = detail.getMQuantity();
+                //medicineDetailList.add(detail);
+
+
+
+                medicineDetailList.add(this.position, new MedicineDetail(name, number));
+
+                mAdapter.notifyDataSetChanged();
                 //sendData(var_name,Integer.parseInt(var_quantity));
+                Log.d("tag","yo");
 
                 break;}
             case R.id.btn_no:
