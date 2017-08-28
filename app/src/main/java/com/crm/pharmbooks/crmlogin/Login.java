@@ -69,7 +69,10 @@ public class Login extends AppCompatActivity {
                             res = object.getInt("res");
                             if(res == 1)
                             {
-                                Intent i = new Intent(getApplicationContext(),MedicineData.class);
+                                /*
+                                Changing the intent to start the MainActivity after Successful login
+                                */
+                                Intent i = new Intent(getApplicationContext(),MainActivity.class);
                                 startActivity(i);
                                 SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedpreferences.edit();

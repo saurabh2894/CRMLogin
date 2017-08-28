@@ -1,11 +1,15 @@
 package com.crm.pharmbooks.crmlogin;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,7 +29,7 @@ import java.util.Map;
 
 import static com.crm.pharmbooks.crmlogin.Login.MyPREFERENCES;
 
-public class TransactionalMessage extends AppCompatActivity {
+public class TransactionalMessage extends android.support.v4.app.Fragment {
 
     EditText Name;
     EditText MobileNo;
@@ -33,14 +37,22 @@ public class TransactionalMessage extends AppCompatActivity {
     Button Next;
     String Name_var, MobileNo_var, BillAmount_var;
     int result;
+    private OnFragmentInteractionListener mListener;
+
+    public TransactionalMessage() {
+        // Required empty public constructor
+    }
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_detail);
-        Name = (EditText)findViewById(R.id.Name);
-        MobileNo = (EditText) findViewById(R.id.MobileNo);
-        BillAmount = (EditText) findViewById(R.id.BillAmount);
-        Next = (Button) findViewById(R.id.Next);
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        Name = (EditText) getView().findViewById(R.id.Name);
+        MobileNo = (EditText) getView().findViewById(R.id.MobileNo);
+        BillAmount = (EditText) getView().findViewById(R.id.BillAmount);
+        Next = (Button) getView().findViewById(R.id.Next);
 
         Next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,9 +65,31 @@ public class TransactionalMessage extends AppCompatActivity {
             }
         });
 
-
+        return inflater.inflate(R.layout.activity_dash_board, container, false);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+
+    public interface OnFragmentInteractionListener {
+
+        void onFragmentInteraction(Uri uri);
+    }
+
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
 
 
     public void sendR(final String Name_var, final String MobileNo_var, final String BillAmount_var){
@@ -87,15 +121,15 @@ public class TransactionalMessage extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(TransactionalMessage.this,response,Toast.LENGTH_LONG).show();
-                        Toast.makeText(TransactionalMessage.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(),response,Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(),msg+""+ result +"",Toast.LENGTH_LONG).show();
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(TransactionalMessage.this,error.toString(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(),error.toString(),Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
@@ -110,7 +144,7 @@ public class TransactionalMessage extends AppCompatActivity {
 
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
 
     }

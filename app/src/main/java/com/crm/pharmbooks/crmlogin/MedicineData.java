@@ -2,10 +2,12 @@ package com.crm.pharmbooks.crmlogin;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,10 +19,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,23 +53,32 @@ import Model.MedicineDetail;
 import static android.R.id.message;
 
 
-public class MedicineData extends AppCompatActivity {
+public class MedicineData extends android.support.v4.app.Fragment {
     private ArrayList<MedicineDetail> medicineDetailList = new ArrayList<>();
     private RecyclerView recyclerView;
     private MedicineAdapter mAdapter;
-    //private FloatingActionButton fab;
+    private FloatingActionButton fab;
     private EditText MedicineName, MedicineQuantity;
     private Button addButton;
     String MedicineName_value,MedicineQuantity_value;
+    private OnFragmentInteractionListener mListener;
+
+    public MedicineData() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_medicine_data);
-        MedicineName = (EditText)findViewById(R.id.MedicineName);
-        MedicineQuantity = (EditText) findViewById(R.id.MedicineQuantity);
-        addButton = (Button) findViewById(R.id.addButton);
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+
+        MedicineName = (EditText) getView().findViewById(R.id.MedicineName);
+        MedicineQuantity = (EditText) getView().findViewById(R.id.MedicineQuantity);
+        addButton = (Button) getView().findViewById(R.id.addButton);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,29 +93,30 @@ public class MedicineData extends AppCompatActivity {
 
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
         mAdapter = new MedicineAdapter(medicineDetailList);
 
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
 
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         // set the adapter
         recyclerView.setAdapter(mAdapter);
 
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
 
 
 
-                CustomDialogClass cdd=new CustomDialogClass(position,MedicineData.this);
+                CustomDialogClass cdd=new CustomDialogClass(position,getActivity());
                 cdd.show();
                 if(cdd.isShowing()) {
                     Log.d("mytag","lol");
+
 
                 }
 
@@ -133,6 +147,7 @@ public class MedicineData extends AppCompatActivity {
             }
 
         });*/
+        return inflater.inflate(R.layout.activity_medicine_data, container, false);
     }
 
 
@@ -173,8 +188,29 @@ public class MedicineData extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
     }
 
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
 
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+
+    public interface OnFragmentInteractionListener {
+
+        void onFragmentInteraction(Uri uri);
+    }
     public void sendR() {
         String url = "https://pharmcrm.herokuapp.com/api/save/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -197,7 +233,7 @@ public class MedicineData extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(MedicineData.this,response,Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(),response,Toast.LENGTH_LONG).show();
                         //Toast.makeText(MedicineData.this,msg+""+ res +"",Toast.LENGTH_LONG).show();
 
                     }
@@ -205,7 +241,7 @@ public class MedicineData extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MedicineData.this,error.toString(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(),error.toString(),Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
@@ -225,29 +261,24 @@ public class MedicineData extends AppCompatActivity {
             }
 
         };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
 
     }
 
 
-
-
-
-
-
-    @Override
+   /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
 
-        ActionBar actionBar = getSupportActionBar();;
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.medicinedetailactionbar, menu);
         return true;
     }
-
+*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //Handle action bar item clicks here. The action bar will
