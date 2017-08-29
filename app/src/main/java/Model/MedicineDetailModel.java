@@ -6,13 +6,13 @@ package Model;
 
 
 
-public class MedicineDetail {
+public class MedicineDetailModel {
     private String MName;
     private int MQuantity;
 
 
 
-    public MedicineDetail(String MName, int MQuantity) {
+    public MedicineDetailModel(String MName, int MQuantity) {
         this.MName = MName;
         this.MQuantity = MQuantity;
 

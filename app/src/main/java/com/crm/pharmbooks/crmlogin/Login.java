@@ -10,9 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -72,11 +74,11 @@ public class Login extends AppCompatActivity {
                                 /*
                                 Changing the intent to start the MainActivity after Successful login
                                 */
-                                Intent i = new Intent(getApplicationContext(),MainActivity.class);
-                                startActivity(i);
-                                SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedpreferences.edit();
-
+                               // Intent i = new Intent(getApplicationContext(),TransactionalMessage.class);
+                               // startActivity(i);
+                                //SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                                //SharedPreferences.Editor editor = sharedpreferences.edit();
+                                SharedPreferences.Editor editor = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE).edit();
                                 editor.putString("username", String.valueOf(username));
                                 editor.commit();
 
@@ -94,7 +96,12 @@ public class Login extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(Login.this,error.toString(),Toast.LENGTH_LONG).show();
                     }
-                }){
+                })
+
+
+
+
+        {
             @Override
             protected Map<String,String> getParams(){
                 Map<String, String> params = new HashMap<>();
@@ -105,6 +112,12 @@ public class Login extends AppCompatActivity {
             }
 
         };
+
+        int MY_SOCKET_TIMEOUT_MS = 50000;
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);

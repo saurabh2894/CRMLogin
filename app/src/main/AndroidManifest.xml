@@ -16,6 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,8 +25,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".CustomerDetail" />
+        <activity android:name=".Login">
 
-        <activity android:name=".Login"></activity>
+        </activity>
+        <activity android:name=".ExistingRefills"></activity>
     </application>
 
 </manifest>

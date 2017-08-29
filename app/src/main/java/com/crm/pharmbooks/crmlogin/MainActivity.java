@@ -91,11 +91,11 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.commitAllowingStateLoss();
         } else if (id == R.id.nav_refill) {
             getSupportActionBar().setTitle("Medicine Data");
-            Fragment fragment = new MedicineData();
+            //Fragment fragment = new MedicineData();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                     android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, fragment, "Medicine Data");
+            //fragmentTransaction.replace(R.id.frame, fragment, "Medicine Data");
             fragmentTransaction.commitAllowingStateLoss();
 
         } else if (id == R.id.nav_promotion) {

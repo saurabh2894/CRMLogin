@@ -7,22 +7,24 @@
 
 
     <EditText
+        android:id="@+id/Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/Name"/>
+        android:hint="Name" />
 
     <EditText
         android:id="@+id/MobileNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Mobile No"
         android:inputType="phone" />
 
     <EditText
+        android:id="@+id/BillAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/BillAmount"
-        android:inputType="number"
-        />
+        android:hint="Bill Amount"
+        android:inputType="number" />
 
     <Button
         android:layout_width="match_parent"

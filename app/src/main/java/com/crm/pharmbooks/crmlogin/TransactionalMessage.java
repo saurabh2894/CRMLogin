@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.crm.pharmbooks.crmlogin.Login.MyPREFERENCES;
 
 public class TransactionalMessage extends android.support.v4.app.Fragment {
@@ -37,6 +38,7 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
     Button Next;
     String Name_var, MobileNo_var, BillAmount_var;
     int result;
+    String name;
     private OnFragmentInteractionListener mListener;
 
     public TransactionalMessage() {
@@ -49,10 +51,19 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Name = (EditText) getView().findViewById(R.id.Name);
-        MobileNo = (EditText) getView().findViewById(R.id.MobileNo);
-        BillAmount = (EditText) getView().findViewById(R.id.BillAmount);
-        Next = (Button) getView().findViewById(R.id.Next);
+        SharedPreferences sharedpreferences = this.getActivity().getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
+        String restoredText = sharedpreferences.getString("username", null);
+        if (restoredText != null) {
+            name = sharedpreferences.getString("username", "No name defined");//"No name defined" is the default value.
+        }
+
+
+
+        View view = inflater.inflate(R.layout.activity_transactional_message, container, false);
+        Name = (EditText) view.findViewById(R.id.Name);
+        MobileNo = (EditText) view.findViewById(R.id.MobileNo);
+        BillAmount = (EditText) view.findViewById(R.id.BillAmount);
+        Next = (Button) view.findViewById(R.id.Next);
 
         Next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +76,7 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
             }
         });
 
-        return inflater.inflate(R.layout.activity_dash_board, container, false);
+        return view;
     }
 
     @Override
@@ -95,7 +106,7 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
     public void sendR(final String Name_var, final String MobileNo_var, final String BillAmount_var){
 
 
-        String url = "https://pharmcrm.herokuapp.com/api/save/";
+        String url = "https://pharmcrm.herokuapp.com/api/transactional/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -134,13 +145,22 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
                 }){
             @Override
             protected Map<String,String> getParams(){
+
+
+
+
                 Map<String, String> params = new HashMap<>();
-                params.put("Cname",Name_var);
-                params.put("Cnumber",MobileNo_var);
-                params.put("Camt",BillAmount_var);
+                params.put("name",Name_var);
+                params.put("number",MobileNo_var);
+                params.put("amount",BillAmount_var);
+                params.put("chemist",name);
+
 
                 return params;
             }
+
+
+
 
         };
 
@@ -148,5 +168,7 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
         requestQueue.add(stringRequest);
 
     }
+
+
 
 }

@@ -1,14 +1,7 @@
 package com.crm.pharmbooks.crmlogin;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.Fragment;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,18 +10,14 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -45,84 +34,145 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 import Adapters.MedicineAdapter;
-import Model.MedicineDetail;
-
-import static android.R.id.message;
+import Model.MedicineDetailModel;
 
 
-public class MedicineData extends android.support.v4.app.Fragment {
-    private ArrayList<MedicineDetail> medicineDetailList = new ArrayList<>();
+public class MedicineData extends AppCompatActivity {
+    private ArrayList<MedicineDetailModel> medicineDetailModelList = new ArrayList<>();
     private RecyclerView recyclerView;
     private MedicineAdapter mAdapter;
-    private FloatingActionButton fab;
+    //private FloatingActionButton fab;
     private EditText MedicineName, MedicineQuantity;
+    private EditText MedicineNameDialogBox,MedicineQuantityDialogBox;
     private Button addButton;
     String MedicineName_value,MedicineQuantity_value;
-    private OnFragmentInteractionListener mListener;
-
-    public MedicineData() {
-        // Required empty public constructor
-    }
+    String MedicineName_valuedialogbox,MedicineQuantity_valuedialogbox;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_medicine_data);
+        MedicineName = (EditText)findViewById(R.id.MedicineName);
+        MedicineQuantity = (EditText) findViewById(R.id.MedicineQuantity);
+        addButton = (Button) findViewById(R.id.addButton);
 
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
-        MedicineName = (EditText) getView().findViewById(R.id.MedicineName);
-        MedicineQuantity = (EditText) getView().findViewById(R.id.MedicineQuantity);
-        addButton = (Button) getView().findViewById(R.id.addButton);
+
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MedicineName_value = MedicineName.getText().toString();
                 MedicineQuantity_value = MedicineQuantity.getText().toString();
-                MedicineDetail detail = new MedicineDetail(MedicineName_value,Integer.parseInt(MedicineQuantity_value));
-                medicineDetailList.add(detail);
+                MedicineDetailModel detail = new MedicineDetailModel(MedicineName_value,Integer.parseInt(MedicineQuantity_value));
+                medicineDetailModelList.add(detail);
                 mAdapter.notifyDataSetChanged();
             }
         });
 
 
 
-        recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
-        mAdapter = new MedicineAdapter(medicineDetailList);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mAdapter = new MedicineAdapter(medicineDetailModelList);
 
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
 
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         // set the adapter
         recyclerView.setAdapter(mAdapter);
 
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new ClickListener() {
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
             @Override
-            public void onClick(View view, int position) {
+            public void onClick(View view, final int position) {
 
 
 
-                CustomDialogClass cdd=new CustomDialogClass(position,getActivity());
+
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MedicineData.this);
+                // Get the layout inflater
+                LayoutInflater linf = LayoutInflater.from(getApplicationContext());
+                final View inflator = linf.inflate(R.layout.custom_dialogbox, null);
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+
+                // Setting Dialog Title
+                alertDialog.setTitle("Confirm Save...");
+
+                // Setting Dialog Message
+                alertDialog.setMessage("Are you sure you want to update these details?");
+                // Setting Icon to Dialog
+                alertDialog.setIcon(R.drawable.saveicon);
+                alertDialog.setView(inflator);
+
+
+                MedicineNameDialogBox = (EditText) inflator.findViewById(R.id.MedicineNameDialogBox);
+                MedicineQuantityDialogBox = (EditText) inflator.findViewById(R.id.MedicineQuantityDialogBox);
+
+                String name =   medicineDetailModelList.get(position).getMName();
+                String number = medicineDetailModelList.get(position).getMQuantity()+"";
+                MedicineNameDialogBox.setText(name);
+                MedicineQuantityDialogBox.setText(number);
+
+
+
+                // Setting Positive "Yes" Button
+                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int which) {
+
+
+
+                        MedicineName_valuedialogbox = MedicineNameDialogBox.getText().toString();
+                        MedicineQuantity_valuedialogbox = MedicineQuantityDialogBox.getText().toString();
+                        medicineDetailModelList.remove(position);
+
+                        medicineDetailModelList.add(position,new MedicineDetailModel(MedicineName_valuedialogbox,Integer.parseInt(MedicineQuantity_valuedialogbox)));
+                        /*MedicineDetailModel detail = new MedicineDetailModel(MedicineName_value,Integer.parseInt(MedicineQuantity_value));
+                        String name = detail.getMName();
+                        Integer number = detail.getMQuantity();
+                        //medicineDetailModelList.add(detail);
+                        */
+
+
+                        mAdapter.notifyDataSetChanged();
+
+
+                        // Write your code here to invoke YES event
+                        Toast.makeText(getApplicationContext(), "You clicked on YES and added  "+ MedicineName_valuedialogbox, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // Setting Negative "NO" Button
+                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke NO event
+                        Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                });
+
+                // Showing Alert Message
+                //return alertDialog.create();
+                alertDialog.show();
+
+
+
+                /*CustomDialogClass cdd=new CustomDialogClass(position,MedicineData.this);
                 cdd.show();
                 if(cdd.isShowing()) {
-                    Log.d("mytag","lol");
+                    Log.d("mytag","medicine data dialog box call working");
 
+                }*/
 
-                }
-
-
-
-               // Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
+               MedicineDetailModel medicineDetailModel = new MedicineDetailModel(MedicineName_value,Integer.parseInt(MedicineQuantity_value));
+               Toast.makeText(getApplicationContext(), medicineDetailModel.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -139,26 +189,25 @@ public class MedicineData extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View view) {
 
-                MedicineDetail medicineDetail;
+                MedicineDetailModel medicineDetail;
                 medicineDetail = mAdapter.getData();
-                medicineDetailList.add(medicineDetail);
-                Log.d("tag",medicineDetailList.get(medicineDetailList.size()-1).getMName());
+                medicineDetailModelList.add(medicineDetail);
+                Log.d("tag",medicineDetailModelList.get(medicineDetailModelList.size()-1).getMName());
                 mAdapter.notifyDataSetChanged();
             }
 
         });*/
-        return inflater.inflate(R.layout.activity_medicine_data, container, false);
     }
 
 
-    public JSONObject getJsonFromMyFormObject(ArrayList<MedicineDetail> medicineDetailList) throws JSONException {
+    public JSONObject getJsonFromMyFormObject(ArrayList<MedicineDetailModel> medicineDetailModelList) throws JSONException {
         JSONObject responseDetailsJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         try {
-            for (int i = 0; i < medicineDetailList.size(); i++) {
+            for (int i = 0; i < medicineDetailModelList.size(); i++) {
                 JSONObject formDetailsJson = new JSONObject();
-                formDetailsJson.put("medicine_"+(i+1), medicineDetailList.get(i).getMName());
-                formDetailsJson.put("days_"+(i+1), String.valueOf(medicineDetailList.get(i).getMQuantity()));
+                formDetailsJson.put("medicine_"+(i+1), medicineDetailModelList.get(i).getMName());
+                formDetailsJson.put("days_"+(i+1), String.valueOf(medicineDetailModelList.get(i).getMQuantity()));
 
                 jsonArray.put(formDetailsJson);
 
@@ -169,7 +218,7 @@ public class MedicineData extends android.support.v4.app.Fragment {
         catch (JSONException e) {
             e.printStackTrace();
         }
-        responseDetailsJson.put("medicineDetailList", jsonArray);
+        responseDetailsJson.put("medicineDetailModelList", jsonArray);
 
         Log.d("mytag",responseDetailsJson+"");
         return responseDetailsJson;
@@ -178,39 +227,10 @@ public class MedicineData extends android.support.v4.app.Fragment {
     }
 
 
-    public void lol(int position)
-    {
-        MedicineDetail detail = null;
-        String name = detail.getMName();
-        Integer number = detail.getMQuantity();
-
-        medicineDetailList.add(position, new MedicineDetail(name, number));
-        mAdapter.notifyDataSetChanged();
-    }
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
 
-    public interface OnFragmentInteractionListener {
-
-        void onFragmentInteraction(Uri uri);
-    }
     public void sendR() {
         String url = "https://pharmcrm.herokuapp.com/api/save/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -233,7 +253,7 @@ public class MedicineData extends android.support.v4.app.Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(getActivity().getApplicationContext(),response,Toast.LENGTH_LONG).show();
+                        Toast.makeText(MedicineData.this,response,Toast.LENGTH_LONG).show();
                         //Toast.makeText(MedicineData.this,msg+""+ res +"",Toast.LENGTH_LONG).show();
 
                     }
@@ -241,7 +261,7 @@ public class MedicineData extends android.support.v4.app.Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getActivity().getApplicationContext(),error.toString(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(MedicineData.this,error.toString(),Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
@@ -251,8 +271,8 @@ public class MedicineData extends android.support.v4.app.Fragment {
                 params.put("Cname","manya");
                 params.put("Cnumber","9898876545");
                 params.put("Cadd","delhi");
-                params.put("counter",String.valueOf(medicineDetailList.size()));
-                params.put("data",getJsonFromMyFormObject(medicineDetailList)+"");
+                params.put("counter",String.valueOf(medicineDetailModelList.size()));
+                params.put("data",getJsonFromMyFormObject(medicineDetailModelList)+"");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -261,24 +281,29 @@ public class MedicineData extends android.support.v4.app.Fragment {
             }
 
         };
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
     }
 
 
-   /* @Override
+
+
+
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
 
-        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();;
+        ActionBar actionBar = getSupportActionBar();;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        MenuInflater inflater = getActivity().getMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.medicinedetailactionbar, menu);
         return true;
     }
-*/
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //Handle action bar item clicks here. The action bar will
@@ -289,11 +314,11 @@ public class MedicineData extends android.support.v4.app.Fragment {
         //noinspection SimplifiableIfStatement
         if (id == R.id.saveIcon) {
 
-            Log.d("mtag","hello");
+            Log.d("mtag","save icon call working");
             sendR();
             /*JSONObject json = null;
             try {
-                json = getJsonFromMyFormObject(medicineDetailList);
+                json = getJsonFromMyFormObject(medicineDetailModelList);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
