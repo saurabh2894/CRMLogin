@@ -70,15 +70,18 @@ public class MedicineData extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("mytag","In Medicine");
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
-        MedicineName = (EditText) getView().findViewById(R.id.MedicineName);
-        MedicineQuantity = (EditText) getView().findViewById(R.id.MedicineQuantity);
-        addButton = (Button) getView().findViewById(R.id.addButton);
+        Log.i("mytag","In Medicine");
+        View rootView = inflater.inflate(R.layout.activity_medicine_data, container, false);
+        MedicineName = (EditText) rootView.findViewById(R.id.MedicineName);
+        MedicineQuantity = (EditText) rootView.findViewById(R.id.MedicineQuantity);
+        addButton = (Button) rootView.findViewById(R.id.addButton);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +96,7 @@ public class MedicineData extends android.support.v4.app.Fragment {
 
 
 
-        recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mAdapter = new MedicineAdapter(medicineDetailList);
 
         recyclerView.setHasFixedSize(true);
@@ -147,7 +150,7 @@ public class MedicineData extends android.support.v4.app.Fragment {
             }
 
         });*/
-        return inflater.inflate(R.layout.activity_medicine_data, container, false);
+        return rootView;
     }
 
 
@@ -193,6 +196,7 @@ public class MedicineData extends android.support.v4.app.Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
 
 
     @Override

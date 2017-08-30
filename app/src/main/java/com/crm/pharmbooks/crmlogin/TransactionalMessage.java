@@ -49,10 +49,11 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Name = (EditText) getView().findViewById(R.id.Name);
-        MobileNo = (EditText) getView().findViewById(R.id.MobileNo);
-        BillAmount = (EditText) getView().findViewById(R.id.BillAmount);
-        Next = (Button) getView().findViewById(R.id.Next);
+        View rootView = inflater.inflate(R.layout.activity_dash_board, container, false);
+        Name = (EditText) rootView.findViewById(R.id.Name);
+        MobileNo = (EditText) rootView.findViewById(R.id.MobileNo);
+        BillAmount = (EditText) rootView.findViewById(R.id.BillAmount);
+        Next = (Button) rootView.findViewById(R.id.Next);
 
         Next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +66,7 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
             }
         });
 
-        return inflater.inflate(R.layout.activity_dash_board, container, false);
+        return rootView;
     }
 
     @Override

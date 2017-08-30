@@ -35,7 +35,8 @@ import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,DashBoard.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,DashBoard.OnFragmentInteractionListener,
+        NewFragment.OnFragmentInteractionListener{
 
     DrawerLayout drawer;
     @Override
@@ -90,12 +91,12 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.frame, fragment, "DashBoard");
             fragmentTransaction.commitAllowingStateLoss();
         } else if (id == R.id.nav_refill) {
-            getSupportActionBar().setTitle("Medicine Data");
-            Fragment fragment = new MedicineData();
+            getSupportActionBar().setTitle("Refill");
+            Fragment fragment = NewFragment.newInstance();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                     android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, fragment, "Medicine Data");
+            fragmentTransaction.replace(R.id.frame, fragment, "New Fragment");
             fragmentTransaction.commitAllowingStateLoss();
 
         } else if (id == R.id.nav_promotion) {
@@ -117,5 +118,7 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+
 }
 
