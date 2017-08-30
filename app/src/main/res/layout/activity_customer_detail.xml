@@ -9,21 +9,23 @@
 
 
     <EditText
+        android:id="@+id/Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/Name"/>
+        android:hint="Enter Name" />
 
     <EditText
         android:id="@+id/MobileNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Mobile No"
         android:inputType="phone" />
 
-<EditText
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/Address"
-    />
+    <EditText
+        android:id="@+id/Address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Address" />
 
 <Button
     android:layout_width="match_parent"

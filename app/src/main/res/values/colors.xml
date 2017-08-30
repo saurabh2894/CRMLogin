@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="MName">#999999</color>
+    <color name="CustomerName">#999999</color>
     <color name="MQuantity">#222222</color>
 </resources>

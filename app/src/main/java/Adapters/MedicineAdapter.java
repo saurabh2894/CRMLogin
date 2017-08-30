@@ -5,32 +5,26 @@ package Adapters;
  */
 
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.crm.pharmbooks.crmlogin.R;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.ArrayList;
 
-import java.util.Scanner;
-
-import Model.MedicineDetail;
+import Model.MedicineDetailModel;
 
 
 public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MyViewHolder> {
 
-        private ArrayList<MedicineDetail> medicineList;
+        private ArrayList<MedicineDetailModel> medicineList;
 
 
-        public MedicineAdapter(ArrayList<MedicineDetail> medicineList) {
+        public MedicineAdapter(ArrayList<MedicineDetailModel> medicineList) {
                    this.medicineList = medicineList;
                    Log.d("mytag",medicineList.size()+"");
         }
@@ -64,9 +58,9 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MyView
         public void onBindViewHolder(MyViewHolder holder, int position) {
 
 
-            MedicineDetail medicineDetail = medicineList.get(position);
-            holder.MName.setText(medicineDetail.getMName());
-            holder.MQuantity.setText(medicineDetail.getMQuantity()+"");
+            MedicineDetailModel medicineDetailModel = medicineList.get(position);
+            holder.MName.setText(medicineDetailModel.getMName());
+            holder.MQuantity.setText(medicineDetailModel.getMQuantity()+"");
 
         }
 
