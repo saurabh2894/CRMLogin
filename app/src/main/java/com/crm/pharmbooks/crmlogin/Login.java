@@ -74,12 +74,12 @@ public class Login extends AppCompatActivity {
                                 /*
                                 Changing the intent to start the MainActivity after Successful login
                                 */
-                               // Intent i = new Intent(getApplicationContext(),TransactionalMessage.class);
-                               // startActivity(i);
+                               Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                               startActivity(i);
                                 //SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                                 //SharedPreferences.Editor editor = sharedpreferences.edit();
                                 SharedPreferences.Editor editor = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE).edit();
-                                editor.putString("username", String.valueOf(username));
+                                editor.putString("username", String.valueOf(user_var));
                                 editor.commit();
 
                             }

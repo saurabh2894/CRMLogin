@@ -1,5 +1,6 @@
 package com.crm.pharmbooks.crmlogin;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,18 +29,21 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import static com.crm.pharmbooks.crmlogin.Login.MyPREFERENCES;
 
 import Adapters.CustomerAdapter;
 import Model.*;
 
 public class CustomerNameFetch extends AppCompatActivity {
 
-    private ArrayList<CustomerDetails> customerDetailsList = new ArrayList<>();
+    private ArrayList<CustomerDetailModel> customerDetailsList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private CustomerAdapter mAdapter;
+    private CustomerAdapter cAdapter;
+    private EditText SearchBoxExistingRefill;
     ProgressBar pb;
     TextView txt;
     String name, phone;
+    String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +52,26 @@ public class CustomerNameFetch extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.re);
         pb= (ProgressBar) findViewById(R.id.pb) ;
         txt=(TextView) findViewById(R.id.loadingtxt);
+        SearchBoxExistingRefill = (EditText) findViewById(R.id.SearchBoxExistingRefill);
+        SharedPreferences sharedpreferences = this.getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
+        String restoredText = sharedpreferences.getString("username", null);
+        if (restoredText != null) {
+            username = sharedpreferences.getString("username", "No name defined");//"No name defined" is the default value.
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
         recyclerView.setVisibility(View.GONE);
 
-        mAdapter = new CustomerAdapter(customerDetailsList);
+        cAdapter = new CustomerAdapter(customerDetailsList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
 
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         // set the adapter
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(cAdapter);
         getSupportActionBar().setTitle("Existing Customers");
         String url = "https://pharmcrm.herokuapp.com/api/namedata/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -74,7 +86,7 @@ public class CustomerNameFetch extends AppCompatActivity {
                                 String phone1 = ob1.getString("custmornumber");
                                 Log.v("name",name1);
                                 Log.v("phone",phone1);
-                                CustomerDetails detail = new CustomerDetails(name1,phone1);
+                                CustomerDetailModel detail = new CustomerDetailModel(name1,phone1);
                                 customerDetailsList.add(detail);
                                 makeVisible();
                                 //customerDetailsList.add(new CustomerDetails(name1,phone1));
@@ -85,7 +97,7 @@ public class CustomerNameFetch extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
-                mAdapter.notifyDataSetChanged();
+                cAdapter.notifyDataSetChanged();
                 Log.d("mytag",customerDetailsList.get(1).getCName());
 
             }
@@ -99,7 +111,7 @@ public class CustomerNameFetch extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("chemist", "balkeerat");
+                params.put("chemist", username);
                 return params;
             }
         };

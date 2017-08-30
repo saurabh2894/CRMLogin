@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.crm.pharmbooks.crmlogin.CustomerNameFetch">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -15,7 +19,15 @@
         android:foregroundTint="@android:color/white"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-   <android.support.v7.widget.RecyclerView
+    <EditText
+        android:id="@+id/SearchBoxExistingRefill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter Customer Name"
+        android:inputType="text" />
+
+    <android.support.v7.widget.RecyclerView
        android:id="@+id/re"
        android:layout_width="match_parent"
        android:layout_height="0dp"
@@ -32,4 +44,5 @@
         android:gravity="center_horizontal"
         android:text="Loading"
         android:id="@+id/loadingtxt" />
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

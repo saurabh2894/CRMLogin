@@ -6,19 +6,28 @@ package Model;
 
 public class CustomerDetailModel {
 
-    private String CustomerName;
-
-    public CustomerDetailModel(String CustomerName) {
-        this.CustomerName = CustomerName;
-
+    private String CName;
+    private String CPhone;
+    public CustomerDetailModel(String CName, String CPhone) {
+        this.CName = CName;
+        this.CPhone = CPhone;
 
     }
-    public String getCustomerName() {
-        return CustomerName;
+
+    public String getCName() {
+        return CName;
     }
 
-    public void setCustomerName(String CustomerName) {
-        this.CustomerName = CustomerName;
+    public void setCName(String CName) {
+        this.CName = CName;
+    }
+
+    public void setCPhone(String CPhone) {
+        this.CPhone = CPhone;
+    }
+
+    public String getCPhone() {
+        return CPhone;
     }
 
 }

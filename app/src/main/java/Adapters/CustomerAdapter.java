@@ -1,6 +1,5 @@
 package Adapters;
 
-
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,62 +11,64 @@ import com.crm.pharmbooks.crmlogin.R;
 
 import java.util.ArrayList;
 
-import Model.CustomerDetails;
-import Model.MedicineDetail;
+import Model.CustomerDetailModel;
 
+/**
+ * Created by Dell on 28-Aug-17.
+ */
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyViewHolder> {
 
-        private ArrayList<CustomerDetails> customerList;
+    private ArrayList<CustomerDetailModel> customerList;
 
 
-        public CustomerAdapter(ArrayList<CustomerDetails> customerList) {
-                   this.customerList = customerList;
+    public CustomerAdapter(ArrayList<CustomerDetailModel> customerList) {
+        this.customerList = customerList;
+        Log.d("mytag",customerList.size()+"");
+    }
+
+
+
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView CName;
+        public TextView CPhone;
+        public MyViewHolder(View view) {
+            super(view);
+            CName = (TextView) view.findViewById(R.id.CName);
+            CPhone= (TextView) view.findViewById(R.id.CPhone);
+
 
         }
+    }
 
 
+    @Override
+    public CustomerAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.customer_list_row, parent, false);
+
+        return new CustomerAdapter.MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(CustomerAdapter.MyViewHolder holder, int position) {
 
 
-
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView CName,CPhone;
-
-            public MyViewHolder(View view) {
-                super(view);
-                CName = (TextView) view.findViewById(R.id.cus_name);
-                CPhone = (TextView) view.findViewById(R.id.cus_phone);
-
-            }
-        }
-
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.customer_name_entry, parent, false);
-
-            return new MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-
-
-            CustomerDetails customerDetails = customerList.get(position);
-            holder.CName.setText(customerDetails.getCName());
-            holder.CPhone.setText(customerDetails.getCPhone());
-
-        }
-
-        @Override
-        public int getItemCount()
-        {
-            return customerList.size();
-        }
+        CustomerDetailModel customerDetail = customerList.get(position);
+        holder.CName.setText(customerDetail.getCName());
+        holder.CPhone.setText(customerDetail.getCPhone());
 
 
 
     }
 
+    @Override
+    public int getItemCount()
+    {
+        return customerList.size();
+    }
+
+
+
+}

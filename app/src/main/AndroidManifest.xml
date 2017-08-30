@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +24,10 @@
         </activity>
         <activity android:name=".CustomerDetail" />
 
-        <activity android:name=".Login"></activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MedicineData"></activity>
+        <activity android:name=".CustomerNameFetch"></activity>
+
     </application>
 
 </manifest>

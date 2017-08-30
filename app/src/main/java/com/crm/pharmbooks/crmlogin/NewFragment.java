@@ -1,17 +1,22 @@
+
+/**
+ * Created by Dell on 30-Aug-17.
+ */
+
 package com.crm.pharmbooks.crmlogin;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
+        import android.content.Context;
+        import android.content.Intent;
+        import android.net.Uri;
+        import android.os.Bundle;
+        import android.support.v4.app.Fragment;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.Button;
 
 
-public class NewFragment extends Fragment implements View.OnClickListener,MedicineData.OnFragmentInteractionListener {
+public class NewFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
     Button addNew,repeat,existing;
@@ -39,7 +44,7 @@ public class NewFragment extends Fragment implements View.OnClickListener,Medici
         View rootView = inflater.inflate(R.layout.fragment_new, container, false);
         addNew = (Button) rootView.findViewById(R.id.addnew);
         existing = (Button) rootView.findViewById(R.id.existing);
-         repeat = (Button) rootView.findViewById(R.id.repeat);
+        repeat = (Button) rootView.findViewById(R.id.repeat);
         addNew.setOnClickListener(this);
         existing.setOnClickListener(this);
         repeat.setOnClickListener(this);
@@ -72,22 +77,13 @@ public class NewFragment extends Fragment implements View.OnClickListener,Medici
     @Override
     public void onClick(View view) {
         if(view==addNew){
-            Fragment fragment = new MedicineData();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, fragment, "Refill");
-            fragmentTransaction.commitAllowingStateLoss();
+            startActivity(new Intent(getActivity(),MedicineData.class));
         }
         else if(view == existing){
             startActivity(new Intent(getActivity(),CustomerNameFetch.class));
         }
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 
 
     public interface OnFragmentInteractionListener {

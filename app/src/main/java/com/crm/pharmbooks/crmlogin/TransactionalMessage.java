@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -27,6 +28,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.crm.pharmbooks.crmlogin.Login.MyPREFERENCES;
 
 public class TransactionalMessage extends android.support.v4.app.Fragment {
@@ -37,6 +39,7 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
     Button Next;
     String Name_var, MobileNo_var, BillAmount_var;
     int result;
+    String username;
     private OnFragmentInteractionListener mListener;
 
     public TransactionalMessage() {
@@ -49,11 +52,19 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.activity_dash_board, container, false);
-        Name = (EditText) rootView.findViewById(R.id.Name);
-        MobileNo = (EditText) rootView.findViewById(R.id.MobileNo);
-        BillAmount = (EditText) rootView.findViewById(R.id.BillAmount);
-        Next = (Button) rootView.findViewById(R.id.Next);
+        SharedPreferences sharedpreferences = this.getActivity().getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
+        String restoredText = sharedpreferences.getString("username", null);
+        if (restoredText != null) {
+            username = sharedpreferences.getString("username", "No name defined");//"No name defined" is the default value.
+        }
+
+
+
+        View view = inflater.inflate(R.layout.activity_transactional_message, container, false);
+        Name = (EditText) view.findViewById(R.id.Name);
+        MobileNo = (EditText) view.findViewById(R.id.MobileNo);
+        BillAmount = (EditText) view.findViewById(R.id.BillAmount);
+        Next = (Button) view.findViewById(R.id.Next);
 
         Next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,12 +72,13 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
                 Name_var = Name.getText().toString();
                 MobileNo_var = MobileNo.getText().toString();
                 BillAmount_var = BillAmount.getText().toString();
+                Toast.makeText(getActivity().getApplicationContext(),username,Toast.LENGTH_LONG).show();
                 sendR(Name_var, MobileNo_var, BillAmount_var);
 
             }
         });
 
-        return rootView;
+        return view;
     }
 
     @Override
@@ -96,7 +108,7 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
     public void sendR(final String Name_var, final String MobileNo_var, final String BillAmount_var){
 
 
-        String url = "https://pharmcrm.herokuapp.com/api/save/";
+        String url = "https://pharmcrm.herokuapp.com/api/transactional/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -135,19 +147,36 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
                 }){
             @Override
             protected Map<String,String> getParams(){
+
+
+
+
                 Map<String, String> params = new HashMap<>();
-                params.put("Cname",Name_var);
-                params.put("Cnumber",MobileNo_var);
-                params.put("Camt",BillAmount_var);
+                params.put("name",Name_var);
+                params.put("number",MobileNo_var);
+                params.put("amount",BillAmount_var);
+                params.put("chemist",username);
 
                 return params;
             }
 
+
+
+
         };
+
+        int MY_SOCKET_TIMEOUT_MS = 50000;
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
 
     }
+
+
 
 }
