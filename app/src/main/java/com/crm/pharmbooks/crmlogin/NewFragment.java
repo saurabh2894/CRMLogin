@@ -80,7 +80,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
             startActivity(new Intent(getActivity(),MedicineData.class));
         }
         else if(view == existing){
-            startActivity(new Intent(getActivity(),CustomerNameFetch.class));
+            startActivity(new Intent(getActivity(),PrescriptionListActivity.class));
         }
     }
 

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="170dp"
+    android:padding="20dp"
+
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Name "
+            android:textColor="@android:color/black"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:textColor="@android:color/black"
+            android:text=":"
+            android:textSize="16sp"/>
+
+    <EditText
+        android:id="@+id/dboxMedName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter Medicine Name Here"
+        android:textSize="16sp"
+        android:layout_weight="2"
+        android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Dosage "
+            android:textColor="@android:color/black"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text=":"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"/>
+
+        <EditText
+            android:id="@+id/dboxMedDose"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter Dosage Here"
+            android:textSize="16sp"
+            android:layout_weight="2"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Start Date "
+            android:textSize="16sp"
+            android:textColor="@android:color/black"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text=":"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"/>
+
+        <EditText
+            android:id="@+id/dboxMedStart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter Start Date Here"
+            android:textSize="16sp"
+            android:layout_weight="2"
+            android:textColor="@android:color/black"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="End Date "
+            android:textColor="@android:color/black"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text=":"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"/>
+
+        <EditText
+            android:id="@+id/dboxMedEnd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter End Date Here"
+            android:textSize="16sp"
+            android:layout_weight="2"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+
+
+</LinearLayout>
