@@ -2,6 +2,7 @@ package com.crm.pharmbooks.PharmCRM;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ public class CustomerPrescription extends AppCompatActivity {
     private RecyclerView recyclerView;
     private PrescriptionAdapter pAdapter,pEditAdapter;
     EditText dboxMedName,dboxMedDose,dboxMedStart,dboxMedEnd;
+    FloatingActionButton fab;
     ProgressBar pb;
     TextView txt;
     String presId;
@@ -60,7 +62,7 @@ public class CustomerPrescription extends AppCompatActivity {
         recyclerView.setVisibility(View.GONE);
         pb= (ProgressBar) findViewById(R.id.pb) ;
         txt=(TextView) findViewById(R.id.loadingtxt);
-
+        fab=(FloatingActionButton)findViewById(R.id.fab1);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         TextView title = (TextView)toolbar.findViewById(R.id.title);
@@ -75,110 +77,18 @@ public class CustomerPrescription extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         // set the adapter
         recyclerView.setAdapter(pAdapter);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCustomDialog(-1);
+            }
+        });
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
 
                 pos=position;
-
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(CustomerPrescription.this);
-                // Get the layout inflater
-                LayoutInflater linf = LayoutInflater.from(getApplicationContext());
-                final View inflator = linf.inflate(R.layout.prescription_edit_dialogbox, null);
-                // Inflate and set the layout for the dialog
-                // Pass null as the parent view because its going in the dialog layout
-
-                // Setting Dialog Title
-                alertDialog.setTitle("Edit Details...");
-
-                // Setting Dialog Message
-                // Setting Icon to Dialog
-                alertDialog.setView(inflator);
-
-                final TextView dboxMedId;
-
-                dboxMedName = (EditText) inflator.findViewById(R.id.dboxMedName);
-                dboxMedDose = (EditText) inflator.findViewById(R.id.dboxMedDose);
-                dboxMedStart = (EditText) inflator.findViewById(R.id.dboxMedStart);
-                dboxMedEnd = (EditText) inflator.findViewById(R.id.dboxMedEnd);
-                dboxMedId = (TextView) inflator.findViewById(R.id.dboxMedId);
-
-                final String medName =   presciptionModelList.get(position).getMedName();
-                String medDose =   presciptionModelList.get(position).getDosage();
-                String medStart =   presciptionModelList.get(position).getRefillDate();
-                String medEnd =   presciptionModelList.get(position).getEndDate();
-                String medId =   presciptionModelList.get(position).getMedicineid();
-
-
-                dboxMedName.setText(medName);
-                dboxMedDose.setText(medDose);
-                dboxMedStart.setText(medStart);
-                dboxMedEnd.setText(medEnd);
-                dboxMedId.setText(medId);
-
-
-
-                // Setting Positive "Yes" Button
-                alertDialog.setPositiveButton("EDIT", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int which) {
-
-
-
-                        String medname = dboxMedName.getText().toString().trim();
-                        String meddose = dboxMedDose.getText().toString().trim();
-                        String medstart = dboxMedStart.getText().toString().trim();
-                        String medend = dboxMedEnd.getText().toString().trim();
-                        String medId = dboxMedId.getText().toString().trim();
-                        presciptionModelList.remove(pos);
-                        presciptionModelList.add(pos,new PresciptionModel(medname,meddose,medstart,medend,medId));
-                        /*MedicineDetailModel detail = new MedicineDetailModel(MedicineName_value,Integer.parseInt(MedicineQuantity_value));
-                        String name = detail.getMName();
-                        Integer number = detail.getMQuantity();
-                        //medicineDetailModelList.add(detail);
-                        */
-                        pAdapter.notifyDataSetChanged();
-
-
-                        //code for Prescription Edit List
-
-                        String medNameEdit = dboxMedName.getText().toString().trim();
-                        String meddoseEdit = dboxMedDose.getText().toString().trim();
-                        String medstartEdit = dboxMedStart.getText().toString().trim();
-                        String medendEdit = dboxMedEnd.getText().toString().trim();
-                        String medIdEdit = dboxMedId.getText().toString().trim();
-
-                        presciptionEditModelList.add(pos,new PresciptionModel(medNameEdit,meddoseEdit,medstartEdit,medendEdit,medIdEdit));
-                        pEditAdapter.notifyDataSetChanged();
-
-
-
-                        // Write your code here to invoke YES event
-                    }
-                });
-
-                // Setting Negative "NO" Button
-                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Write your code here to invoke NO event
-                        Toast.makeText(CustomerPrescription.this, "You clicked on NO", Toast.LENGTH_SHORT).show();
-                        dialog.cancel();
-                    }
-                });
-
-                alertDialog.show();
-
-
-
-
-
-
-                /*CustomDialogClass cdd=new CustomDialogClass(position,MedicineData.this);
-                cdd.show();
-                if(cdd.isShowing()) {
-                    Log.d("mytag","medicine data dialog box call working");
-
-                }*/
-
+                showCustomDialog(pos);
             }
 
 
@@ -265,6 +175,7 @@ public class CustomerPrescription extends AppCompatActivity {
         JSONObject responseDetailsJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         try {
+
             for (int i = 0; i < presciptionEditModelList.size(); i++) {
                 JSONObject formDetailsJson = new JSONObject();
                 formDetailsJson.put("medicineName", presciptionEditModelList.get(i).getMedName());
@@ -458,15 +369,192 @@ public class CustomerPrescription extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.saveIcon) {
 
-            Log.d("mtag","save icon call working");
-            sendEditDataList();
+           // Log.d("mtag","save icon call working");
+           // sendEditDataList();
             //sendAddDataList();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+    public void showCustomDialog(final int pos){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CustomerPrescription.this);
+        // Get the layout inflater
+        LayoutInflater linf = LayoutInflater.from(getApplicationContext());
+        final View inflator = linf.inflate(R.layout.prescription_edit_dialogbox, null);
+        // Inflate and set the layout for the dialog
+        // Pass null as the parent view because its going in the dialog layout
+
+        // Setting Dialog Title
 
 
+        // Setting Dialog Message
+        // Setting Icon to Dialog
+        alertDialog.setView(inflator);
+
+        final TextView dboxMedId;
+
+        dboxMedName = (EditText) inflator.findViewById(R.id.dboxMedName);
+        dboxMedDose = (EditText) inflator.findViewById(R.id.dboxMedDose);
+        dboxMedStart = (EditText) inflator.findViewById(R.id.dboxMedStart);
+        dboxMedEnd = (EditText) inflator.findViewById(R.id.dboxMedEnd);
+        dboxMedId = (TextView) inflator.findViewById(R.id.dboxMedId);
+        String btn="";
+        if(pos!=-1) {
+            alertDialog.setTitle("Edit Details...");
+            final String medName = presciptionModelList.get(pos).getMedName();
+            String medDose = presciptionModelList.get(pos).getDosage();
+            String medStart = presciptionModelList.get(pos).getRefillDate();
+            String medEnd = presciptionModelList.get(pos).getEndDate();
+            String medId = presciptionModelList.get(pos).getMedicineid();
+            btn="EDIT";
+
+            dboxMedName.setText(medName);
+            dboxMedDose.setText(medDose);
+            dboxMedStart.setText(medStart);
+            dboxMedEnd.setText(medEnd);
+            dboxMedId.setText(medId);
+
+        }
+        else{
+            alertDialog.setTitle("Add New...");
+            btn="Add";
+            dboxMedName.setText("");
+            dboxMedDose.setText("");
+            dboxMedId.setVisibility(View.GONE);
+            dboxMedStart.setEnabled(false);
+            dboxMedEnd.setEnabled(false);
+        }
+
+
+        // Setting Positive "Yes" Button
+        alertDialog.setPositiveButton(btn, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+
+
+
+                String medname = dboxMedName.getText().toString().trim();
+                String meddose = dboxMedDose.getText().toString().trim();
+                String medstart = dboxMedStart.getText().toString().trim();
+                String medend = dboxMedEnd.getText().toString().trim();
+                String medId = dboxMedId.getText().toString().trim();
+                if(pos!=-1) {
+                    presciptionModelList.remove(pos);
+                    presciptionModelList.add(pos, new PresciptionModel(medname, meddose, medstart, medend, medId));
+
+                    pAdapter.notifyDataSetChanged();
+
+
+                    //code for Prescription Edit List
+
+                    String medNameEdit = dboxMedName.getText().toString().trim();
+                    String meddoseEdit = dboxMedDose.getText().toString().trim();
+                    String medstartEdit = dboxMedStart.getText().toString().trim();
+                    String medendEdit = dboxMedEnd.getText().toString().trim();
+                    String medIdEdit = dboxMedId.getText().toString().trim();
+                    ArrayList<String> med = new ArrayList<String>();
+
+                    if (med.contains(medIdEdit)) {
+                        presciptionEditModelList.remove(pos);
+                            presciptionEditModelList.add(pos, new PresciptionModel(medNameEdit, meddoseEdit, medstartEdit, medendEdit, medIdEdit));
+                            pEditAdapter.notifyDataSetChanged();
+                        Log.d("mytag","You were right1");
+                        }
+                        else{
+                        med.add(medIdEdit);
+                        presciptionEditModelList.add(pos, new PresciptionModel(medNameEdit, meddoseEdit, medstartEdit, medendEdit, medIdEdit));
+                        pEditAdapter.notifyDataSetChanged();
+                        Log.d("mytag","You were right");
+                    }
+
+
+                    sendEditDataList();
+                }
+                else{
+                    String dateStart = presciptionModelList.get(0).getRefillDate();
+                    String[] date= dateStart.split("-");
+                    int year=Integer.parseInt(date[0]);
+                    int month=Integer.parseInt(date[1]);
+                    int day=Integer.parseInt(date[2]);
+                    int dose = Integer.parseInt(dboxMedDose.getText().toString().trim());
+                    int ndays=day+dose;
+                    int nmonth=month;
+                    int nyear=year;
+                    if(month==1||month==3||month==5||month==7||month==10||month==12||month==8){
+                        if(ndays>31){
+                            ndays=ndays-31;
+                            nmonth=month+1;
+                        }
+                    }
+                    else if(month==2) {
+                        if (year % 4 == 0) {
+                            if (ndays > 29) {
+                                ndays-= 29;
+                                nmonth = month + 1;
+                            }
+                        } else {
+                            if (ndays > 28) {
+                                ndays = ndays - 28;
+                                nmonth = month + 1;
+                            }
+                        }
+                    }
+                    else if(month==4||month==6||month==9||month==11){
+                        if(ndays>30){
+                            ndays=ndays-30;
+                            nmonth=month+1;
+                        }
+                    }
+
+                    if(nmonth>12){
+                        nmonth-=12;
+                    }
+                    String ndate="";
+                    int flag=0;
+                    if(nmonth<10){
+                        ndate=nyear+"-0"+nmonth+"-"+ndays;
+                        flag=1;
+                    }
+                    if(ndays<10){
+                        ndate=nyear+"-"+nmonth+"-0"+ndays;
+                        flag=1;
+                    }
+                    if(flag==0){
+                        ndate=nyear+"-"+nmonth+"-"+ndays;
+                    }
+                    presciptionModelList.add(new PresciptionModel(medname, meddose, dateStart, ndate,"0"));
+                    pAdapter.notifyDataSetChanged();
+                }
+
+
+
+                // Write your code here to invoke YES event
+
+            }
+        });
+
+        // Setting Negative "NO" Button
+        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to invoke NO event
+                Toast.makeText(CustomerPrescription.this, "You clicked on NO", Toast.LENGTH_SHORT).show();
+                dialog.cancel();
+            }
+        });
+
+        alertDialog.show();
+
+
+
+
+
+
+                /*CustomDialogClass cdd=new CustomDialogClass(position,MedicineData.this);
+                cdd.show();
+                if(cdd.isShowing()) {
+                    Log.d("mytag","medicine data dialog box call working");
+
+                }*/
+    }
 
 }
