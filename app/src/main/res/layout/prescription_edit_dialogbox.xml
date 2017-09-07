@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="170dp"
+    android:layout_height="match_parent"
     android:padding="20dp"
-
     android:orientation="vertical" >
 
     <LinearLayout
@@ -77,13 +76,7 @@
             android:layout_weight="1"
             android:text="Start Date "
             android:textSize="16sp"
-            android:textColor="@android:color/black"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:text=":"
-            android:textSize="16sp"
+            android:id="@+id/toRemove1"
             android:textColor="@android:color/black"/>
 
         <EditText
@@ -106,13 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="End Date "
-            android:textColor="@android:color/black"
-            android:textSize="16sp"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:text=":"
+            android:id="@+id/toRemove2"
             android:textColor="@android:color/black"
             android:textSize="16sp"/>
 
@@ -138,12 +125,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Medicine ID "
+            android:id="@+id/medId"
             android:textColor="@android:color/black"
             android:textSize="16sp"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
+            android:id="@+id/medIdColon"
             android:textColor="@android:color/black"
             android:text=":"
             android:textSize="16sp"/>
