@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,9 +65,16 @@ public class PrescriptionListActivity extends AppCompatActivity {
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
                 Intent intent = new Intent(PrescriptionListActivity.this,CustomerPrescription.class);
                 intent.putExtra("presId",listPresId.get(listDataHeader.get(i)).get(i1));
-                intent.putExtra("customerphone",listPresId.get(listDataHeader.get(i)).get(i1));
+
+
+                String str = listDataHeader.get(i);
+                String[] parts = str.split(",");
+                String stringreq = parts[1];
+                intent.putExtra("customerphone",stringreq);
+
                 startActivity(intent);
                 Log.d("mytag",listPresId.get(listDataHeader.get(i)).get(i1));
+
                 return false;
             }
         });
@@ -100,7 +108,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
                                 JSONObject object = jsonArray.getJSONObject(i);
                                 String name = object.getString("custmorname");
                                 String phone = object.getString("custmornumber");
-                                listDataHeader.add(name + "  "+ phone);
+                                listDataHeader.add(name + ","+ phone);
                                 JSONArray array = object.getJSONArray("prescriptionid");
                                 List<String>  prescriptionlist = new ArrayList<String>();
                                 List<String>  prescriptionlistshow = new ArrayList<String>();
@@ -113,6 +121,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
 
                                 listDataChild.put(listDataHeader.get(i),prescriptionlistshow );
                                 listPresId.put(listDataHeader.get(i),prescriptionlist );
+
                                 //Log.d("mytag",listDataChild+"");
                                 //Log.d("mytag",prescriptionlistshow+"");
 

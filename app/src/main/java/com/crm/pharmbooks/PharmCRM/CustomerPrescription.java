@@ -61,7 +61,7 @@ public class CustomerPrescription extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         presId = extra.getString("presId");
         customerphone=extra.getString("customerphone");
-        Log.d("phpne",customerphone);
+        Log.d("customerphone",customerphone);
         setContentView(R.layout.activity_customer_prescription);
         recyclerView = (RecyclerView) findViewById(R.id.re);
         recyclerView.setVisibility(View.GONE);
@@ -246,7 +246,7 @@ public class CustomerPrescription extends AppCompatActivity {
                 try {
                     //params.put("prescid",presId);
                     //params.put("counter",String.valueOf(presciptionEditModelList.size()));\
-                    params.put("customerphone",customerphone);
+                    //params.put("customerphoneedit",customerphone);
                     params.put("dataedit",getJsonFromMyFormObjectEdit(presciptionEditModelList)+"");
 
                 } catch (JSONException e) {
@@ -275,9 +275,9 @@ public class CustomerPrescription extends AppCompatActivity {
             for (int i = 0; i < presciptionAddModelList.size(); i++) {
                 JSONObject formDetailsJson = new JSONObject();
                 formDetailsJson.put("medicineName_"+(i+1), presciptionAddModelList.get(i).getMedName());
-                formDetailsJson.put("dosage"+(i+1), String.valueOf(presciptionAddModelList.get(i).getDosage()));
-                //formDetailsJson.put("refilldate"+(i+1), String.valueOf(presciptionAddModelList.get(i).getRefillDate()));
-                //formDetailsJson.put("enddate"+(i+1), String.valueOf(presciptionAddModelList.get(i).getEndDate()));
+                formDetailsJson.put("dosage_"+(i+1), String.valueOf(presciptionAddModelList.get(i).getDosage()));
+                //formDetailsJson.put("refilldate_"+(i+1), String.valueOf(presciptionAddModelList.get(i).getRefillDate()));
+                //formDetailsJson.put("enddate_"+(i+1), String.valueOf(presciptionAddModelList.get(i).getEndDate()));
 
                 jsonArray.put(formDetailsJson);
 
@@ -337,7 +337,7 @@ public class CustomerPrescription extends AppCompatActivity {
                     params.put("prescid",presId);
                     params.put("counter",String.valueOf(presciptionAddModelList.size()));
                     params.put("dataadd",getJsonFromMyFormObjectAdd(presciptionAddModelList)+"");
-                    params.put("customerphone",customerphone);
+                    params.put("customerphoneadd",customerphone);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -486,59 +486,62 @@ public class CustomerPrescription extends AppCompatActivity {
 
                         sendEditDataList();
                     } else {
-//                        String dateStart = presciptionModelList.get(0).getRefillDate();
-//                        String[] date = dateStart.split("-");
-//                        int year = Integer.parseInt(date[0]);
-//                        int month = Integer.parseInt(date[1]);
-//                        int day = Integer.parseInt(date[2]);
-//                        int dose = Integer.parseInt(dboxMedDose.getText().toString().trim());
-//                        int ndays = day + dose;
-//                        int nmonth = month;
-//                        int nyear = year;
-//                        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 10 || month == 12 || month == 8) {
-//                            if (ndays > 31) {
-//                                ndays = ndays - 31;
-//                                nmonth = month + 1;
-//                            }
-//                        } else if (month == 2) {
-//                            if (year % 4 == 0) {
-//                                if (ndays > 29) {
-//                                    ndays -= 29;
-//                                    nmonth = month + 1;
-//                                }
-//                            } else {
-//                                if (ndays > 28) {
-//                                    ndays = ndays - 28;
-//                                    nmonth = month + 1;
-//                                }
-//                            }
-//                        } else if (month == 4 || month == 6 || month == 9 || month == 11) {
-//                            if (ndays > 30) {
-//                                ndays = ndays - 30;
-//                                nmonth = month + 1;
-//                            }
-//                        }
-//
-//                        if (nmonth > 12) {
-//                            nmonth -= 12;
-//                        }
-//                        String ndate = "";
-//                        int flag = 0;
-//                        if (nmonth < 10) {
-//                            ndate = nyear + "-0" + nmonth + "-" + ndays;
-//                            flag = 1;
-//                        }
-//                        if (ndays < 10) {
-//                            ndate = nyear + "-" + nmonth + "-0" + ndays;
-//                            flag = 1;
-//                        }
-//                        if (flag == 0) {
-//                            ndate = nyear + "-" + nmonth + "-" + ndays;
-//                        }
+                        /*
+                        String dateStart = presciptionModelList.get(0).getRefillDate();
+                        String[] date = dateStart.split("-");
+                        int year = Integer.parseInt(date[0]);
+                        int month = Integer.parseInt(date[1]);
+                        int day = Integer.parseInt(date[2]);
+                        int dose = Integer.parseInt(dboxMedDose.getText().toString().trim());
+                        int ndays = day + dose;
+                        int nmonth = month;
+                        int nyear = year;
+                        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 10 || month == 12 || month == 8) {
+                            if (ndays > 31) {
+                                ndays = ndays - 31;
+                                nmonth = month + 1;
+                            }
+                        } else if (month == 2) {
+                            if (year % 4 == 0) {
+                                if (ndays > 29) {
+                                    ndays -= 29;
+                                    nmonth = month + 1;
+                                }
+                            } else {
+                                if (ndays > 28) {
+                                    ndays = ndays - 28;
+                                    nmonth = month + 1;
+                                }
+                            }
+                        } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+                            if (ndays > 30) {
+                                ndays = ndays - 30;
+                                nmonth = month + 1;
+                            }
+                        }
+
+                        if (nmonth > 12) {
+                            nmonth -= 12;
+                        }
+                        String ndate = "";
+                        int flag = 0;
+                        if (nmonth < 10) {
+                            ndate = nyear + "-0" + nmonth + "-" + ndays;
+                            flag = 1;
+                        }
+                        if (ndays < 10) {
+                            ndate = nyear + "-" + nmonth + "-0" + ndays;
+                            flag = 1;
+                        }
+                        if (flag == 0) {
+                            ndate = nyear + "-" + nmonth + "-" + ndays;
+                        }
+                        presciptionModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
+                        pAdapter.notifyDataSetChanged();
+                        */
                         presciptionAddModelList.add(new PresciptionModel(medname, meddose,"0","0", "0"));
                         pAddAdapter.notifyDataSetChanged();
-//                        presciptionModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
-//                        pAdapter.notifyDataSetChanged();
+
                         sendAddDataList();
                     }
 
