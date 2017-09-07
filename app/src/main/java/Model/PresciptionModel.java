@@ -5,16 +5,18 @@ package Model;
  */
 
 public class PresciptionModel {
-    private String medName,dosage,refillDate,endDate;
+    private String medName,dosage,refillDate,endDate,medicineid;
     public PresciptionModel(){
         //reqd. public constructor
     }
 
-    public PresciptionModel(String medName,String dosage,String refillDate,String endDate){
+    public PresciptionModel(String medName,String dosage,String refillDate,String endDate,String medicineid){
         this.medName=medName;
         this.dosage=dosage;
         this.refillDate=refillDate;
         this.endDate=endDate;
+        this.medicineid=medicineid;
+
     }
 
     public String getMedName() {
@@ -29,9 +31,9 @@ public class PresciptionModel {
         return refillDate;
     }
 
-    public String getEndDate() {
-        return endDate;
-    }
+    public String getEndDate() {return endDate; }
+    public String getMedicineid() {return medicineid; }
+
 }
 
 

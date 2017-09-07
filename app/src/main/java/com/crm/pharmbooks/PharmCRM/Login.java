@@ -1,20 +1,20 @@
-package com.crm.pharmbooks.crmlogin;
+package com.crm.pharmbooks.PharmCRM;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -34,6 +34,7 @@ public class Login extends AppCompatActivity {
     int res ;
     public static final String MyPREFERENCES = "MyPrefs" ;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +42,12 @@ public class Login extends AppCompatActivity {
         username = (EditText)findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
         Signin = (Button) findViewById(R.id.Signin);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        TextView title = (TextView)toolbar.findViewById(R.id.title);
+
 
 
         Signin.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +87,8 @@ public class Login extends AppCompatActivity {
                                 //SharedPreferences.Editor editor = sharedpreferences.edit();
                                 SharedPreferences.Editor editor = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE).edit();
                                 editor.putString("username", String.valueOf(user_var));
+                                editor.putString("password", String.valueOf(pass_var));
+
                                 editor.commit();
 
                             }

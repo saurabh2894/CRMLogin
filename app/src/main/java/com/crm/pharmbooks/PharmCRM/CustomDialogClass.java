@@ -1,4 +1,4 @@
-package com.crm.pharmbooks.crmlogin;
+package com.crm.pharmbooks.PharmCRM;
 
 /**
  * Created by Dell on 24-Aug-17.

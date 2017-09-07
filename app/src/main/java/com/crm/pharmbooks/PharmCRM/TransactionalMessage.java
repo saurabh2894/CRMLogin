@@ -1,11 +1,8 @@
-package com.crm.pharmbooks.crmlogin;
+package com.crm.pharmbooks.PharmCRM;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.crm.pharmbooks.crmlogin.Login.MyPREFERENCES;
+import static com.crm.pharmbooks.PharmCRM.Login.MyPREFERENCES;
 
 public class TransactionalMessage extends android.support.v4.app.Fragment {
 

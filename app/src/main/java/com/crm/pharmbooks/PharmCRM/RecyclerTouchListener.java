@@ -1,4 +1,4 @@
-package com.crm.pharmbooks.crmlogin;
+package com.crm.pharmbooks.PharmCRM;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

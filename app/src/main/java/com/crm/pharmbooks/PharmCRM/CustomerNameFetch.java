@@ -1,4 +1,4 @@
-package com.crm.pharmbooks.crmlogin;
+package com.crm.pharmbooks.PharmCRM;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -29,7 +29,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import static com.crm.pharmbooks.crmlogin.Login.MyPREFERENCES;
+import static com.crm.pharmbooks.PharmCRM.Login.MyPREFERENCES;
 
 import Adapters.CustomerAdapter;
 import Model.*;

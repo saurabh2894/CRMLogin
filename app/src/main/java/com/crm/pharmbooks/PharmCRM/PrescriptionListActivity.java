@@ -1,14 +1,16 @@
-package com.crm.pharmbooks.crmlogin;
+package com.crm.pharmbooks.PharmCRM;
 
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 
 import com.android.volley.Request;
@@ -22,16 +24,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import Adapters.ExpandableListAdapter;
-import Model.CustomerDetailModel;
 
-import static com.crm.pharmbooks.crmlogin.Login.MyPREFERENCES;
+import static com.crm.pharmbooks.PharmCRM.Login.MyPREFERENCES;
 
 public class PrescriptionListActivity extends AppCompatActivity {
 
@@ -47,6 +47,10 @@ public class PrescriptionListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prescription_list);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        TextView title = (TextView)toolbar.findViewById(R.id.title);
 
 
         SharedPreferences sharedpreferences = this.getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
@@ -108,6 +112,9 @@ public class PrescriptionListActivity extends AppCompatActivity {
 
                                 listDataChild.put(listDataHeader.get(i),prescriptionlistshow );
                                 listPresId.put(listDataHeader.get(i),prescriptionlist );
+                                //Log.d("mytag",listDataChild+"");
+                                //Log.d("mytag",prescriptionlistshow+"");
+
 
 
                             }

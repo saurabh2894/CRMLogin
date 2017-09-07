@@ -1,4 +1,4 @@
-package com.crm.pharmbooks.crmlogin;
+package com.crm.pharmbooks.PharmCRM;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -40,14 +42,9 @@ import java.util.Map;
 import Adapters.MedicineAdapter;
 import Model.MedicineDetailModel;
 
-import static android.R.id.message;
-
-import Adapters.MedicineAdapter;
-import Model.MedicineDetailModel;
-
 
 public class MedicineData extends AppCompatActivity {
-    private ArrayList<MedicineDetailModel> medicineDetailModelList = new ArrayList<>();
+    private ArrayList<MedicineDetailModel> medicineDetailList = new ArrayList<>();
     private RecyclerView recyclerView;
     private MedicineAdapter mAdapter;
     private EditText MedicineName, MedicineQuantity;
@@ -69,6 +66,10 @@ public class MedicineData extends AppCompatActivity {
         MedicineName = (EditText) findViewById(R.id.MedicineName);
         MedicineQuantity = (EditText) findViewById(R.id.MedicineQuantity);
         addButton = (Button) findViewById(R.id.addButton);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        TextView title = (TextView)toolbar.findViewById(R.id.title);
+
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,13 +77,13 @@ public class MedicineData extends AppCompatActivity {
                 MedicineName_value = MedicineName.getText().toString();
                 MedicineQuantity_value = MedicineQuantity.getText().toString();
                 MedicineDetailModel detail = new MedicineDetailModel(MedicineName_value,Integer.parseInt(MedicineQuantity_value));
-                medicineDetailModelList.add(detail);
+                medicineDetailList.add(detail);
                 mAdapter.notifyDataSetChanged();
             }
         });
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mAdapter = new MedicineAdapter(medicineDetailModelList);
+        mAdapter = new MedicineAdapter(medicineDetailList);
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -120,8 +121,8 @@ public class MedicineData extends AppCompatActivity {
                 MedicineNameDialogBox = (EditText) inflator.findViewById(R.id.MedicineNameDialogBox);
                 MedicineQuantityDialogBox = (EditText) inflator.findViewById(R.id.MedicineQuantityDialogBox);
 
-                String name =   medicineDetailModelList.get(position).getMName();
-                String number = medicineDetailModelList.get(position).getMQuantity()+"";
+                String name =   medicineDetailList.get(position).getMName();
+                String number = medicineDetailList.get(position).getMQuantity()+"";
                 MedicineNameDialogBox.setText(name);
                 MedicineQuantityDialogBox.setText(number);
                 // Setting Positive "Yes" Button
@@ -132,13 +133,13 @@ public class MedicineData extends AppCompatActivity {
 
                         MedicineName_valuedialogbox = MedicineNameDialogBox.getText().toString();
                         MedicineQuantity_valuedialogbox = MedicineQuantityDialogBox.getText().toString();
-                        medicineDetailModelList.remove(pos);
+                        medicineDetailList.remove(pos);
 
-                        medicineDetailModelList.add(pos,new MedicineDetailModel(MedicineName_valuedialogbox,Integer.parseInt(MedicineQuantity_valuedialogbox)));
+                        medicineDetailList.add(pos,new MedicineDetailModel(MedicineName_valuedialogbox,Integer.parseInt(MedicineQuantity_valuedialogbox)));
                         /*MedicineDetailModel detail = new MedicineDetailModel(MedicineName_value,Integer.parseInt(MedicineQuantity_value));
                         String name = detail.getMName();
                         Integer number = detail.getMQuantity();
-                        //medicineDetailModelList.add(detail);
+                        //medicineDetailList.add(detail);
                         */
 
 
@@ -185,7 +186,7 @@ public class MedicineData extends AppCompatActivity {
 
 
 
-                // Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
 
 
             @Override
@@ -195,7 +196,7 @@ public class MedicineData extends AppCompatActivity {
             }
         }));
 
-}
+    }
 
 
 
@@ -217,9 +218,10 @@ public class MedicineData extends AppCompatActivity {
         catch (JSONException e) {
             e.printStackTrace();
         }
-        responseDetailsJson.put("medicineDetailModelList", jsonArray);
+        responseDetailsJson.put("medicineDetailList", jsonArray);
 
         Log.d("mytag",responseDetailsJson+"");
+
         return responseDetailsJson;
 
 
@@ -250,14 +252,12 @@ public class MedicineData extends AppCompatActivity {
                             {
 
 
-
-
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         Toast.makeText(MedicineData.this,response,Toast.LENGTH_LONG).show();
-                        //Toast.makeText(MedicineData.this,msg+""+ res +"",Toast.LENGTH_LONG).show();
+                        //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
 
                     }
                 },
@@ -271,11 +271,11 @@ public class MedicineData extends AppCompatActivity {
             protected Map<String,String> getParams(){
                 Map<String, String> params = new HashMap<>();
                 try {
-                params.put("Cname","manya");
-                params.put("Cnumber","9898876545");
-                params.put("Cadd","delhi");
-                params.put("counter",String.valueOf(medicineDetailModelList.size()));
-                params.put("data",getJsonFromMyFormObject(medicineDetailModelList)+"");
+                    params.put("Cname","manya");
+                    params.put("Cnumber","9898876545");
+                    params.put("Cadd","delhi");
+                    params.put("counter",String.valueOf(medicineDetailList.size()));
+                    params.put("data",getJsonFromMyFormObject(medicineDetailList)+"");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -322,7 +322,7 @@ public class MedicineData extends AppCompatActivity {
             sendR();
             /*JSONObject json = null;
             try {
-                json = getJsonFromMyFormObject(medicineDetailModelList);
+                json = getJsonFromMyFormObject(medicineDetailList);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

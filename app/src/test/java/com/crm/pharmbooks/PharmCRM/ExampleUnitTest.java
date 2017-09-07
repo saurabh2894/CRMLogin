@@ -1,4 +1,4 @@
-package com.crm.pharmbooks.crmlogin;
+package com.crm.pharmbooks.PharmCRM;
 
 import org.junit.Test;
 

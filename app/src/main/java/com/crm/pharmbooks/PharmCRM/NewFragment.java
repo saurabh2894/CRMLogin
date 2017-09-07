@@ -3,7 +3,7 @@
  * Created by Dell on 30-Aug-17.
  */
 
-package com.crm.pharmbooks.crmlogin;
+package com.crm.pharmbooks.PharmCRM;
 
         import android.content.Context;
         import android.content.Intent;

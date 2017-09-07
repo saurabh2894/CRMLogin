@@ -1,4 +1,4 @@
-package com.crm.pharmbooks.crmlogin;
+package com.crm.pharmbooks.PharmCRM;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,30 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
-import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,DashBoard.OnFragmentInteractionListener,
@@ -91,7 +68,7 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.frame, fragment, "DashBoard");
             fragmentTransaction.commitAllowingStateLoss();
         } else if (id == R.id.nav_refill) {
-            getSupportActionBar().setTitle("Refill");
+            getSupportActionBar().setTitle("Refilling");
             Fragment fragment = NewFragment.newInstance();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,

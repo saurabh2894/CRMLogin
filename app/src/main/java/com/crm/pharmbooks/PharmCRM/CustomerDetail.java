@@ -1,13 +1,15 @@
-package com.crm.pharmbooks.crmlogin;
+package com.crm.pharmbooks.PharmCRM;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,7 +25,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.crm.pharmbooks.crmlogin.Login.MyPREFERENCES;
+import static com.crm.pharmbooks.PharmCRM.Login.MyPREFERENCES;
 
 public class CustomerDetail extends AppCompatActivity {
 
@@ -41,6 +43,10 @@ public class CustomerDetail extends AppCompatActivity {
         MobileNo = (EditText) findViewById(R.id.MobileNo);
         Address = (EditText) findViewById(R.id.Address);
         Next = (Button) findViewById(R.id.Next);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        TextView title = (TextView)toolbar.findViewById(R.id.title);
 
        Next.setOnClickListener(new View.OnClickListener() {
             @Override
