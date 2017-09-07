@@ -43,7 +43,7 @@ public class CustomerPrescription extends AppCompatActivity {
 
     private ArrayList<PresciptionModel> presciptionModelList = new ArrayList<>();
     private ArrayList<PresciptionModel> presciptionEditModelList = new ArrayList<>();
-
+    ArrayList<String> med = new ArrayList<String>();
     private RecyclerView recyclerView;
     private PrescriptionAdapter pAdapter,pEditAdapter;
     EditText dboxMedName,dboxMedDose,dboxMedStart,dboxMedEnd;
@@ -452,7 +452,7 @@ public class CustomerPrescription extends AppCompatActivity {
                     String medstartEdit = dboxMedStart.getText().toString().trim();
                     String medendEdit = dboxMedEnd.getText().toString().trim();
                     String medIdEdit = dboxMedId.getText().toString().trim();
-                    ArrayList<String> med = new ArrayList<String>();
+
 
                     if (med.contains(medIdEdit)) {
                         presciptionEditModelList.remove(pos);
