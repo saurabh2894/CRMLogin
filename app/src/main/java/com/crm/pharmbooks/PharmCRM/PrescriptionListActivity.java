@@ -64,6 +64,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
                 Intent intent = new Intent(PrescriptionListActivity.this,CustomerPrescription.class);
                 intent.putExtra("presId",listPresId.get(listDataHeader.get(i)).get(i1));
+                intent.putExtra("customerphone",listPresId.get(listDataHeader.get(i)).get(i1));
                 startActivity(intent);
                 Log.d("mytag",listPresId.get(listDataHeader.get(i)).get(i1));
                 return false;

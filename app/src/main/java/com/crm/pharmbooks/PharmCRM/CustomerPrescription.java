@@ -53,13 +53,15 @@ public class CustomerPrescription extends AppCompatActivity {
     FloatingActionButton fab;
     ProgressBar pb;
     TextView txt;
-    String presId;
+    String presId,customerphone;
     int pos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extra = getIntent().getExtras();
         presId = extra.getString("presId");
+        customerphone=extra.getString("customerphone");
+        Log.d("phpne",customerphone);
         setContentView(R.layout.activity_customer_prescription);
         recyclerView = (RecyclerView) findViewById(R.id.re);
         recyclerView.setVisibility(View.GONE);
@@ -243,7 +245,8 @@ public class CustomerPrescription extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 try {
                     //params.put("prescid",presId);
-                    //params.put("counter",String.valueOf(presciptionEditModelList.size()));
+                    //params.put("counter",String.valueOf(presciptionEditModelList.size()));\
+                    params.put("customerphone",customerphone);
                     params.put("dataedit",getJsonFromMyFormObjectEdit(presciptionEditModelList)+"");
 
                 } catch (JSONException e) {
@@ -334,6 +337,7 @@ public class CustomerPrescription extends AppCompatActivity {
                     params.put("prescid",presId);
                     params.put("counter",String.valueOf(presciptionAddModelList.size()));
                     params.put("dataadd",getJsonFromMyFormObjectAdd(presciptionAddModelList)+"");
+                    params.put("customerphone",customerphone);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
