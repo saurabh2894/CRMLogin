@@ -42,10 +42,11 @@ import Model.PresciptionModel;
 public class CustomerPrescription extends AppCompatActivity {
 
     private ArrayList<PresciptionModel> presciptionModelList = new ArrayList<>();
+    private ArrayList<PresciptionModel> presciptionAddModelList = new ArrayList<>();
     private ArrayList<PresciptionModel> presciptionEditModelList = new ArrayList<>();
     ArrayList<String> med = new ArrayList<String>();
     private RecyclerView recyclerView;
-    private PrescriptionAdapter pAdapter,pEditAdapter;
+    private PrescriptionAdapter pAdapter,pEditAdapter,pAddAdapter;
     EditText dboxMedName,dboxMedDose,dboxMedStart,dboxMedEnd;
     FloatingActionButton fab;
     ProgressBar pb;
@@ -69,6 +70,7 @@ public class CustomerPrescription extends AppCompatActivity {
 
         pAdapter = new PrescriptionAdapter(presciptionModelList);
         pEditAdapter = new PrescriptionAdapter(presciptionEditModelList);
+        pAddAdapter = new PrescriptionAdapter(presciptionAddModelList);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -261,17 +263,16 @@ public class CustomerPrescription extends AppCompatActivity {
 
     //For Add Prescription
 
-/*
-    public JSONObject getJsonFromMyFormObjectAdd(ArrayList<PresciptionModel> presciptionModelList) throws JSONException {
+    public JSONObject getJsonFromMyFormObjectAdd(ArrayList<PresciptionModel> presciptionAddModelList) throws JSONException {
         JSONObject responseDetailsJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         try {
-            for (int i = 0; i < presciptionModelList.size(); i++) {
+            for (int i = 0; i < presciptionAddModelList.size(); i++) {
                 JSONObject formDetailsJson = new JSONObject();
-                formDetailsJson.put("medicineName_"+(i+1), presciptionModelList.get(i).getMedName());
-                formDetailsJson.put("dosage"+(i+1), String.valueOf(presciptionModelList.get(i).getDosage()));
-                formDetailsJson.put("refilldate"+(i+1), String.valueOf(presciptionModelList.get(i).getRefillDate()));
-                formDetailsJson.put("enddate"+(i+1), String.valueOf(presciptionModelList.get(i).getEndDate()));
+                formDetailsJson.put("medicineName_"+(i+1), presciptionAddModelList.get(i).getMedName());
+                formDetailsJson.put("dosage"+(i+1), String.valueOf(presciptionAddModelList.get(i).getDosage()));
+                //formDetailsJson.put("refilldate"+(i+1), String.valueOf(presciptionAddModelList.get(i).getRefillDate()));
+                //formDetailsJson.put("enddate"+(i+1), String.valueOf(presciptionAddModelList.get(i).getEndDate()));
 
                 jsonArray.put(formDetailsJson);
 
@@ -282,7 +283,7 @@ public class CustomerPrescription extends AppCompatActivity {
         catch (JSONException e) {
             e.printStackTrace();
         }
-        responseDetailsJson.put("presciptionModelList", jsonArray);
+        responseDetailsJson.put("presciptionAddModelList", jsonArray);
 
         Log.d("mytag",responseDetailsJson+"");
         Log.d("mytag",presId+"");
@@ -329,8 +330,8 @@ public class CustomerPrescription extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 try {
                     params.put("prescid",presId);
-                    params.put("counter",String.valueOf(presciptionEditModelList.size()));
-                    params.put("data",getJsonFromMyFormObjectAdd(presciptionEditModelList)+"");
+                    params.put("counter",String.valueOf(presciptionAddModelList.size()));
+                    params.put("data",getJsonFromMyFormObjectAdd(presciptionAddModelList)+"");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -345,7 +346,7 @@ public class CustomerPrescription extends AppCompatActivity {
 
     }
 
-*/
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -522,8 +523,11 @@ public class CustomerPrescription extends AppCompatActivity {
                     if(flag==0){
                         ndate=nyear+"-"+nmonth+"-"+ndays;
                     }
+                    presciptionAddModelList.add(new PresciptionModel(medname, meddose, dateStart, ndate,"0"));
+                    pAddAdapter.notifyDataSetChanged();
                     presciptionModelList.add(new PresciptionModel(medname, meddose, dateStart, ndate,"0"));
                     pAdapter.notifyDataSetChanged();
+                    sendAddDataList();
                 }
 
 
