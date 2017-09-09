@@ -58,6 +58,7 @@
         <EditText
             android:id="@+id/dboxMedDose"
             android:layout_width="0dp"
+            android:inputType="number"
             android:layout_height="wrap_content"
             android:hint="Enter Dosage Here"
             android:textSize="16sp"
