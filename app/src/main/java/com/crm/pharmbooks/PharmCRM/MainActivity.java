@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,DashBoard.OnFragmentInteractionListener,
         NewFragment.OnFragmentInteractionListener{
 
-    static String LOAD_FRAG_TAG="";
+    static String LOAD_FRAG_TAG=" ";
     DrawerLayout drawer;
     FrameLayout frame;
     int flag=0;
@@ -29,12 +29,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        Fragment fragment = DashBoard.newInstance();
+
         frame = (FrameLayout) findViewById(R.id.frame);
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.frame, fragment, "DashBoard");
-        fragmentTransaction.commitAllowingStateLoss();
+
+        loadFragment();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -98,29 +96,18 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             getSupportActionBar().setTitle("DashBoard");
-            Fragment fragment = DashBoard.newInstance();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, fragment, "DashBoard");
-            fragmentTransaction.commitAllowingStateLoss();
+            LOAD_FRAG_TAG="DashBoard";
+            loadFragment();
+
         } else if (id == R.id.nav_refill) {
+            LOAD_FRAG_TAG="Refill";
             getSupportActionBar().setTitle("Refilling");
-            Fragment fragment = NewFragment.newInstance();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, fragment, "New Fragment");
-            fragmentTransaction.commitAllowingStateLoss();
+            loadFragment();
 
         } else if (id == R.id.nav_promotion) {
+            LOAD_FRAG_TAG="Transactional";
             getSupportActionBar().setTitle("Transactional Message");
-            Fragment fragment = new TransactionalMessage();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, fragment, "Transactional Data");
-            fragmentTransaction.commitAllowingStateLoss();
+            loadFragment();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -133,6 +120,43 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+    public void loadFragment(){
+        if(LOAD_FRAG_TAG=="DashBoard"){
+
+            Fragment fragment = DashBoard.newInstance();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, fragment, "DashBoard");
+            fragmentTransaction.commitAllowingStateLoss();
+        }
+        else if(LOAD_FRAG_TAG=="Refill"){
+
+            Fragment fragment = NewFragment.newInstance();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, fragment, "New Fragment");
+            fragmentTransaction.commitAllowingStateLoss();
+        }
+        else if(LOAD_FRAG_TAG=="Transactional"){
+
+            Fragment fragment = new TransactionalMessage();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, fragment, "Transactional Data");
+            fragmentTransaction.commitAllowingStateLoss();
+        }
+        else {
+            Fragment fragment = DashBoard.newInstance();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.frame, fragment, "DashBoard");
+        fragmentTransaction.commitAllowingStateLoss();
+        }
+    }
 
 }
 
