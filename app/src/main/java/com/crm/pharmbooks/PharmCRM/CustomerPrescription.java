@@ -52,7 +52,7 @@ public class CustomerPrescription extends AppCompatActivity {
 
     ArrayList<String> med = new ArrayList<String>();
     private RecyclerView recyclerView;
-    private PrescriptionAdapter pAdapter,pEditAdapter,pAddAdapter;
+    private PrescriptionAdapter pAdapter,pEditAdapter,pAddAdapter,pDeleteAdapter;
     EditText dboxMedName,dboxMedDose,dboxMedStart,dboxMedEnd;
     FloatingActionButton fab;
     ProgressBar pb;
@@ -111,15 +111,25 @@ public class CustomerPrescription extends AppCompatActivity {
             public void onLongClick(View view, int position) {
                 //Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
                 pos=position;
-
+                final ArrayList<PresciptionModel> presciptionDeleteModelList = new ArrayList<>();
+                pDeleteAdapter = new PrescriptionAdapter(presciptionDeleteModelList);
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(CustomerPrescription.this);
                 alertDialog.setTitle("Remove Entry...");
                 alertDialog.setMessage("Do You Really Want To Remove This Entry?");
                 alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        PresciptionModel deletedValue=presciptionModelList.get(pos);
+                        PresciptionModel detail = new PresciptionModel(deletedValue.getMedName(),deletedValue.getDosage(),deletedValue.getRefillDate(),deletedValue.getEndDate(),deletedValue.getMedicineid());
+                        presciptionDeleteModelList.add(detail);
+                        pDeleteAdapter.notifyDataSetChanged();
+                        sendDeleteDataList(presciptionDeleteModelList);
+
                         presciptionModelList.remove(pos);
                         pAdapter.notifyDataSetChanged();
+                        Toast.makeText(CustomerPrescription.this,deletedValue.getMedName()+" is deleted",Toast.LENGTH_LONG).show();
+
+
                     }
                 });
                 alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -343,7 +353,7 @@ public class CustomerPrescription extends AppCompatActivity {
                     params.put("prescid",presId);
                     params.put("counter",String.valueOf(presciptionAddModelList.size()));
                     params.put("dataadd",getJsonFromMyFormObjectAdd(presciptionAddModelList)+"");
-                    params.put("customerphoneadd",customerphone);
+                    params.put("cnumber",customerphone);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -359,7 +369,92 @@ public class CustomerPrescription extends AppCompatActivity {
     }
 
 
+    //For Deleted prescription values
 
+    public JSONObject getJsonFromMyFormObjectDelete(ArrayList<PresciptionModel> presciptionDeleteModelList) throws JSONException {
+        JSONObject responseDetailsJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        try {
+
+            for (int i = 0; i < presciptionDeleteModelList.size(); i++) {
+                JSONObject formDetailsJson = new JSONObject();
+                //formDetailsJson.put("medicineName", presciptionDeleteModelList.get(i).getMedName());
+                //formDetailsJson.put("dosage", String.valueOf(presciptionDeleteModelList.get(i).getDosage()));
+                //formDetailsJson.put("refilldate", String.valueOf(presciptionDeleteModelList.get(i).getRefillDate()));
+                //formDetailsJson.put("enddate"+(i+1), String.valueOf(presciptionDeleteModelList.get(i).getEndDate()));
+                formDetailsJson.put("medicineId", String.valueOf(presciptionDeleteModelList.get(i).getMedicineid()));
+                jsonArray.put(formDetailsJson);
+            }
+
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        responseDetailsJson.put("presciptionDeleteModelList", jsonArray);
+
+        Log.d("mytag",responseDetailsJson+"");
+        Log.d("mytag",presId+"");
+        //Log.d("mytag",presciptionEditModelList.size()+"");
+
+
+        return responseDetailsJson;
+
+
+    }
+
+
+    public void sendDeleteDataList(final ArrayList<PresciptionModel> presciptionDeleteModelList) {
+        String url = "https://pharmcrm.herokuapp.com/api/save/";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        int result;
+                        //String msg = null;
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            //msg = object.getString("msg");
+                            result= object.getInt("result");
+                            if(result == 1)
+                            {
+
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(CustomerPrescription.this,response,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(CustomerPrescription.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String, String> params = new HashMap<>();
+                try {
+                    //params.put("prescid",presId);
+                    //params.put("counter",String.valueOf(presciptionEditModelList.size()));\
+                    //params.put("customerphoneedit",customerphone);
+                    params.put("datadelete",getJsonFromMyFormObjectEdit(presciptionDeleteModelList)+"");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                return params;
+            }
+
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
 
 
 
