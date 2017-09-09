@@ -54,7 +54,7 @@ public class CustomerPrescription extends AppCompatActivity {
     private RecyclerView recyclerView;
     private PrescriptionAdapter pAdapter,pEditAdapter,pAddAdapter,pDeleteAdapter;
     EditText dboxMedName,dboxMedDose,dboxMedStart,dboxMedEnd;
-    String medNameEditbox="",medDoseEditbox="";
+    String medNameEditbox="",medDoseEditbox="",medStartEditbox="",medEndEditbox="",medIdEditbox="";
 
     FloatingActionButton fab;
     ProgressBar pb;
@@ -492,9 +492,9 @@ public class CustomerPrescription extends AppCompatActivity {
             alertDialog.setTitle("Edit Details...");
             medNameEditbox = presciptionModelList.get(pos).getMedName();
             medDoseEditbox = presciptionModelList.get(pos).getDosage();
-            String medStart = presciptionModelList.get(pos).getRefillDate();
-            String medEnd = presciptionModelList.get(pos).getEndDate();
-            String medId = presciptionModelList.get(pos).getMedicineid();
+            medStartEditbox = presciptionModelList.get(pos).getRefillDate();
+            medEndEditbox = presciptionModelList.get(pos).getEndDate();
+            medIdEditbox = presciptionModelList.get(pos).getMedicineid();
             btn="EDIT";
 
             dboxMedName.setText(medNameEditbox);
@@ -503,7 +503,7 @@ public class CustomerPrescription extends AppCompatActivity {
             de.setVisibility(View.GONE);
             dboxMedStart.setVisibility(View.GONE);
             dboxMedEnd.setVisibility(View.GONE);
-            dboxMedId.setText(medId);
+            dboxMedId.setText(medIdEditbox);
 
         }
         else{
@@ -561,7 +561,7 @@ public class CustomerPrescription extends AppCompatActivity {
                                     }
                                 }
                                 presciptionEditModelList.remove(pos);
-                                presciptionEditModelList.add(pos, new PresciptionModel(medNameEdit, meddoseEdit, medstartEdit, medendEdit, medIdEdit));
+                                presciptionEditModelList.add(pos, new PresciptionModel(medNameEdit, meddoseEdit, medStartEditbox, medEndEditbox, medIdEdit));
                                 pEditAdapter.notifyDataSetChanged();
                                 Log.d("mytag", "You were right1");
                             } else {
