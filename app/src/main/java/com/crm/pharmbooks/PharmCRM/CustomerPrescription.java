@@ -127,7 +127,7 @@ public class CustomerPrescription extends AppCompatActivity {
             }
         }));
 
-        getSupportActionBar().setTitle("Prescriptions");
+        getSupportActionBar().setTitle("");
         String url = "https://pharmcrm.herokuapp.com/api/medicine/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -354,36 +354,9 @@ public class CustomerPrescription extends AppCompatActivity {
 
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
 
 
-        ActionBar actionBar = getSupportActionBar();;
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.prescriptiondetailactionbar, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.saveIcon) {
-
-           // Log.d("mtag","save icon call working");
-           // sendEditDataList();
-            //sendAddDataList();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
     public void showCustomDialog(final int pos){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(CustomerPrescription.this);
         // Get the layout inflater
@@ -458,7 +431,6 @@ public class CustomerPrescription extends AppCompatActivity {
                     if (pos != -1) {
                         presciptionModelList.remove(pos);
                         presciptionModelList.add(pos, new PresciptionModel(medname, meddose, medstart, medend, medId));
-
                         pAdapter.notifyDataSetChanged();
 
 
@@ -536,12 +508,12 @@ public class CustomerPrescription extends AppCompatActivity {
                         if (flag == 0) {
                             ndate = nyear + "-" + nmonth + "-" + ndays;
                         }
-                        presciptionModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
-                        pAdapter.notifyDataSetChanged();
+
                         */
                         presciptionAddModelList.add(new PresciptionModel(medname, meddose,"0","0", "0"));
                         pAddAdapter.notifyDataSetChanged();
-
+                        presciptionModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
+                        pAdapter.notifyDataSetChanged();
                         sendAddDataList();
                     }
 
@@ -549,8 +521,7 @@ public class CustomerPrescription extends AppCompatActivity {
                     // Write your code here to invoke YES event
 
                 }else{
-                    Snackbar.make(m, "Enter Valid Values Please", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    Toast.makeText(CustomerPrescription.this, "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

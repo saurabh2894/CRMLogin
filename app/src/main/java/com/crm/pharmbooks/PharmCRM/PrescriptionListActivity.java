@@ -72,6 +72,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
                 String stringreq = parts[1];
                 intent.putExtra("customerphone",stringreq);
 
+
                 startActivity(intent);
                 Log.d("mytag",listPresId.get(listDataHeader.get(i)).get(i1));
 

@@ -5,7 +5,7 @@
 
 package com.crm.pharmbooks.PharmCRM;
 
-        import android.content.Context;
+import android.content.Context;
         import android.content.Intent;
         import android.net.Uri;
         import android.os.Bundle;
@@ -39,8 +39,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new, container, false);
         addNew = (Button) rootView.findViewById(R.id.addnew);
         existing = (Button) rootView.findViewById(R.id.existing);

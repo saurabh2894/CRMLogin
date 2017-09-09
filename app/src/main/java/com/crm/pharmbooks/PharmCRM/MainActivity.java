@@ -3,6 +3,7 @@ package com.crm.pharmbooks.PharmCRM;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,21 +11,25 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,DashBoard.OnFragmentInteractionListener,
         NewFragment.OnFragmentInteractionListener{
 
     DrawerLayout drawer;
+    FrameLayout frame;
+    int flag=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
         Fragment fragment = DashBoard.newInstance();
+        frame = (FrameLayout) findViewById(R.id.frame);
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out);
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.frame, fragment, "DashBoard");
         fragmentTransaction.commitAllowingStateLoss();
 
@@ -44,12 +49,24 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
+        else if(!drawer.isDrawerOpen(GravityCompat.START)||flag==0){
+
+            Snackbar.make(frame,"Do You Really want to exit",Snackbar.LENGTH_INDEFINITE).
+                    setAction("Exit", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            MainActivity.super.onBackPressed();
+                        }
+                    }).show();
+        }
+//        if(flag==1){
+//            super.onBackPressed();
+//        }
     }
 
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /*public class DashBoard extends AppCompatActivity {
 
@@ -19,10 +20,11 @@ import android.view.ViewGroup;
 
 
 
-public class DashBoard extends Fragment {
+public class DashBoard extends Fragment  implements View.OnClickListener{
 
 
     private OnFragmentInteractionListener mListener;
+    Button NoOfCustomersToBeRefilled,NoOFCustomersOnboard,NoOfRepeatedCustomers,NoOfMedicinesRefilled;
 
     public DashBoard() {
         // Required empty public constructor
@@ -41,10 +43,20 @@ public class DashBoard extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_dash_board, container, false);
+
+        View rootView = inflater.inflate(R.layout.activity_dash_board, container, false);
+        NoOfCustomersToBeRefilled = (Button) rootView.findViewById(R.id.NoOfCustomersToBeRefilled);
+        NoOFCustomersOnboard = (Button) rootView.findViewById(R.id.NoOFCustomersOnboard);
+        NoOfRepeatedCustomers = (Button) rootView.findViewById(R.id.NoOfRepeatedCustomers);
+        NoOfMedicinesRefilled = (Button) rootView.findViewById(R.id.NoOfMedicinesRefilled);
+
+        NoOfCustomersToBeRefilled.setOnClickListener(this);
+        NoOFCustomersOnboard.setOnClickListener(this);
+        NoOfRepeatedCustomers.setOnClickListener(this);
+        NoOfMedicinesRefilled.setOnClickListener(this);
+        return rootView;
     }
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -61,6 +73,11 @@ public class DashBoard extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 
 

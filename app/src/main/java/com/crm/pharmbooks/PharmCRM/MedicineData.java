@@ -11,6 +11,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -74,11 +75,16 @@ public class MedicineData extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MedicineName_value = MedicineName.getText().toString();
-                MedicineQuantity_value = MedicineQuantity.getText().toString();
-                MedicineDetailModel detail = new MedicineDetailModel(MedicineName_value,Integer.parseInt(MedicineQuantity_value));
-                medicineDetailList.add(detail);
-                mAdapter.notifyDataSetChanged();
+                if (!(TextUtils.isEmpty(MedicineName.getText()) && TextUtils.isEmpty(MedicineQuantity.getText().toString().trim()))) {
+                    MedicineName_value = MedicineName.getText().toString();
+                    MedicineQuantity_value = MedicineQuantity.getText().toString();
+                    MedicineDetailModel detail = new MedicineDetailModel(MedicineName_value, Integer.parseInt(MedicineQuantity_value));
+                    medicineDetailList.add(detail);
+                    mAdapter.notifyDataSetChanged();
+                }
+                else{
+                    Toast.makeText(MedicineData.this, "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -121,8 +127,8 @@ public class MedicineData extends AppCompatActivity {
                 MedicineNameDialogBox = (EditText) inflator.findViewById(R.id.MedicineNameDialogBox);
                 MedicineQuantityDialogBox = (EditText) inflator.findViewById(R.id.MedicineQuantityDialogBox);
 
-                String name =   medicineDetailList.get(position).getMName();
-                String number = medicineDetailList.get(position).getMQuantity()+"";
+                final String name =   medicineDetailList.get(position).getMName();
+                final String number = medicineDetailList.get(position).getMQuantity()+"";
                 MedicineNameDialogBox.setText(name);
                 MedicineQuantityDialogBox.setText(number);
                 // Setting Positive "Yes" Button
@@ -130,12 +136,11 @@ public class MedicineData extends AppCompatActivity {
                     public void onClick(DialogInterface dialog,int which) {
 
 
-
-                        MedicineName_valuedialogbox = MedicineNameDialogBox.getText().toString();
-                        MedicineQuantity_valuedialogbox = MedicineQuantityDialogBox.getText().toString();
-                        medicineDetailList.remove(pos);
-
-                        medicineDetailList.add(pos,new MedicineDetailModel(MedicineName_valuedialogbox,Integer.parseInt(MedicineQuantity_valuedialogbox)));
+                        if (!(TextUtils.isEmpty(MedicineNameDialogBox.getText()) && TextUtils.isEmpty(MedicineQuantityDialogBox.getText().toString().trim()))) {
+                            MedicineName_valuedialogbox = MedicineNameDialogBox.getText().toString();
+                            MedicineQuantity_valuedialogbox = MedicineQuantityDialogBox.getText().toString();
+                            medicineDetailList.remove(pos);
+                            medicineDetailList.add(pos, new MedicineDetailModel(MedicineName_valuedialogbox, Integer.parseInt(MedicineQuantity_valuedialogbox)));
                         /*MedicineDetailModel detail = new MedicineDetailModel(MedicineName_value,Integer.parseInt(MedicineQuantity_value));
                         String name = detail.getMName();
                         Integer number = detail.getMQuantity();
@@ -143,11 +148,18 @@ public class MedicineData extends AppCompatActivity {
                         */
 
 
-                        mAdapter.notifyDataSetChanged();
+                            mAdapter.notifyDataSetChanged();
 
 
-                        // Write your code here to invoke YES event
-                        Toast.makeText(MedicineData.this, "You clicked on YES and added  "+ MedicineName_valuedialogbox, Toast.LENGTH_SHORT).show();
+                            // Write your code here to invoke YES event
+                            Toast.makeText(MedicineData.this, "You clicked on YES and added  " + MedicineName_valuedialogbox, Toast.LENGTH_SHORT).show();
+                        }
+
+
+
+                        else{
+                            Toast.makeText(MedicineData.this, "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
@@ -258,7 +270,6 @@ public class MedicineData extends AppCompatActivity {
                         }
                         Toast.makeText(MedicineData.this,response,Toast.LENGTH_LONG).show();
                         //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
-
                     }
                 },
                 new Response.ErrorListener() {
