@@ -54,6 +54,8 @@ public class CustomerPrescription extends AppCompatActivity {
     private RecyclerView recyclerView;
     private PrescriptionAdapter pAdapter,pEditAdapter,pAddAdapter,pDeleteAdapter;
     EditText dboxMedName,dboxMedDose,dboxMedStart,dboxMedEnd;
+    String medNameEditbox="",medDoseEditbox="";
+
     FloatingActionButton fab;
     ProgressBar pb;
     TextView txt;
@@ -441,7 +443,7 @@ public class CustomerPrescription extends AppCompatActivity {
                     //params.put("prescid",presId);
                     //params.put("counter",String.valueOf(presciptionEditModelList.size()));\
                     //params.put("customerphoneedit",customerphone);
-                    params.put("datadelete",getJsonFromMyFormObjectEdit(presciptionDeleteModelList)+"");
+                    params.put("datadelete",getJsonFromMyFormObjectDelete(presciptionDeleteModelList)+"");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -488,15 +490,15 @@ public class CustomerPrescription extends AppCompatActivity {
         String btn="";
         if(pos!=-1) {
             alertDialog.setTitle("Edit Details...");
-            final String medName = presciptionModelList.get(pos).getMedName();
-            String medDose = presciptionModelList.get(pos).getDosage();
+            medNameEditbox = presciptionModelList.get(pos).getMedName();
+            medDoseEditbox = presciptionModelList.get(pos).getDosage();
             String medStart = presciptionModelList.get(pos).getRefillDate();
             String medEnd = presciptionModelList.get(pos).getEndDate();
             String medId = presciptionModelList.get(pos).getMedicineid();
             btn="EDIT";
 
-            dboxMedName.setText(medName);
-            dboxMedDose.setText(medDose);
+            dboxMedName.setText(medNameEditbox);
+            dboxMedDose.setText(medDoseEditbox);
             ds.setVisibility(View.GONE);
             de.setVisibility(View.GONE);
             dboxMedStart.setVisibility(View.GONE);
@@ -534,43 +536,49 @@ public class CustomerPrescription extends AppCompatActivity {
                 String medstart = dboxMedStart.getText().toString().trim();
                 String medend = dboxMedEnd.getText().toString().trim();
                 String medId = dboxMedId.getText().toString().trim();
-                if (!(TextUtils.isEmpty(medname) && TextUtils.isEmpty(meddose))) {
+                if (!(TextUtils.isEmpty(medname) && TextUtils.isEmpty(meddose)) ) {
                     if (pos != -1) {
-                        presciptionModelList.remove(pos);
-                        presciptionModelList.add(pos, new PresciptionModel(medname, meddose, medstart, medend, medId));
-                        pAdapter.notifyDataSetChanged();
+                        if (!(medNameEditbox.equals(medname) && medDoseEditbox.equals(meddose))) {
+                            presciptionModelList.remove(pos);
+                            presciptionModelList.add(pos, new PresciptionModel(medname, meddose, medstart, medend, medId));
+                            pAdapter.notifyDataSetChanged();
 
 
-                        //code for Prescription Edit List
+                            //code for Prescription Edit List
 
-                        String medNameEdit = dboxMedName.getText().toString().trim();
-                        String meddoseEdit = dboxMedDose.getText().toString().trim();
-                        String medstartEdit = dboxMedStart.getText().toString().trim();
-                        String medendEdit = dboxMedEnd.getText().toString().trim();
-                        String medIdEdit = dboxMedId.getText().toString().trim();
+                            String medNameEdit = dboxMedName.getText().toString().trim();
+                            String meddoseEdit = dboxMedDose.getText().toString().trim();
+                            String medstartEdit = dboxMedStart.getText().toString().trim();
+                            String medendEdit = dboxMedEnd.getText().toString().trim();
+                            String medIdEdit = dboxMedId.getText().toString().trim();
 
 
-                        if (med.contains(medIdEdit)) {
-                            int pos=0;
-                            for(int i=0;i<med.size();i++){
-                                if(med.get(i).equals(medIdEdit)){
-                                    pos=i;
+                            if (med.contains(medIdEdit)) {
+                                int pos = 0;
+                                for (int i = 0; i < med.size(); i++) {
+                                    if (med.get(i).equals(medIdEdit)) {
+                                        pos = i;
+                                    }
                                 }
+                                presciptionEditModelList.remove(pos);
+                                presciptionEditModelList.add(pos, new PresciptionModel(medNameEdit, meddoseEdit, medstartEdit, medendEdit, medIdEdit));
+                                pEditAdapter.notifyDataSetChanged();
+                                Log.d("mytag", "You were right1");
+                            } else {
+                                med.add(medIdEdit);
+                                presciptionEditModelList.add(new PresciptionModel(medNameEdit, meddoseEdit, medstartEdit, medendEdit, medIdEdit));
+                                pEditAdapter.notifyDataSetChanged();
+                                Log.d("mytag", "You were right");
                             }
-                            presciptionEditModelList.remove(pos);
-                            presciptionEditModelList.add(pos, new PresciptionModel(medNameEdit, meddoseEdit, medstartEdit, medendEdit, medIdEdit));
-                            pEditAdapter.notifyDataSetChanged();
-                            Log.d("mytag", "You were right1");
+
+
+                            sendEditDataList(presciptionEditModelList);
                         } else {
-                            med.add(medIdEdit);
-                            presciptionEditModelList.add(new PresciptionModel(medNameEdit, meddoseEdit, medstartEdit, medendEdit, medIdEdit));
-                            pEditAdapter.notifyDataSetChanged();
-                            Log.d("mytag", "You were right");
+                            Toast.makeText(CustomerPrescription.this, "Don't add save values again, make some changes bro!", Toast.LENGTH_SHORT).show();
+
                         }
 
-
-                        sendEditDataList(presciptionEditModelList);
-                    } else {
+                    }else {
                         /*
                         String dateStart = presciptionModelList.get(0).getRefillDate();
                         String[] date = dateStart.split("-");
@@ -623,18 +631,22 @@ public class CustomerPrescription extends AppCompatActivity {
                         }
 
                         */
-                        presciptionAddModelList.add(new PresciptionModel(medname, meddose,"0","0", "0"));
-                        pAddAdapter.notifyDataSetChanged();
-                        presciptionModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
-                        pAdapter.notifyDataSetChanged();
-                        sendAddDataList(presciptionAddModelList);
-                        //TODO send a request to server to fetch the lastest entry of prescription list
+                            presciptionAddModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
+                            pAddAdapter.notifyDataSetChanged();
+                            presciptionModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
+                            pAdapter.notifyDataSetChanged();
+                            sendAddDataList(presciptionAddModelList);
+                            //TODO send a request to server to fetch the lastest entry of prescription list
                     }
 
 
-                    // Write your code here to invoke YES event
+                        // Write your code here to invoke YES event
 
-                }else{
+                }
+
+
+
+                else{
                     Toast.makeText(CustomerPrescription.this, "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
                 }
             }
