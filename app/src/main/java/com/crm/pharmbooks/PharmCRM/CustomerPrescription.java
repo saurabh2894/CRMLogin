@@ -2,8 +2,11 @@ package com.crm.pharmbooks.PharmCRM;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,8 +21,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,8 +49,7 @@ import Model.PresciptionModel;
 public class CustomerPrescription extends AppCompatActivity {
 
     private ArrayList<PresciptionModel> presciptionModelList = new ArrayList<>();
-    private ArrayList<PresciptionModel> presciptionAddModelList = new ArrayList<>();
-    private ArrayList<PresciptionModel> presciptionEditModelList = new ArrayList<>();
+
     ArrayList<String> med = new ArrayList<String>();
     private RecyclerView recyclerView;
     private PrescriptionAdapter pAdapter,pEditAdapter,pAddAdapter;
@@ -53,6 +57,7 @@ public class CustomerPrescription extends AppCompatActivity {
     FloatingActionButton fab;
     ProgressBar pb;
     TextView txt;
+    RelativeLayout rl;
     String presId,customerphone;
     int pos;
     @Override
@@ -63,6 +68,7 @@ public class CustomerPrescription extends AppCompatActivity {
         customerphone=extra.getString("customerphone");
         Log.d("customerphone",customerphone);
         setContentView(R.layout.activity_customer_prescription);
+        rl=(RelativeLayout)findViewById(R.id.rel);
         recyclerView = (RecyclerView) findViewById(R.id.re);
         recyclerView.setVisibility(View.GONE);
         pb= (ProgressBar) findViewById(R.id.pb) ;
@@ -73,8 +79,7 @@ public class CustomerPrescription extends AppCompatActivity {
         TextView title = (TextView)toolbar.findViewById(R.id.title);
 
         pAdapter = new PrescriptionAdapter(presciptionModelList);
-        pEditAdapter = new PrescriptionAdapter(presciptionEditModelList);
-        pAddAdapter = new PrescriptionAdapter(presciptionAddModelList);
+
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -133,6 +138,7 @@ public class CustomerPrescription extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 recyclerView.setVisibility(View.VISIBLE);
+                rl.setVisibility(View.GONE);
                 pb.setVisibility(View.GONE);
                 txt.setVisibility(View.GONE);
                 try {
@@ -209,7 +215,7 @@ public class CustomerPrescription extends AppCompatActivity {
     }
 
 
-    public void sendEditDataList() {
+    public void sendEditDataList(final ArrayList<PresciptionModel> presciptionEditModelList) {
         String url = "https://pharmcrm.herokuapp.com/api/save/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -299,7 +305,7 @@ public class CustomerPrescription extends AppCompatActivity {
     }
 
 
-    public void sendAddDataList() {
+    public void sendAddDataList(final ArrayList<PresciptionModel> presciptionAddModelList) {
         String url = "https://pharmcrm.herokuapp.com/api/save/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -422,6 +428,12 @@ public class CustomerPrescription extends AppCompatActivity {
         alertDialog.setPositiveButton(btn, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
+                ArrayList<PresciptionModel> presciptionEditModelList = new ArrayList<>();
+                ArrayList<PresciptionModel> presciptionAddModelList = new ArrayList<>();
+
+                pEditAdapter = new PrescriptionAdapter(presciptionEditModelList);
+                pAddAdapter = new PrescriptionAdapter(presciptionAddModelList);
+
                 String medname = dboxMedName.getText().toString().trim();
                 String meddose = dboxMedDose.getText().toString().trim();
                 String medstart = dboxMedStart.getText().toString().trim();
@@ -444,19 +456,25 @@ public class CustomerPrescription extends AppCompatActivity {
 
 
                         if (med.contains(medIdEdit)) {
+                            int pos=0;
+                            for(int i=0;i<med.size();i++){
+                                if(med.get(i).equals(medIdEdit)){
+                                    pos=i;
+                                }
+                            }
                             presciptionEditModelList.remove(pos);
                             presciptionEditModelList.add(pos, new PresciptionModel(medNameEdit, meddoseEdit, medstartEdit, medendEdit, medIdEdit));
                             pEditAdapter.notifyDataSetChanged();
                             Log.d("mytag", "You were right1");
                         } else {
                             med.add(medIdEdit);
-                            presciptionEditModelList.add(pos, new PresciptionModel(medNameEdit, meddoseEdit, medstartEdit, medendEdit, medIdEdit));
+                            presciptionEditModelList.add(new PresciptionModel(medNameEdit, meddoseEdit, medstartEdit, medendEdit, medIdEdit));
                             pEditAdapter.notifyDataSetChanged();
                             Log.d("mytag", "You were right");
                         }
 
 
-                        sendEditDataList();
+                        sendEditDataList(presciptionEditModelList);
                     } else {
                         /*
                         String dateStart = presciptionModelList.get(0).getRefillDate();
@@ -514,7 +532,8 @@ public class CustomerPrescription extends AppCompatActivity {
                         pAddAdapter.notifyDataSetChanged();
                         presciptionModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
                         pAdapter.notifyDataSetChanged();
-                        sendAddDataList();
+                        sendAddDataList(presciptionAddModelList);
+                        //TODO send a request to server to fetch the lastest entry of prescription list
                     }
 
 
@@ -548,6 +567,43 @@ public class CustomerPrescription extends AppCompatActivity {
                     Log.d("mytag","medicine data dialog box call working");
 
                 }*/
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+
+        ActionBar actionBar = getSupportActionBar();;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.customerprescriptionactionbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                    // This activity is NOT part of this app's task, so create a new task
+                    // when navigating up, with a synthesized back stack.
+                    TaskStackBuilder.create(this)
+                            // Add all of this activity's parents to the back stack
+                            .addNextIntentWithParentStack(upIntent)
+                            // Navigate up to the closest parent
+                            .startActivities();
+                } else {
+                    // This activity is part of this app's task, so simply
+                    // navigate up to the logical parent activity.
+                    NavUtils.navigateUpTo(this, upIntent);
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

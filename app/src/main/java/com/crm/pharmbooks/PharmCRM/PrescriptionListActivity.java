@@ -4,12 +4,20 @@ package com.crm.pharmbooks.PharmCRM;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -42,6 +50,9 @@ public class PrescriptionListActivity extends AppCompatActivity {
     HashMap<String, List<String>> listDataChild;
     HashMap<String, List<String>> listPresId;
     String username;
+    ProgressBar pb;
+    TextView txt;
+    RelativeLayout rl;
 
 
     @Override
@@ -53,6 +64,9 @@ public class PrescriptionListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         TextView title = (TextView)toolbar.findViewById(R.id.title);
 
+        rl=(RelativeLayout)findViewById(R.id.rel);
+        pb= (ProgressBar) findViewById(R.id.pb) ;
+        txt=(TextView) findViewById(R.id.loadingtxt);
 
         SharedPreferences sharedpreferences = this.getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
         String restoredText = sharedpreferences.getString("username", null);
@@ -60,6 +74,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
             username = sharedpreferences.getString("username", "No name defined");//"No name defined" is the default value.
         }
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
+        expListView.setVisibility(View.GONE);
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
@@ -91,6 +106,42 @@ public class PrescriptionListActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+
+        ActionBar actionBar = getSupportActionBar();;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.prescriptionlistactivityactionbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                    // This activity is NOT part of this app's task, so create a new task
+                    // when navigating up, with a synthesized back stack.
+                    TaskStackBuilder.create(this)
+                            // Add all of this activity's parents to the back stack
+                            .addNextIntentWithParentStack(upIntent)
+                            // Navigate up to the closest parent
+                            .startActivities();
+                } else {
+                    // This activity is part of this app's task, so simply
+                    // navigate up to the logical parent activity.
+                    NavUtils.navigateUpTo(this, upIntent);
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 
     public void sendR() {
@@ -102,6 +153,10 @@ public class PrescriptionListActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        expListView.setVisibility(View.VISIBLE);
+                        rl.setVisibility(View.GONE);
+                        pb.setVisibility(View.GONE);
+                        txt.setVisibility(View.GONE);
 
                         try {
                             JSONArray jsonArray = new JSONArray(response);

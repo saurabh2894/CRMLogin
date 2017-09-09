@@ -1,5 +1,7 @@
 package com.crm.pharmbooks.PharmCRM;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,DashBoard.OnFragmentInteractionListener,
         NewFragment.OnFragmentInteractionListener{
 
+    static String LOAD_FRAG_TAG="";
     DrawerLayout drawer;
     FrameLayout frame;
     int flag=0;
@@ -56,13 +59,30 @@ public class MainActivity extends AppCompatActivity
         }
         else if(!drawer.isDrawerOpen(GravityCompat.START)||flag==0){
 
-            Snackbar.make(frame,"Do You Really want to exit",Snackbar.LENGTH_INDEFINITE).
-                    setAction("Exit", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            MainActivity.super.onBackPressed();
-                        }
-                    }).show();
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+            alertDialog.setTitle("Confirm Exit!");
+            alertDialog.setMessage("Do You Really Want To Exit?");
+            alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    MainActivity.super.onBackPressed();
+                }
+            });
+            alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            alertDialog.show();
+
+//            Snackbar.make(frame,"Do You Really want to exit",Snackbar.LENGTH_INDEFINITE).
+//                    setAction("Exit", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            MainActivity.super.onBackPressed();
+//                        }
+//                    }).show();
         }
 //        if(flag==1){
 //            super.onBackPressed();

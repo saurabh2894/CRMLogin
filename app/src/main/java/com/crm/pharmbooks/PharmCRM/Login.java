@@ -1,5 +1,6 @@
 package com.crm.pharmbooks.PharmCRM;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ public class Login extends AppCompatActivity {
     Button Signin;
     String user_var, pass_var;
     int res ;
+    ProgressDialog progressDialog;
     public static final String MyPREFERENCES = "MyPrefs" ;
 
 
@@ -42,9 +44,11 @@ public class Login extends AppCompatActivity {
         username = (EditText)findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
         Signin = (Button) findViewById(R.id.Signin);
+        progressDialog=new ProgressDialog(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
+
         setSupportActionBar(toolbar);
         TextView title = (TextView)toolbar.findViewById(R.id.title);
 
@@ -55,6 +59,9 @@ public class Login extends AppCompatActivity {
             public void onClick(View view) {
                 user_var = username.getText().toString();
                 pass_var = password.getText().toString();
+                progressDialog.setTitle("Logging In...");
+                progressDialog.setMessage("Please Wait!");
+                progressDialog.show();
                 sendR(user_var, pass_var);
 
             }
@@ -78,17 +85,18 @@ public class Login extends AppCompatActivity {
                             res = object.getInt("res");
                             if(res == 1)
                             {
+                                progressDialog.dismiss();
                                 /*
                                 Changing the intent to start the MainActivity after Successful login
                                 */
                                Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                                finish();
                                startActivity(i);
                                 //SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                                 //SharedPreferences.Editor editor = sharedpreferences.edit();
                                 SharedPreferences.Editor editor = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE).edit();
                                 editor.putString("username", String.valueOf(user_var));
                                 editor.putString("password", String.valueOf(pass_var));
-
                                 editor.commit();
 
                             }

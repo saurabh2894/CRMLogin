@@ -24,10 +24,28 @@
         </activity>
         <activity android:name="com.crm.pharmbooks.PharmCRM.CustomerDetail" />
         <activity android:name="com.crm.pharmbooks.PharmCRM.MainActivity" />
-        <activity android:name="com.crm.pharmbooks.PharmCRM.MedicineData" />
+
+        <activity android:name="com.crm.pharmbooks.PharmCRM.MedicineData"
+            android:parentActivityName="com.crm.pharmbooks.PharmCRM.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
+        </activity>
+
         <activity android:name="com.crm.pharmbooks.PharmCRM.CustomerNameFetch" />
-        <activity android:name="com.crm.pharmbooks.PharmCRM.PrescriptionListActivity" />
-        <activity android:name="com.crm.pharmbooks.PharmCRM.CustomerPrescription" />
+        <activity android:name="com.crm.pharmbooks.PharmCRM.PrescriptionListActivity"
+            android:parentActivityName="com.crm.pharmbooks.PharmCRM.MainActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
+        </activity>
+
+        <activity android:name="com.crm.pharmbooks.PharmCRM.CustomerPrescription"
+            android:parentActivityName="com.crm.pharmbooks.PharmCRM.PrescriptionListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.crm.pharmbooks.PharmCRM.PrescriptionListActivity" />
+        </activity>
         <activity android:name="com.crm.pharmbooks.PharmCRM.Login"/>
 
     </application>
