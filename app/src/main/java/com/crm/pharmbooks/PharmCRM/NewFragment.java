@@ -19,7 +19,7 @@ import android.content.Context;
 public class NewFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
-    Button addNew,repeat,existing;
+    Button addNew,repeat,existing,customer;
 
     public NewFragment() {
         // Required empty public constructor
@@ -44,9 +44,12 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         addNew = (Button) rootView.findViewById(R.id.addnew);
         existing = (Button) rootView.findViewById(R.id.existing);
         repeat = (Button) rootView.findViewById(R.id.repeat);
+        customer = (Button) rootView.findViewById(R.id.customer);
+
         addNew.setOnClickListener(this);
         existing.setOnClickListener(this);
         repeat.setOnClickListener(this);
+        customer.setOnClickListener(this);
         return rootView;
     }
 
@@ -62,8 +65,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -80,6 +82,9 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         }
         else if(view == existing){
             startActivity(new Intent(getActivity(),PrescriptionListActivity.class));
+        }
+        else if(view == customer){
+            startActivity(new Intent(getActivity(),CustomerDetail.class));
         }
     }
 

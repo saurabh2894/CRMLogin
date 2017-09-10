@@ -3,6 +3,7 @@ package com.crm.pharmbooks.PharmCRM;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
@@ -26,6 +27,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -46,6 +48,8 @@ import java.util.Map;
 import Adapters.MedicineAdapter;
 import Model.MedicineDetailModel;
 
+import static com.crm.pharmbooks.PharmCRM.Login.MyPREFERENCES;
+
 
 public class MedicineData extends AppCompatActivity {
     private ArrayList<MedicineDetailModel> medicineDetailList = new ArrayList<>();
@@ -57,6 +61,7 @@ public class MedicineData extends AppCompatActivity {
     private  int pos=0;
     String MedicineName_value,MedicineQuantity_value;
     String MedicineName_valuedialogbox,MedicineQuantity_valuedialogbox;
+    String username;
 
 
     @Override
@@ -73,6 +78,13 @@ public class MedicineData extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         TextView title = (TextView)toolbar.findViewById(R.id.title);
+        SharedPreferences sharedpreferences = this.getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
+
+        String restoredText = sharedpreferences.getString("username", null);
+        if (restoredText != null) {
+            username = sharedpreferences.getString("username", "No name defined");//"No name defined" is the default value.
+            Log.d("usernamecheck",username);
+        }
 
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -206,6 +218,41 @@ public class MedicineData extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
+
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MedicineData.this);
+                alertDialog.setTitle("Remove Entry...");
+                alertDialog.setMessage("Do You Really Want To Remove This Entry?");
+                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        Toast.makeText(MedicineData.this,medicineDetailList.get(pos).getMName()+" is deleted",Toast.LENGTH_LONG).show();
+                        medicineDetailList.remove(pos);
+                        mAdapter.notifyDataSetChanged();
+
+                    }
+                });
+                alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                alertDialog.show();
+
+
+
+
+
+
+
+
+
+
+
+
+
                 //Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
 
             }
@@ -285,9 +332,10 @@ public class MedicineData extends AppCompatActivity {
             protected Map<String,String> getParams(){
                 Map<String, String> params = new HashMap<>();
                 try {
-                    params.put("Cname","manya");
-                    params.put("Cnumber","9898876545");
-                    params.put("Cadd","delhi");
+                    //params.put("Cname","hellooooo");
+                    //params.put("Cnumber","9865322114");
+                    //params.put("Cadd","delhi");
+                    params.put("chemist",username);
                     params.put("counter",String.valueOf(medicineDetailList.size()));
                     params.put("data",getJsonFromMyFormObject(medicineDetailList)+"");
 
@@ -298,6 +346,13 @@ public class MedicineData extends AppCompatActivity {
             }
 
         };
+
+        int MY_SOCKET_TIMEOUT_MS = 50000;
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 

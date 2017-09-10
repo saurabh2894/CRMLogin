@@ -22,11 +22,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:textColor="#283593"
         android:text="by Medicians"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#455A64"
+        android:textStyle="bold"
+        android:textSize="12sp" />
 
 
 

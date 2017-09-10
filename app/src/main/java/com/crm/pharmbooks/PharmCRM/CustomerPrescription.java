@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -50,7 +51,7 @@ public class CustomerPrescription extends AppCompatActivity {
 
     private ArrayList<PresciptionModel> presciptionModelList = new ArrayList<>();
 
-    ArrayList<String> med = new ArrayList<String>();
+
     private RecyclerView recyclerView;
     private PrescriptionAdapter pAdapter,pEditAdapter,pAddAdapter,pDeleteAdapter;
     EditText dboxMedName,dboxMedDose,dboxMedStart,dboxMedEnd;
@@ -189,10 +190,19 @@ public class CustomerPrescription extends AppCompatActivity {
                 return params;
             }
         };
+
+        int MY_SOCKET_TIMEOUT_MS = 50000;
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         RequestQueue requestQueue = Volley.newRequestQueue(CustomerPrescription.this);
         requestQueue.add(stringRequest);
 
     }
+
+    //For Edit Prescription
 
 
     public JSONObject getJsonFromMyFormObjectEdit(ArrayList<PresciptionModel> presciptionEditModelList) throws JSONException {
@@ -228,7 +238,7 @@ public class CustomerPrescription extends AppCompatActivity {
 
 
     public void sendEditDataList(final ArrayList<PresciptionModel> presciptionEditModelList) {
-        String url = "https://pharmcrm.herokuapp.com/api/save/";
+        String url = "https://pharmcrm.herokuapp.com/api/medicineedit/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -275,6 +285,13 @@ public class CustomerPrescription extends AppCompatActivity {
             }
 
         };
+
+        int MY_SOCKET_TIMEOUT_MS = 50000;
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
@@ -318,7 +335,7 @@ public class CustomerPrescription extends AppCompatActivity {
 
 
     public void sendAddDataList(final ArrayList<PresciptionModel> presciptionAddModelList) {
-        String url = "https://pharmcrm.herokuapp.com/api/save/";
+        String url = "https://pharmcrm.herokuapp.com/api/medicineedit/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -365,6 +382,13 @@ public class CustomerPrescription extends AppCompatActivity {
             }
 
         };
+
+        int MY_SOCKET_TIMEOUT_MS = 50000;
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
@@ -406,7 +430,7 @@ public class CustomerPrescription extends AppCompatActivity {
 
 
     public void sendDeleteDataList(final ArrayList<PresciptionModel> presciptionDeleteModelList) {
-        String url = "https://pharmcrm.herokuapp.com/api/save/";
+        String url = "https://pharmcrm.herokuapp.com/api/medicineedit/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -453,6 +477,13 @@ public class CustomerPrescription extends AppCompatActivity {
             }
 
         };
+
+        int MY_SOCKET_TIMEOUT_MS = 50000;
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
@@ -496,7 +527,6 @@ public class CustomerPrescription extends AppCompatActivity {
             medEndEditbox = presciptionModelList.get(pos).getEndDate();
             medIdEditbox = presciptionModelList.get(pos).getMedicineid();
             btn="EDIT";
-
             dboxMedName.setText(medNameEditbox);
             dboxMedDose.setText(medDoseEditbox);
             ds.setVisibility(View.GONE);
@@ -527,6 +557,7 @@ public class CustomerPrescription extends AppCompatActivity {
 
                 ArrayList<PresciptionModel> presciptionEditModelList = new ArrayList<>();
                 ArrayList<PresciptionModel> presciptionAddModelList = new ArrayList<>();
+                ArrayList<String> med = new ArrayList<String>();
 
                 pEditAdapter = new PrescriptionAdapter(presciptionEditModelList);
                 pAddAdapter = new PrescriptionAdapter(presciptionAddModelList);
@@ -540,7 +571,7 @@ public class CustomerPrescription extends AppCompatActivity {
                     if (pos != -1) {
                         if (!(medNameEditbox.equals(medname) && medDoseEditbox.equals(meddose))) {
                             presciptionModelList.remove(pos);
-                            presciptionModelList.add(pos, new PresciptionModel(medname, meddose, medstart, medend, medId));
+                            presciptionModelList.add(pos, new PresciptionModel(medname, meddose, medStartEditbox, medEndEditbox, medId));
                             pAdapter.notifyDataSetChanged();
 
 
@@ -564,11 +595,13 @@ public class CustomerPrescription extends AppCompatActivity {
                                 presciptionEditModelList.add(pos, new PresciptionModel(medNameEdit, meddoseEdit, medStartEditbox, medEndEditbox, medIdEdit));
                                 pEditAdapter.notifyDataSetChanged();
                                 Log.d("mytag", "You were right1");
+
                             } else {
                                 med.add(medIdEdit);
-                                presciptionEditModelList.add(new PresciptionModel(medNameEdit, meddoseEdit, medstartEdit, medendEdit, medIdEdit));
+                                presciptionEditModelList.add(new PresciptionModel(medNameEdit, meddoseEdit, medStartEditbox, medEndEditbox, medIdEdit));
                                 pEditAdapter.notifyDataSetChanged();
                                 Log.d("mytag", "You were right");
+
                             }
 
 

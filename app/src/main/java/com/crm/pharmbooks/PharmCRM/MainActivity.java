@@ -126,8 +126,7 @@ public class MainActivity extends AppCompatActivity
 
             Fragment fragment = DashBoard.newInstance();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out);
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             fragmentTransaction.replace(R.id.frame, fragment, "DashBoard");
             fragmentTransaction.commitAllowingStateLoss();
         }
@@ -135,8 +134,7 @@ public class MainActivity extends AppCompatActivity
 
             Fragment fragment = NewFragment.newInstance();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out);
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             fragmentTransaction.replace(R.id.frame, fragment, "New Fragment");
             fragmentTransaction.commitAllowingStateLoss();
         }
@@ -144,8 +142,7 @@ public class MainActivity extends AppCompatActivity
 
             Fragment fragment = new TransactionalMessage();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out);
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             fragmentTransaction.replace(R.id.frame, fragment, "Transactional Data");
             fragmentTransaction.commitAllowingStateLoss();
         }

@@ -22,7 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.crm.pharmbooks.PharmCRM.CustomerDetail" />
+
+        <activity android:name="com.crm.pharmbooks.PharmCRM.CustomerDetail"
+            android:parentActivityName="com.crm.pharmbooks.PharmCRM.MainActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
+        </activity>
+
         <activity android:name="com.crm.pharmbooks.PharmCRM.MainActivity" />
 
         <activity android:name="com.crm.pharmbooks.PharmCRM.MedicineData"
