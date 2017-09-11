@@ -32,6 +32,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.crm.pharmbooks.PharmCRM.Login.MyPREFERENCES;
 
@@ -71,7 +73,30 @@ public class CustomerDetail extends AppCompatActivity {
                 Name_var = Name.getText().toString();
                 MobileNo_var = MobileNo.getText().toString();
                 Address_var = Address.getText().toString();
-                sendR(Name_var, MobileNo_var, Address_var);
+
+                    Pattern p = Pattern.compile("\\d{10}");
+                    Matcher m = p.matcher(MobileNo_var);
+                    boolean b = m.matches();
+                    if(b){
+                        Toast.makeText(CustomerDetail.this,"10 digits bingo",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(CustomerDetail.this,MedicineData.class);
+                        intent.putExtra("Name", String.valueOf(Name_var));
+                        intent.putExtra("MobileNo", String.valueOf(MobileNo_var));
+                        intent.putExtra("Address", String.valueOf(Address_var));
+                        Log.d("mytag","b is true");
+                        //Intent i = new Intent(getApplicationContext(),MedicineData.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(CustomerDetail.this, "Please enter valid number", Toast.LENGTH_SHORT).show();
+                        Log.d("mytag","b is false");
+                    }
+
+
+
+
+
+                //sendR(Name_var, MobileNo_var, Address_var);
 
             }
         });
@@ -81,6 +106,7 @@ public class CustomerDetail extends AppCompatActivity {
 
 
 
+    /*
     public void sendR(final String Name_var, final String MobileNo_var, final String Address_var){
 
 
@@ -102,6 +128,8 @@ public class CustomerDetail extends AppCompatActivity {
                                 SharedPreferences.Editor editor = sharedpreferences.edit();
 
                                 editor.putString("Name", String.valueOf(Name));
+                                editor.putString("MobileNo", String.valueOf(MobileNo));
+                                editor.putString("Address", String.valueOf(Address));
                                 editor.commit();
 
                                 Intent i = new Intent(getApplicationContext(),MedicineData.class);
@@ -124,11 +152,10 @@ public class CustomerDetail extends AppCompatActivity {
             @Override
             protected Map<String,String> getParams(){
                 Map<String, String> params = new HashMap<>();
-                params.put("Cname",Name_var);
-                params.put("Cnumber",MobileNo_var);
-                params.put("Cadd",Address_var);
-                params.put("chemist",username);
-
+                //params.put("Cname",Name_var);
+                //params.put("Cnumber",MobileNo_var);
+                //params.put("Cadd",Address_var);
+                //params.put("chemist",username);
 
                 return params;
             }
@@ -145,6 +172,8 @@ public class CustomerDetail extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
+
+    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

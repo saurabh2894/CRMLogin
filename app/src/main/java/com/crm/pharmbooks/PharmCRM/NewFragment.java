@@ -41,12 +41,10 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new, container, false);
-        addNew = (Button) rootView.findViewById(R.id.addnew);
         existing = (Button) rootView.findViewById(R.id.existing);
         repeat = (Button) rootView.findViewById(R.id.repeat);
         customer = (Button) rootView.findViewById(R.id.customer);
 
-        addNew.setOnClickListener(this);
         existing.setOnClickListener(this);
         repeat.setOnClickListener(this);
         customer.setOnClickListener(this);
@@ -77,10 +75,8 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if(view==addNew){
-            startActivity(new Intent(getActivity(),MedicineData.class));
-        }
-        else if(view == existing){
+
+        if(view == existing){
             startActivity(new Intent(getActivity(),PrescriptionListActivity.class));
         }
         else if(view == customer){

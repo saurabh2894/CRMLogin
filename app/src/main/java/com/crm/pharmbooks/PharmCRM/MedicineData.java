@@ -62,6 +62,7 @@ public class MedicineData extends AppCompatActivity {
     String MedicineName_value,MedicineQuantity_value;
     String MedicineName_valuedialogbox,MedicineQuantity_valuedialogbox;
     String username;
+    String Name,MobileNo,Address;
 
 
     @Override
@@ -82,9 +83,21 @@ public class MedicineData extends AppCompatActivity {
 
         String restoredText = sharedpreferences.getString("username", null);
         if (restoredText != null) {
-            username = sharedpreferences.getString("username", "No name defined");//"No name defined" is the default value.
+            username = sharedpreferences.getString("username", "No username defined");//"No name defined" is the default value.
+
             Log.d("usernamecheck",username);
+
+
         }
+
+        Bundle extra = getIntent().getExtras();
+        Name = extra.getString("Name");
+        MobileNo= extra.getString("MobileNo");
+        Address= extra.getString("Address");
+        Log.d("Name",Name);
+        Log.d("MobileNo",MobileNo);
+        Log.d("Address",Address);
+
 
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +109,9 @@ public class MedicineData extends AppCompatActivity {
                     MedicineDetailModel detail = new MedicineDetailModel(MedicineName_value, Integer.parseInt(MedicineQuantity_value));
                     medicineDetailList.add(detail);
                     mAdapter.notifyDataSetChanged();
+                    MedicineName.setText("");
+                    MedicineQuantity.setText("");
+                    MedicineName.requestFocus();
                 }
                 else{
                     Toast.makeText(MedicineData.this, "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
@@ -315,10 +331,16 @@ public class MedicineData extends AppCompatActivity {
 
 
                             }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         Toast.makeText(MedicineData.this,response,Toast.LENGTH_LONG).show();
+                        Log.d("notify","I'm here bro");
+//                        for(int i=0;i<medicineDetailList.size();i++)
+//                            medicineDetailList.remove(i);
+                        medicineDetailList.clear();
+                        mAdapter.notifyDataSetChanged();
                         //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
                     }
                 },
@@ -332,9 +354,9 @@ public class MedicineData extends AppCompatActivity {
             protected Map<String,String> getParams(){
                 Map<String, String> params = new HashMap<>();
                 try {
-                    //params.put("Cname","hellooooo");
-                    //params.put("Cnumber","9865322114");
-                    //params.put("Cadd","delhi");
+                    params.put("Cname",Name);
+                    params.put("Cnumber",MobileNo);
+                    params.put("Cadd",Address);
                     params.put("chemist",username);
                     params.put("counter",String.valueOf(medicineDetailList.size()));
                     params.put("data",getJsonFromMyFormObject(medicineDetailList)+"");
@@ -357,10 +379,6 @@ public class MedicineData extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
-
-
-
-
 
 
 
@@ -388,9 +406,10 @@ public class MedicineData extends AppCompatActivity {
         if (id == R.id.saveIcon) {
 
             Log.d("mtag","save icon call working");
-            if(medicineDetailList.size()!=0)
-            sendR();
+            if(medicineDetailList.size()!=0) {
+                sendR();
 
+            }
             else
             Toast.makeText(MedicineData.this,"Please Enter Some Values!!",Toast.LENGTH_LONG).show();
 
