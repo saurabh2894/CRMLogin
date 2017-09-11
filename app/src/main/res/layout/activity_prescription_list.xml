@@ -42,8 +42,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:layout_weight="1"
-        android:hint="Enter Customer Name"
-        android:inputType="text" />
+        android:hint="Enter Customer Number"
+        android:inputType="number" />
 
     <ImageView
         android:layout_width="0dp"

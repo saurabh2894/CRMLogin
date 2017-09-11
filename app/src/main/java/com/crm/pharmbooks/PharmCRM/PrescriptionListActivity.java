@@ -53,7 +53,9 @@ public class PrescriptionListActivity extends AppCompatActivity {
     ExpandableListView expListView;
     List<String> listDataHeaderCommaValue;
     List<String> listDataHeaderSpaceValue;
+    List<String> listDataHeaderSpaceSearch;
     HashMap<String, List<String>> listDataChild_PrescriptionValue;
+    HashMap<String, List<String>> listDataChild_PrescriptionValueSearch;
     HashMap<String, List<String>> listPresId;
     String username;
     ProgressBar pb;
@@ -61,7 +63,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
     RelativeLayout rl;
     private EditText SearchBoxExistingRefill;
     private ImageView searchicon;
-
+    int SEARCH_FLAG=0;
 
 
 
@@ -79,6 +81,55 @@ public class PrescriptionListActivity extends AppCompatActivity {
         txt=(TextView) findViewById(R.id.loadingtxt);
         SearchBoxExistingRefill=(EditText)findViewById(R.id.SearchBoxExistingRefill);
         searchicon=(ImageView)findViewById(R.id.searchicon);
+        searchicon.setOnClickListener(new View.OnClickListener() {
+            ArrayList<String> numbers = new ArrayList<String>();
+
+            @Override
+            public void onClick(View view) {
+                String number=SearchBoxExistingRefill.getText().toString().trim();
+                for(int i=0;i<listDataHeaderCommaValue.size();i++){
+                    String str = listDataHeaderCommaValue.get(i);
+                    String[] parts = str.split(",");
+                    numbers.add(parts[1]);
+                }
+                if(numbers.contains(number)){
+                    listDataHeaderSpaceSearch = new ArrayList<String>();
+                    for(int i=0;i<numbers.size();i++){
+                        if(number.equals(numbers.get(i))){
+                            SEARCH_FLAG=1;
+                            listDataHeaderSpaceSearch.add(listDataHeaderSpaceValue.get(i));
+                            listDataChild_PrescriptionValueSearch = new HashMap<String, List<String>>();
+                            listDataChild_PrescriptionValueSearch.put(listDataHeaderSpaceValue.get(i),listDataChild_PrescriptionValue.get(listDataHeaderSpaceValue.get(i)));
+                            Log.d("index",i+"");
+                            Log.d("Value",listDataHeaderSpaceValue.get(i));
+                            listAdapter = new ExpandableListAdapter(PrescriptionListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
+                            expListView.setAdapter(listAdapter);
+                        }
+                    }
+
+                }else{
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(PrescriptionListActivity.this);
+                    alertDialog.setTitle("Oops...");
+                    alertDialog.setMessage("This customer does not exist!\nDo you want to add this customer?");
+                    alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                            startActivity(new Intent(PrescriptionListActivity.this,CustomerDetail.class));
+                        }
+                    });
+                    alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    alertDialog.show();
+                }
+
+            }
+        });
+
 
         SharedPreferences sharedpreferences = this.getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
         String restoredText = sharedpreferences.getString("username", null);
@@ -182,6 +233,16 @@ public class PrescriptionListActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        if(SEARCH_FLAG==1){
+            listAdapter = new ExpandableListAdapter(PrescriptionListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValue);
+            expListView.setAdapter(listAdapter);
+            SEARCH_FLAG=0;
+        }else {
+            super.onBackPressed();
+        }
+    }
 
     public void sendR() {
         String url = "https://pharmcrm.herokuapp.com/api/namedata/";
