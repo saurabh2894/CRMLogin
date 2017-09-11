@@ -48,6 +48,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
+    List<String> listDataHeader1;
     HashMap<String, List<String>> listDataChild;
     HashMap<String, List<String>> listPresId;
     String username;
@@ -80,7 +81,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
                 Intent intent = new Intent(PrescriptionListActivity.this,CustomerPrescription.class);
-                intent.putExtra("presId",listPresId.get(listDataHeader.get(i)).get(i1));
+                intent.putExtra("presId",listPresId.get(listDataHeader1.get(i)).get(i1));
 
 
                 String str = listDataHeader.get(i);
@@ -98,7 +99,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
      //   prepareListData();
         sendR();
 
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+        listAdapter = new ExpandableListAdapter(this, listDataHeader1, listDataChild);
 
 
         // setting list adapter
@@ -148,6 +149,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
     public void sendR() {
         String url = "https://pharmcrm.herokuapp.com/api/namedata/";
         listDataHeader = new ArrayList<String>();
+        listDataHeader1 = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
         listPresId = new HashMap<String , List<String>>();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -166,6 +168,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
                                 String name = object.getString("custmorname");
                                 String phone = object.getString("custmornumber");
                                 listDataHeader.add(name + ","+ phone);
+                                listDataHeader1.add(name + "  "+ phone);
                                 JSONArray array = object.getJSONArray("prescriptionid");
                                 List<String>  prescriptionlist = new ArrayList<String>();
                                 List<String>  prescriptionlistshow = new ArrayList<String>();
@@ -176,8 +179,8 @@ public class PrescriptionListActivity extends AppCompatActivity {
                                 }
 
 
-                                listDataChild.put(listDataHeader.get(i),prescriptionlistshow );
-                                listPresId.put(listDataHeader.get(i),prescriptionlist );
+                                listDataChild.put(listDataHeader1.get(i),prescriptionlistshow );
+                                listPresId.put(listDataHeader1.get(i),prescriptionlist );
 
                                 //Log.d("mytag",listDataChild+"");
                                 //Log.d("mytag",prescriptionlistshow+"");
