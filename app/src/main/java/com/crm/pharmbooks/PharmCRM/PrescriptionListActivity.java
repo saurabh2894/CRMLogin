@@ -1,6 +1,8 @@
 package com.crm.pharmbooks.PharmCRM;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,12 +16,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -34,7 +39,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,14 +51,18 @@ public class PrescriptionListActivity extends AppCompatActivity {
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
-    List<String> listDataHeader;
-    List<String> listDataHeader1;
-    HashMap<String, List<String>> listDataChild;
+    List<String> listDataHeaderCommaValue;
+    List<String> listDataHeaderSpaceValue;
+    HashMap<String, List<String>> listDataChild_PrescriptionValue;
     HashMap<String, List<String>> listPresId;
     String username;
     ProgressBar pb;
     TextView txt;
     RelativeLayout rl;
+    private EditText SearchBoxExistingRefill;
+    private ImageView searchicon;
+
+
 
 
     @Override
@@ -69,6 +77,8 @@ public class PrescriptionListActivity extends AppCompatActivity {
         rl=(RelativeLayout)findViewById(R.id.rel);
         pb= (ProgressBar) findViewById(R.id.pb) ;
         txt=(TextView) findViewById(R.id.loadingtxt);
+        SearchBoxExistingRefill=(EditText)findViewById(R.id.SearchBoxExistingRefill);
+        searchicon=(ImageView)findViewById(R.id.searchicon);
 
         SharedPreferences sharedpreferences = this.getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
         String restoredText = sharedpreferences.getString("username", null);
@@ -77,21 +87,23 @@ public class PrescriptionListActivity extends AppCompatActivity {
         }
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
         expListView.setVisibility(View.GONE);
+        searchicon.setVisibility(View.GONE);
+        SearchBoxExistingRefill.setVisibility(View.GONE);
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
                 Intent intent = new Intent(PrescriptionListActivity.this,CustomerPrescription.class);
-                intent.putExtra("presId",listPresId.get(listDataHeader1.get(i)).get(i1));
+                intent.putExtra("presId",listPresId.get(listDataHeaderSpaceValue.get(i)).get(i1));
 
 
-                String str = listDataHeader.get(i);
+                String str = listDataHeaderCommaValue.get(i);
                 String[] parts = str.split(",");
                 String stringreq = parts[1];
                 intent.putExtra("customerphone",stringreq);
 
 
                 startActivity(intent);
-                Log.d("mytag",listPresId.get(listDataHeader.get(i)).get(i1));
+                Log.d("mytag",listPresId.get(listDataHeaderSpaceValue.get(i)).get(i1));
 
                 return false;
             }
@@ -99,14 +111,39 @@ public class PrescriptionListActivity extends AppCompatActivity {
      //   prepareListData();
         sendR();
 
-        listAdapter = new ExpandableListAdapter(this, listDataHeader1, listDataChild);
+        listAdapter = new ExpandableListAdapter(this, listDataHeaderSpaceValue, listDataChild_PrescriptionValue);
 
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
+        expListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,final int position, long id) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(PrescriptionListActivity.this);
+                alertDialog.setTitle("Remove Entry...");
+                alertDialog.setMessage("Do You Really Want To Remove This Customer?");
+                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        listDataHeaderSpaceValue.remove(position);
+                        listDataHeaderCommaValue.remove(position);
+                        listAdapter.notifyDataSetChanged();
+                    }
+                });
+               alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+
+                   }
+               });
+                alertDialog.show();
+                return true;
+            }
+        });
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -148,15 +185,17 @@ public class PrescriptionListActivity extends AppCompatActivity {
 
     public void sendR() {
         String url = "https://pharmcrm.herokuapp.com/api/namedata/";
-        listDataHeader = new ArrayList<String>();
-        listDataHeader1 = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
+        listDataHeaderCommaValue = new ArrayList<String>();
+        listDataHeaderSpaceValue = new ArrayList<String>();
+        listDataChild_PrescriptionValue = new HashMap<String, List<String>>();
         listPresId = new HashMap<String , List<String>>();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         expListView.setVisibility(View.VISIBLE);
+                        searchicon.setVisibility(View.VISIBLE);
+                        SearchBoxExistingRefill.setVisibility(View.VISIBLE);
                         rl.setVisibility(View.GONE);
                         pb.setVisibility(View.GONE);
                         txt.setVisibility(View.GONE);
@@ -167,8 +206,8 @@ public class PrescriptionListActivity extends AppCompatActivity {
                                 JSONObject object = jsonArray.getJSONObject(i);
                                 String name = object.getString("custmorname");
                                 String phone = object.getString("custmornumber");
-                                listDataHeader.add(name + ","+ phone);
-                                listDataHeader1.add(name + "  "+ phone);
+                                listDataHeaderCommaValue.add(name + ","+ phone);
+                                listDataHeaderSpaceValue.add(name + " : "+ phone);
                                 JSONArray array = object.getJSONArray("prescriptionid");
                                 List<String>  prescriptionlist = new ArrayList<String>();
                                 List<String>  prescriptionlistshow = new ArrayList<String>();
@@ -179,10 +218,10 @@ public class PrescriptionListActivity extends AppCompatActivity {
                                 }
 
 
-                                listDataChild.put(listDataHeader1.get(i),prescriptionlistshow );
-                                listPresId.put(listDataHeader1.get(i),prescriptionlist );
+                                listDataChild_PrescriptionValue.put(listDataHeaderSpaceValue.get(i),prescriptionlistshow );
+                                listPresId.put(listDataHeaderSpaceValue.get(i),prescriptionlist );
 
-                                //Log.d("mytag",listDataChild+"");
+                                //Log.d("mytag",listDataChild_PrescriptionValue+"");
                                 //Log.d("mytag",prescriptionlistshow+"");
 
 

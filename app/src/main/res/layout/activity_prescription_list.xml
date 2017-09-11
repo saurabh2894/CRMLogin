@@ -12,8 +12,6 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -28,9 +26,33 @@
                 android:textStyle="bold"
                 android:text="EXISTING"
                 android:textColor="#ffffff" />
+
+
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <EditText
+        android:id="@+id/SearchBoxExistingRefill"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_weight="1"
+        android:hint="Enter Customer Name"
+        android:inputType="text" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".15"
+        android:layout_marginRight="16dp"
+        android:id="@+id/searchicon"
+        android:src="@drawable/searchicon"/>
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/rel"
