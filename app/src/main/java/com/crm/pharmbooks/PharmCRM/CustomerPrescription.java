@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -53,6 +54,8 @@ public class CustomerPrescription extends AppCompatActivity {
 
 
     private RecyclerView recyclerView;
+    Toolbar toolbar;
+    ImageButton deletebtn;
     private PrescriptionAdapter pAdapter,pEditAdapter,pAddAdapter,pDeleteAdapter;
     EditText dboxMedName,dboxMedDose,dboxMedStart,dboxMedEnd;
     String medNameEditbox="",medDoseEditbox="",medStartEditbox="",medEndEditbox="",medIdEditbox="";
@@ -73,11 +76,13 @@ public class CustomerPrescription extends AppCompatActivity {
         setContentView(R.layout.activity_customer_prescription);
         rl=(RelativeLayout)findViewById(R.id.rel);
         recyclerView = (RecyclerView) findViewById(R.id.re);
+        deletebtn=(ImageButton)findViewById(R.id.delete);
+        deletebtn.setVisibility(View.GONE);
         recyclerView.setVisibility(View.GONE);
         pb= (ProgressBar) findViewById(R.id.pb) ;
         txt=(TextView) findViewById(R.id.loadingtxt);
         fab=(FloatingActionButton)findViewById(R.id.fab1);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar= (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         TextView title = (TextView)toolbar.findViewById(R.id.title);
 
@@ -112,16 +117,16 @@ public class CustomerPrescription extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
-                //Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
                 pos=position;
                 final ArrayList<PresciptionModel> presciptionDeleteModelList = new ArrayList<>();
                 pDeleteAdapter = new PrescriptionAdapter(presciptionDeleteModelList);
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(CustomerPrescription.this);
-                alertDialog.setTitle("Remove Entry...");
-                alertDialog.setMessage("Do You Really Want To Remove This Entry?");
-                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                //toolbar.inflateMenu(R.menu.toolbar_inflated_menu);
+                //Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
+                deletebtn.setVisibility(View.VISIBLE);
+                deletebtn.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onClick(View v) {
                         PresciptionModel deletedValue=presciptionModelList.get(pos);
                         PresciptionModel detail = new PresciptionModel(deletedValue.getMedName(),deletedValue.getDosage(),deletedValue.getRefillDate(),deletedValue.getEndDate(),deletedValue.getMedicineid());
                         presciptionDeleteModelList.add(detail);
@@ -135,13 +140,23 @@ public class CustomerPrescription extends AppCompatActivity {
 
                     }
                 });
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(CustomerPrescription.this);
+                alertDialog.setTitle("Remove Entry...");
+                alertDialog.setMessage("Do You Really Want To Remove This Entry?");
+                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
                 alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 });
-                alertDialog.show();
+                //alertDialog.show();
             }
         }));
 
@@ -720,6 +735,7 @@ public class CustomerPrescription extends AppCompatActivity {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.customerprescriptionactionbar, menu);
+        //inflater.inflate(R.menu.toolbar_inflated_menu, menu);
         return true;
     }
 
