@@ -27,6 +27,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     // child data in format of header title, child title
     private HashMap<String, List<String>> _listDataChild;
 
+    LinearLayout base;
+
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
                                  HashMap<String, List<String>> listChildData) {
         this._context = context;
@@ -97,7 +99,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.CName);
-        LinearLayout base = (LinearLayout)convertView.findViewById(R.id.pres_list_layout);
+         base = (LinearLayout)convertView.findViewById(R.id.pres_list_layout);
         if(PrescriptionListActivity.LONG_CLICK_FLAG==1){
             if(groupPosition==PrescriptionListActivity.pos){
                 base.setBackgroundColor(Color.parseColor("#9e9e9e"));

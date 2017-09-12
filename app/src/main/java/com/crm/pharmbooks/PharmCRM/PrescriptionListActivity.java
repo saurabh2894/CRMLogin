@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -67,6 +68,11 @@ public class PrescriptionListActivity extends AppCompatActivity {
     private EditText SearchBoxExistingRefill;
     private ImageButton searchicon;
     int SEARCH_FLAG=0;
+    public static int LONG_CLICK_FLAG=0;
+    ImageButton deletebtn;
+    public static int pos;
+
+
 
 
 
@@ -75,9 +81,14 @@ public class PrescriptionListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prescription_list);
 
+        LONG_CLICK_FLAG=0;
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         TextView title = (TextView)toolbar.findViewById(R.id.title);
+
+        deletebtn=(ImageButton)findViewById(R.id.delete);
+        deletebtn.setVisibility(View.GONE);
 
         rl=(RelativeLayout)findViewById(R.id.rel);
         pb= (ProgressBar) findViewById(R.id.pb) ;
@@ -144,6 +155,24 @@ public class PrescriptionListActivity extends AppCompatActivity {
         expListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,final int position, long id) {
+
+                LONG_CLICK_FLAG=1;
+                pos=position;
+                listAdapter.notifyDataSetChanged();
+
+                deletebtn.setVisibility(View.VISIBLE);
+                deletebtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        listDataHeaderSpaceValue.remove(position);
+                        listDataHeaderCommaValue.remove(position);
+                        listAdapter.notifyDataSetChanged();
+
+                        deletebtn.setVisibility(View.GONE);
+
+                    }
+                });
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(PrescriptionListActivity.this);
                 alertDialog.setTitle("Remove Entry...");
                 alertDialog.setMessage("Do You Really Want To Remove This Customer?");
@@ -161,13 +190,14 @@ public class PrescriptionListActivity extends AppCompatActivity {
 
                    }
                });
-                alertDialog.show();
+                //alertDialog.show();
                 return true;
             }
         });
 
 
     }
+
 
 
     @Override
@@ -213,7 +243,13 @@ public class PrescriptionListActivity extends AppCompatActivity {
             expListView.setAdapter(listAdapter);
             SEARCH_FLAG=0;
             SearchBoxExistingRefill.setText("");
-        }else {
+        }
+        else if(LONG_CLICK_FLAG==1){
+            LONG_CLICK_FLAG=0;
+            listAdapter.notifyDataSetChanged();
+            deletebtn.setVisibility(View.GONE);
+        }
+        else {
             super.onBackPressed();
         }
     }
