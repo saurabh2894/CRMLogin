@@ -41,6 +41,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:imeOptions="actionSearch"
         android:layout_weight="1"
         android:hint="Enter Customer Number"
         android:inputType="number" />

@@ -13,11 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -81,62 +83,25 @@ public class PrescriptionListActivity extends AppCompatActivity {
         pb= (ProgressBar) findViewById(R.id.pb) ;
         txt=(TextView) findViewById(R.id.loadingtxt);
         SearchBoxExistingRefill=(EditText)findViewById(R.id.SearchBoxExistingRefill);
+        SearchBoxExistingRefill.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if(i== EditorInfo.IME_ACTION_SEARCH){
+                    searchFunction();
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        });
         searchicon=(ImageButton) findViewById(R.id.searchicon);
         searchicon.setOnClickListener(new View.OnClickListener() {
-            ArrayList<String> numbers = new ArrayList<String>();
-            List<String> listDataHeaderSpaceSearch =  new ArrayList<String>();;
-            HashMap<String, List<String>> listDataChild_PrescriptionValueSearch;
-            ExpandableListAdapter listAdaptersearch;
+
             @Override
             public void onClick(View view) {
-                if(SEARCH_FLAG==0){
-
-                String number=SearchBoxExistingRefill.getText().toString().trim();
-                for(int i=0;i<listDataHeaderCommaValue.size();i++){
-                    Log.d("list value",listDataHeaderSpaceValue.get(i));
-                    Log.d("index",i+"");
-                    String str = listDataHeaderCommaValue.get(i);
-                    String[] parts = str.split(",");
-                    numbers.add(parts[1]);
-                    Log.d("num list",numbers.get(i));
-                }
-                if(numbers.contains(number)){
-
-                    for(int i=0;i<numbers.size();i++){
-                        if(number.equals(numbers.get(i))){
-                            SEARCH_FLAG=1;
-                            Log.d("evil index",i+"");
-                            listDataHeaderSpaceSearch.add(listDataHeaderSpaceValue.get(i));
-                            listDataChild_PrescriptionValueSearch = new HashMap<String, List<String>>();
-                            listDataChild_PrescriptionValueSearch.put(listDataHeaderSpaceValue.get(i),listDataChild_PrescriptionValue.get(listDataHeaderSpaceValue.get(i)));
-                            Log.d("index",i+"");
-                            Log.d("Value",listDataHeaderSpaceValue.get(i));
-                            listAdaptersearch = new ExpandableListAdapter(PrescriptionListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
-                            expListView.setAdapter(listAdaptersearch);
-                        }
-                    }
-
-                }else{
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(PrescriptionListActivity.this);
-                    alertDialog.setTitle("Oops...");
-                    alertDialog.setMessage("This customer does not exist!\nDo you want to add this customer?");
-                    alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            finish();
-                            startActivity(new Intent(PrescriptionListActivity.this,CustomerDetail.class));
-                        }
-                    });
-                    alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    });
-                    alertDialog.show();
-                }
-
-            }}
+                searchFunction();
+            }
         });
 
 
@@ -337,5 +302,62 @@ public class PrescriptionListActivity extends AppCompatActivity {
 
     }
 
+    public void searchFunction(){
+
+        ArrayList<String> numbers = new ArrayList<String>();
+        List<String> listDataHeaderSpaceSearch =  new ArrayList<String>();;
+        HashMap<String, List<String>> listDataChild_PrescriptionValueSearch;
+        ExpandableListAdapter listAdaptersearch;
+        if(SEARCH_FLAG==0){
+
+            String number=SearchBoxExistingRefill.getText().toString().trim();
+            for(int i=0;i<listDataHeaderCommaValue.size();i++){
+                Log.d("list value",listDataHeaderSpaceValue.get(i));
+                Log.d("index",i+"");
+                String str = listDataHeaderCommaValue.get(i);
+                String[] parts = str.split(",");
+                numbers.add(parts[1]);
+                Log.d("num list",numbers.get(i));
+            }
+            int count=0;
+            if(numbers.contains(number)){
+
+                for(int i=0;i<numbers.size();i++){
+                    if(number.equals(numbers.get(i))&&count==0){
+                        SEARCH_FLAG=1;
+                        count=1;
+                        Log.d("evil index",i+"");
+                        listDataHeaderSpaceSearch.add(listDataHeaderSpaceValue.get(i));
+                        listDataChild_PrescriptionValueSearch = new HashMap<String, List<String>>();
+                        listDataChild_PrescriptionValueSearch.put(listDataHeaderSpaceValue.get(i),listDataChild_PrescriptionValue.get(listDataHeaderSpaceValue.get(i)));
+                        Log.d("index",i+"");
+                        Log.d("Value",listDataHeaderSpaceValue.get(i));
+                        listAdaptersearch = new ExpandableListAdapter(PrescriptionListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
+                        expListView.setAdapter(listAdaptersearch);
+                    }
+                }
+
+            }else{
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(PrescriptionListActivity.this);
+                alertDialog.setTitle("Oops...");
+                alertDialog.setMessage("This customer does not exist!\nDo you want to add this customer?");
+                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                        startActivity(new Intent(PrescriptionListActivity.this,CustomerDetail.class));
+                    }
+                });
+                alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                alertDialog.show();
+            }
+
+        }
+    }
 }
 
