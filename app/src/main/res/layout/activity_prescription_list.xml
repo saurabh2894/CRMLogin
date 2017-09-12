@@ -45,10 +45,11 @@
         android:hint="Enter Customer Number"
         android:inputType="number" />
 
-    <ImageView
+    <ImageButton
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight=".15"
+        android:background="@android:color/transparent"
         android:layout_marginRight="16dp"
         android:id="@+id/searchicon"
         android:src="@drawable/searchicon"/>

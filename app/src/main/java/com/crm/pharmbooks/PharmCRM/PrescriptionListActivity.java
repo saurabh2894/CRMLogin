@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -53,16 +54,16 @@ public class PrescriptionListActivity extends AppCompatActivity {
     ExpandableListView expListView;
     List<String> listDataHeaderCommaValue;
     List<String> listDataHeaderSpaceValue;
-    List<String> listDataHeaderSpaceSearch;
+
     HashMap<String, List<String>> listDataChild_PrescriptionValue;
-    HashMap<String, List<String>> listDataChild_PrescriptionValueSearch;
+
     HashMap<String, List<String>> listPresId;
     String username;
     ProgressBar pb;
     TextView txt;
     RelativeLayout rl;
     private EditText SearchBoxExistingRefill;
-    private ImageView searchicon;
+    private ImageButton searchicon;
     int SEARCH_FLAG=0;
 
 
@@ -80,30 +81,38 @@ public class PrescriptionListActivity extends AppCompatActivity {
         pb= (ProgressBar) findViewById(R.id.pb) ;
         txt=(TextView) findViewById(R.id.loadingtxt);
         SearchBoxExistingRefill=(EditText)findViewById(R.id.SearchBoxExistingRefill);
-        searchicon=(ImageView)findViewById(R.id.searchicon);
+        searchicon=(ImageButton) findViewById(R.id.searchicon);
         searchicon.setOnClickListener(new View.OnClickListener() {
             ArrayList<String> numbers = new ArrayList<String>();
-
+            List<String> listDataHeaderSpaceSearch =  new ArrayList<String>();;
+            HashMap<String, List<String>> listDataChild_PrescriptionValueSearch;
+            ExpandableListAdapter listAdaptersearch;
             @Override
             public void onClick(View view) {
+                if(SEARCH_FLAG==0){
+
                 String number=SearchBoxExistingRefill.getText().toString().trim();
                 for(int i=0;i<listDataHeaderCommaValue.size();i++){
+                    Log.d("list value",listDataHeaderSpaceValue.get(i));
+                    Log.d("index",i+"");
                     String str = listDataHeaderCommaValue.get(i);
                     String[] parts = str.split(",");
                     numbers.add(parts[1]);
+                    Log.d("num list",numbers.get(i));
                 }
                 if(numbers.contains(number)){
-                    listDataHeaderSpaceSearch = new ArrayList<String>();
+
                     for(int i=0;i<numbers.size();i++){
                         if(number.equals(numbers.get(i))){
                             SEARCH_FLAG=1;
+                            Log.d("evil index",i+"");
                             listDataHeaderSpaceSearch.add(listDataHeaderSpaceValue.get(i));
                             listDataChild_PrescriptionValueSearch = new HashMap<String, List<String>>();
                             listDataChild_PrescriptionValueSearch.put(listDataHeaderSpaceValue.get(i),listDataChild_PrescriptionValue.get(listDataHeaderSpaceValue.get(i)));
                             Log.d("index",i+"");
                             Log.d("Value",listDataHeaderSpaceValue.get(i));
-                            listAdapter = new ExpandableListAdapter(PrescriptionListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
-                            expListView.setAdapter(listAdapter);
+                            listAdaptersearch = new ExpandableListAdapter(PrescriptionListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
+                            expListView.setAdapter(listAdaptersearch);
                         }
                     }
 
@@ -127,7 +136,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
                     alertDialog.show();
                 }
 
-            }
+            }}
         });
 
 
@@ -236,9 +245,9 @@ public class PrescriptionListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(SEARCH_FLAG==1){
-            listAdapter = new ExpandableListAdapter(PrescriptionListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValue);
             expListView.setAdapter(listAdapter);
             SEARCH_FLAG=0;
+            SearchBoxExistingRefill.setText("");
         }else {
             super.onBackPressed();
         }
