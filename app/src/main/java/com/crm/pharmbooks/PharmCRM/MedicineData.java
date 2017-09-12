@@ -459,19 +459,25 @@ public class MedicineData extends AppCompatActivity {
             switch (item.getItemId()) {
                 // Respond to the action bar's Up/Home button
                 case android.R.id.home:
-                    Intent upIntent = NavUtils.getParentActivityIntent(this);
-                    if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                        // This activity is NOT part of this app's task, so create a new task
-                        // when navigating up, with a synthesized back stack.
-                        TaskStackBuilder.create(this)
-                                // Add all of this activity's parents to the back stack
-                                .addNextIntentWithParentStack(upIntent)
-                                // Navigate up to the closest parent
-                                .startActivities();
-                    } else {
-                        // This activity is part of this app's task, so simply
-                        // navigate up to the logical parent activity.
-                        NavUtils.navigateUpTo(this, upIntent);
+                    if (medicineDetailList.isEmpty()){
+                        navigateUp();
+            }else{
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MedicineData.this);
+                        alertDialog.setTitle("Alert!...");
+                        alertDialog.setMessage("The data you've saved will be lost if you leave!\nDo you want to save the data?");
+                        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                sendR();
+                            }
+                        });
+                        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                navigateUp();
+                            }
+                        });
+                        alertDialog.show();
                     }
             }
 
@@ -482,4 +488,20 @@ public class MedicineData extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void navigateUp(){
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            // This activity is NOT part of this app's task, so create a new task
+            // when navigating up, with a synthesized back stack.
+            TaskStackBuilder.create(this)
+                    // Add all of this activity's parents to the back stack
+                    .addNextIntentWithParentStack(upIntent)
+                    // Navigate up to the closest parent
+                    .startActivities();
+        } else {
+            // This activity is part of this app's task, so simply
+            // navigate up to the logical parent activity.
+            NavUtils.navigateUpTo(this, upIntent);
+        }
+    }
 }
