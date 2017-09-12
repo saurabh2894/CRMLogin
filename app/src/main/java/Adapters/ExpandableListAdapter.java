@@ -1,13 +1,16 @@
 package Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.crm.pharmbooks.PharmCRM.PrescriptionListActivity;
 import com.crm.pharmbooks.PharmCRM.R;
 
 import java.util.HashMap;
@@ -94,6 +97,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.CName);
+        LinearLayout base = (LinearLayout)convertView.findViewById(R.id.pres_list_layout);
+        if(PrescriptionListActivity.LONG_CLICK_FLAG==1){
+            if(groupPosition==PrescriptionListActivity.pos){
+                base.setBackgroundColor(Color.parseColor("#9e9e9e"));
+            }
+        }else{
+            base.setBackgroundColor(Color.TRANSPARENT);
+        }
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
 

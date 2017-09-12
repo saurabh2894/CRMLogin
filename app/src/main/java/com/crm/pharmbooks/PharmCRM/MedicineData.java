@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +61,7 @@ public class MedicineData extends AppCompatActivity {
     private Button addButton;
     public static int pos=0;
     public static int LONG_CLICK_FLAG=0;
+    ImageButton deletebtn;
     String MedicineName_value,MedicineQuantity_value;
     String MedicineName_valuedialogbox,MedicineQuantity_valuedialogbox;
     String username;
@@ -79,6 +81,8 @@ public class MedicineData extends AppCompatActivity {
         addButton = (Button) findViewById(R.id.addButton);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        deletebtn=(ImageButton)findViewById(R.id.delete);
+        deletebtn.setVisibility(View.GONE);
         TextView title = (TextView)toolbar.findViewById(R.id.title);
         SharedPreferences sharedpreferences = this.getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
 
@@ -235,8 +239,21 @@ public class MedicineData extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
+                LONG_CLICK_FLAG=1;
+                pos=position;
+                mAdapter.notifyDataSetChanged();
+                deletebtn.setVisibility(View.VISIBLE);
+                deletebtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        LONG_CLICK_FLAG=0;
+                        Toast.makeText(MedicineData.this,medicineDetailList.get(pos).getMName()+" is deleted",Toast.LENGTH_LONG).show();
+                        medicineDetailList.remove(pos);
+                        mAdapter.notifyDataSetChanged();
+                        deletebtn.setVisibility(View.GONE);
 
-
+                    }
+                });
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(MedicineData.this);
                 alertDialog.setTitle("Remove Entry...");
                 alertDialog.setMessage("Do You Really Want To Remove This Entry?");
@@ -276,6 +293,17 @@ public class MedicineData extends AppCompatActivity {
         }));
 
     }
+    @Override
+    public void onBackPressed() {
+        if(LONG_CLICK_FLAG==1){
+            LONG_CLICK_FLAG=0;
+            mAdapter.notifyDataSetChanged();
+            deletebtn.setVisibility(View.GONE);
+        }else {
+            super.onBackPressed();
+        }
+    }
+
 
 
 

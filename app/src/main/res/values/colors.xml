@@ -3,7 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="MName">#999999</color>
-    <color name="CustomerName">#999999</color>
-    <color name="MQuantity">#222222</color>
+    <color name="MName">#000000</color>
+    <color name="CustomerName">#000000</color>
+    <color name="MQuantity">#000000</color>
 </resources>
