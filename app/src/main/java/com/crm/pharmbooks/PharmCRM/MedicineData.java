@@ -299,9 +299,30 @@ public class MedicineData extends AppCompatActivity {
             LONG_CLICK_FLAG=0;
             mAdapter.notifyDataSetChanged();
             deletebtn.setVisibility(View.GONE);
-        }else {
+        }else if (medicineDetailList.size()==0) {
             super.onBackPressed();
+
         }
+        else{
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Alert!...");
+            alertDialog.setMessage("The data you've saved will be lost if you leave!\nDo you want to save the data?");
+            alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    sendR();
+                }
+            });
+            alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    MedicineData.super.onBackPressed();
+                }
+            });
+            alertDialog.show();
+        }
+
     }
 
 
@@ -434,13 +455,12 @@ public class MedicineData extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.saveIcon) {
 
-            Log.d("mtag","save icon call working");
-            if(medicineDetailList.size()!=0) {
+            Log.d("mtag", "save icon call working");
+            if (medicineDetailList.size() != 0) {
                 sendR();
 
-            }
-            else
-            Toast.makeText(MedicineData.this,"Please Enter Some Values!!",Toast.LENGTH_LONG).show();
+            } else
+                Toast.makeText(MedicineData.this, "Please Enter Some Values!!", Toast.LENGTH_LONG).show();
 
             /*JSONObject json = null;
             try {
@@ -455,38 +475,43 @@ public class MedicineData extends AppCompatActivity {
                 }
             };*/
 
+        }
+        else if(id==android.R.id.home){
+            if (medicineDetailList.size()==0) {
+               navigateUp();
 
-            switch (item.getItemId()) {
-                // Respond to the action bar's Up/Home button
-                case android.R.id.home:
-                    if (medicineDetailList.isEmpty()){
+            }
+            else{
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setTitle("Alert!...");
+                alertDialog.setMessage("The data you've entered will be lost if not saved!\nDo you want to save the data?");
+                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        sendR();
                         navigateUp();
-            }else{
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MedicineData.this);
-                        alertDialog.setTitle("Alert!...");
-                        alertDialog.setMessage("The data you've saved will be lost if you leave!\nDo you want to save the data?");
-                        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                sendR();
-                            }
-                        });
-                        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                navigateUp();
-                            }
-                        });
-                        alertDialog.show();
                     }
+                });
+                alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        navigateUp();
+                    }
+                });
+                alertDialog.show();
+
             }
 
-
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+//    @Override
+//    protected void onStop() {
+
+//
+//    }
 
     public void navigateUp(){
         Intent upIntent = NavUtils.getParentActivityIntent(this);
