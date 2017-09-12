@@ -62,6 +62,7 @@ public class MedicineData extends AppCompatActivity {
     public static int pos=0;
     public static int LONG_CLICK_FLAG=0;
     ImageButton deletebtn;
+    ImageButton back;
     String MedicineName_value,MedicineQuantity_value;
     String MedicineName_valuedialogbox,MedicineQuantity_valuedialogbox;
     String username;
@@ -82,6 +83,7 @@ public class MedicineData extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         deletebtn=(ImageButton)findViewById(R.id.delete);
+        back=(ImageButton)findViewById(R.id.back);
         deletebtn.setVisibility(View.GONE);
         TextView title = (TextView)toolbar.findViewById(R.id.title);
         SharedPreferences sharedpreferences = this.getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
@@ -94,6 +96,35 @@ public class MedicineData extends AppCompatActivity {
 
 
         }
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (medicineDetailList.size()==0) {
+                    goUp();
+
+                }
+                else {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(MedicineData.this);
+                    alertDialog.setTitle("Alert!...");
+                    alertDialog.setMessage("The data you've entered will be lost if not saved!\nDo you want to save the data?");
+                    alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            sendR();
+                            goUp();
+                        }
+                    });
+                    alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            goUp();
+                        }
+                    });
+                    alertDialog.show();
+                }
+            }
+        });
 
         Bundle extra = getIntent().getExtras();
         Name = extra.getString("Name");
@@ -293,6 +324,11 @@ public class MedicineData extends AppCompatActivity {
         }));
 
     }
+
+    public void goUp(){
+        finish();
+        startActivity(new Intent(MedicineData.this,CustomerDetail.class));
+    }
     @Override
     public void onBackPressed() {
         if(LONG_CLICK_FLAG==1){
@@ -477,43 +513,23 @@ public class MedicineData extends AppCompatActivity {
 
         }
         else if(id==android.R.id.home){
-            if (medicineDetailList.size()==0) {
-               navigateUp();
 
-            }
-            else{
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-                alertDialog.setTitle("Alert!...");
-                alertDialog.setMessage("The data you've entered will be lost if not saved!\nDo you want to save the data?");
-                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        sendR();
-                        navigateUp();
-                    }
-                });
-                alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        navigateUp();
-                    }
-                });
-                alertDialog.show();
-
-            }
 
         }
+
 
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    protected void onStop() {
+    @Override
+    protected void onPause() {
 
-//
-//    }
+                super.onPause();
+            }
+
 
     public void navigateUp(){
+        Log.d("parent","Navigated to right path");
         Intent upIntent = NavUtils.getParentActivityIntent(this);
         if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
             // This activity is NOT part of this app's task, so create a new task

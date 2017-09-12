@@ -310,8 +310,8 @@ public class CustomerPrescription extends AppCompatActivity {
                     //params.put("customerphoneedit",customerphone);
                     params.put("prescid",presId);
                     params.put("counter","0");
-                    params.put("dataadd","{presciptionAddModelList:[]}");
-                    params.put("datadelete","{presciptionDeleteModelList:[]}");
+                    params.put("dataadd","{presciptionAddModelList:[{}]}");
+                    params.put("datadelete","{presciptionDeleteModelList:[{}]}");
                     params.put("cnumber",customerphone);
                     params.put("dataedit",String.valueOf(getJsonFromMyFormObjectEdit(presciptionEditModelList)));
 

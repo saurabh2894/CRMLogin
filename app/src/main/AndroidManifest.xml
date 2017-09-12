@@ -32,11 +32,8 @@
 
         <activity android:name="com.crm.pharmbooks.PharmCRM.MainActivity" />
 
-        <activity android:name="com.crm.pharmbooks.PharmCRM.MedicineData"
-            android:parentActivityName="com.crm.pharmbooks.PharmCRM.CustomerDetail">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.crm.pharmbooks.PharmCRM.CustomerDetail" />
+        <activity android:name="com.crm.pharmbooks.PharmCRM.MedicineData">
+
         </activity>
 
         <activity android:name="com.crm.pharmbooks.PharmCRM.CustomerNameFetch" />
