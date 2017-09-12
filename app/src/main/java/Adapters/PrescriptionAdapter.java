@@ -1,11 +1,14 @@
 package Adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.crm.pharmbooks.PharmCRM.CustomerPrescription;
 import com.crm.pharmbooks.PharmCRM.R;
 
 import java.util.ArrayList;
@@ -33,12 +36,14 @@ public class PrescriptionAdapter extends RecyclerView.Adapter<PrescriptionAdapte
         public TextView medDose;
         public TextView lastRefill;
         public TextView endDate;
+        public LinearLayout base;
         public MyViewHolder(View view) {
             super(view);
             medName = (TextView) view.findViewById(R.id.med_name);
             medDose= (TextView) view.findViewById(R.id.med_dose);
             lastRefill= (TextView) view.findViewById(R.id.med_last_refill);
             endDate= (TextView) view.findViewById(R.id.med_end);
+            base=(LinearLayout)view.findViewById(R.id.pres_list_row);
 
 
         }
@@ -62,7 +67,13 @@ public class PrescriptionAdapter extends RecyclerView.Adapter<PrescriptionAdapte
         holder.medDose.setText(customerDetail.getDosage());
         holder.lastRefill.setText(customerDetail.getRefillDate());
         holder.endDate.setText(customerDetail.getEndDate());
-
+        if(CustomerPrescription.LONG_CLICK_FLAG==1){
+            if(CustomerPrescription.pos==position){
+                holder.base.setBackgroundColor(Color.parseColor("#9e9e9e"));
+            }
+        }else{
+            holder.base.setBackgroundColor(Color.TRANSPARENT);
+        }
 
 
     }

@@ -5,13 +5,16 @@ package Adapters;
  */
 
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.crm.pharmbooks.PharmCRM.MedicineData;
 import com.crm.pharmbooks.PharmCRM.R;
 
 import java.util.ArrayList;
@@ -36,11 +39,13 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MyView
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView MName, MQuantity;
+            public LinearLayout base;
 
             public MyViewHolder(View view) {
                 super(view);
                 MName = (TextView) view.findViewById(R.id.MName);
                 MQuantity = (TextView) view.findViewById(R.id.MQuantity);
+                base = (LinearLayout) view.findViewById(R.id.medicine_list_layout);
 
             }
         }
@@ -61,6 +66,13 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MyView
             MedicineDetailModel medicineDetailModel = medicineList.get(position);
             holder.MName.setText(medicineDetailModel.getMName());
             holder.MQuantity.setText(medicineDetailModel.getMQuantity()+"");
+            if(MedicineData.LONG_CLICK_FLAG==1){
+                if(MedicineData.pos==position){
+                    holder.base.setBackgroundColor(Color.parseColor("#9e9e9e"));
+                }
+            }else{
+                holder.base.setBackgroundColor(Color.TRANSPARENT);
+            }
 
         }
 

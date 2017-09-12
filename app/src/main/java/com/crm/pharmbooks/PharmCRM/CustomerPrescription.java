@@ -55,6 +55,7 @@ public class CustomerPrescription extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     Toolbar toolbar;
+    public static int LONG_CLICK_FLAG=0;
     ImageButton deletebtn;
     private PrescriptionAdapter pAdapter,pEditAdapter,pAddAdapter,pDeleteAdapter;
     EditText dboxMedName,dboxMedDose,dboxMedStart,dboxMedEnd;
@@ -65,11 +66,12 @@ public class CustomerPrescription extends AppCompatActivity {
     TextView txt;
     RelativeLayout rl;
     String presId,customerphone;
-    int pos;
+    public static int pos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extra = getIntent().getExtras();
+        LONG_CLICK_FLAG=0;
         presId = extra.getString("presId");
         customerphone=extra.getString("customerphone");
         Log.d("customerphone",customerphone);
@@ -117,10 +119,13 @@ public class CustomerPrescription extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
+                LONG_CLICK_FLAG=1;
                 pos=position;
+                pAdapter.notifyDataSetChanged();
+
                 final ArrayList<PresciptionModel> presciptionDeleteModelList = new ArrayList<>();
                 pDeleteAdapter = new PrescriptionAdapter(presciptionDeleteModelList);
-
+                pDeleteAdapter.notifyDataSetChanged();
                 //toolbar.inflateMenu(R.menu.toolbar_inflated_menu);
                 //Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
                 deletebtn.setVisibility(View.VISIBLE);
@@ -132,11 +137,11 @@ public class CustomerPrescription extends AppCompatActivity {
                         presciptionDeleteModelList.add(detail);
                         pDeleteAdapter.notifyDataSetChanged();
                         sendDeleteDataList(presciptionDeleteModelList);
-
+                        LONG_CLICK_FLAG=0;
                         presciptionModelList.remove(pos);
                         pAdapter.notifyDataSetChanged();
                         Toast.makeText(CustomerPrescription.this,deletedValue.getMedName()+" is deleted",Toast.LENGTH_LONG).show();
-
+                        deletebtn.setVisibility(View.GONE);
 
                     }
                 });
@@ -217,6 +222,18 @@ public class CustomerPrescription extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if(LONG_CLICK_FLAG==1){
+            LONG_CLICK_FLAG=0;
+            pAdapter.notifyDataSetChanged();
+            deletebtn.setVisibility(View.GONE);
+        }else {
+            super.onBackPressed();
+        }
+    }
+
+
     //For Edit Prescription
 
 
@@ -239,7 +256,7 @@ public class CustomerPrescription extends AppCompatActivity {
         catch (JSONException e) {
             e.printStackTrace();
         }
-        responseDetailsJson.put("presciptionEditModelList", jsonArray);
+        responseDetailsJson.put("presciptionEditModelList", String.valueOf(jsonArray));
 
         Log.d("mytag",responseDetailsJson+"");
         Log.d("mytag",presId+"");
@@ -291,6 +308,11 @@ public class CustomerPrescription extends AppCompatActivity {
                     //params.put("prescid",presId);
                     //params.put("counter",String.valueOf(presciptionEditModelList.size()));\
                     //params.put("customerphoneedit",customerphone);
+                    params.put("prescid",presId);
+                    params.put("counter","0");
+                    params.put("dataadd","{presciptionAddModelList:[]}");
+                    params.put("datadelete","{presciptionDeleteModelList:[]}");
+                    params.put("cnumber",customerphone);
                     params.put("dataedit",String.valueOf(getJsonFromMyFormObjectEdit(presciptionEditModelList)));
 
                 } catch (JSONException e) {
@@ -386,6 +408,8 @@ public class CustomerPrescription extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 try {
                     params.put("prescid",presId);
+                    params.put("dataedit","{presciptionEditModelList:[]}");
+                    params.put("datadelete","{presciptionDeleteModelList:[]}");
                     params.put("counter",String.valueOf(presciptionAddModelList.size()));
                     params.put("dataadd",getJsonFromMyFormObjectAdd(presciptionAddModelList)+"");
                     params.put("cnumber",customerphone);
@@ -483,6 +507,11 @@ public class CustomerPrescription extends AppCompatActivity {
                     //params.put("prescid",presId);
                     //params.put("counter",String.valueOf(presciptionEditModelList.size()));\
                     //params.put("customerphoneedit",customerphone);
+                    params.put("prescid",presId);
+                    params.put("dataedit","{presciptionEditModelList:[]}");
+                    params.put("dataadd","{presciptionAddModelList:[]}");
+                    params.put("counter","0");
+                    params.put("cnumber",customerphone);
                     params.put("datadelete",getJsonFromMyFormObjectDelete(presciptionDeleteModelList)+"");
 
                 } catch (JSONException e) {

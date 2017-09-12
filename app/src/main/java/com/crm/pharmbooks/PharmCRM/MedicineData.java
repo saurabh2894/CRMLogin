@@ -58,7 +58,8 @@ public class MedicineData extends AppCompatActivity {
     private EditText MedicineName, MedicineQuantity;
     private EditText MedicineNameDialogBox,MedicineQuantityDialogBox;
     private Button addButton;
-    private  int pos=0;
+    public static int pos=0;
+    public static int LONG_CLICK_FLAG=0;
     String MedicineName_value,MedicineQuantity_value;
     String MedicineName_valuedialogbox,MedicineQuantity_valuedialogbox;
     String username;
@@ -72,7 +73,7 @@ public class MedicineData extends AppCompatActivity {
         Log.i("mytag","In Medicine");
 
         setContentView(R.layout.activity_medicine_data);
-
+        LONG_CLICK_FLAG=0;
         MedicineName = (EditText) findViewById(R.id.MedicineName);
         MedicineQuantity = (EditText) findViewById(R.id.MedicineQuantity);
         addButton = (Button) findViewById(R.id.addButton);
@@ -255,7 +256,7 @@ public class MedicineData extends AppCompatActivity {
 
                     }
                 });
-                alertDialog.show();
+                //alertDialog.show();
 
 
 
