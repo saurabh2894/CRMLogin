@@ -229,6 +229,7 @@ public class CustomerPrescription extends AppCompatActivity {
         Log.d("mytag",responseDetailsJson+"");
         Log.d("mytag",presId+"");
         //Log.d("mytag",presciptionEditModelList.size()+"");
+        Log.d("mytag",jsonArray+"");
 
 
         return responseDetailsJson;
@@ -275,7 +276,7 @@ public class CustomerPrescription extends AppCompatActivity {
                     //params.put("prescid",presId);
                     //params.put("counter",String.valueOf(presciptionEditModelList.size()));\
                     //params.put("customerphoneedit",customerphone);
-                    params.put("dataedit",getJsonFromMyFormObjectEdit(presciptionEditModelList)+"");
+                    params.put("dataedit",String.valueOf(getJsonFromMyFormObjectEdit(presciptionEditModelList)));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
