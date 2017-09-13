@@ -28,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Demo Email"
+            android:layout_margin="8dp"
             android:gravity="center"
             android:textSize="20sp"
             android:id="@+id/email"
@@ -62,6 +63,7 @@
         android:layout_height="match_parent"
         android:text="Demo Phone"
         android:gravity="center"
+        android:layout_margin="8dp"
         android:textSize="20sp"
         android:id="@+id/phone"
         />
@@ -83,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Demo Address"
-            android:gravity="center"
+            android:layout_margin="8dp"
             android:textSize="20sp"
             android:id="@+id/address"
             />

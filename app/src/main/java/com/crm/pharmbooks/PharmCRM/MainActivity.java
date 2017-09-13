@@ -18,7 +18,7 @@ import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,DashBoard.OnFragmentInteractionListener,
-        NewFragment.OnFragmentInteractionListener{
+        NewFragment.OnFragmentInteractionListener,AboutUs.OnFragmentInteractionListener,ContactUs.OnFragmentInteractionListener{
 
     static String LOAD_FRAG_TAG=" ";
     DrawerLayout drawer;
@@ -109,6 +109,16 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Transactional Message");
             loadFragment();
         }
+        else if(id==R.id.nav_about_us){
+            LOAD_FRAG_TAG="About Us";
+            getSupportActionBar().setTitle("About Us");
+            loadFragment();
+        }
+        else if(id==R.id.nav_contact_us){
+            LOAD_FRAG_TAG="Contact Us";
+            getSupportActionBar().setTitle("Contact Us");
+            loadFragment();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -144,6 +154,22 @@ public class MainActivity extends AppCompatActivity
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             fragmentTransaction.replace(R.id.frame, fragment, "Transactional Data");
+            fragmentTransaction.commitAllowingStateLoss();
+        }
+        else if(LOAD_FRAG_TAG=="About Us"){
+
+            Fragment fragment = new AboutUs();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, fragment, "About Us");
+            fragmentTransaction.commitAllowingStateLoss();
+        }
+        else if(LOAD_FRAG_TAG=="Contact Us"){
+
+            Fragment fragment = new ContactUs();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, fragment, "Contact Us");
             fragmentTransaction.commitAllowingStateLoss();
         }
         else {
