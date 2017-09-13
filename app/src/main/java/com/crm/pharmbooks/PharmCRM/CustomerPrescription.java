@@ -146,6 +146,8 @@ public class CustomerPrescription extends AppCompatActivity {
 
                         }
                     });
+                }else{
+                    Toast.makeText(CustomerPrescription.this,"Delete or Unselect the previously selected value first!", Toast.LENGTH_SHORT).show();
                 }
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(CustomerPrescription.this);
                 alertDialog.setTitle("Remove Entry...");

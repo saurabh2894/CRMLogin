@@ -273,15 +273,17 @@ public class MedicineData extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
-                LONG_CLICK_FLAG=1;
-                pos=position;
+                if (LONG_CLICK_FLAG == 0){
+                    LONG_CLICK_FLAG = 1;
+                pos = position;
                 mAdapter.notifyDataSetChanged();
                 deletebtn.setVisibility(View.VISIBLE);
                 deletebtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        LONG_CLICK_FLAG=0;
-                        Toast.makeText(MedicineData.this,medicineDetailList.get(pos).getMName()+" is deleted",Toast.LENGTH_LONG).show();
+                        LONG_CLICK_FLAG = 0;
+                        mAdapter.notifyDataSetChanged();
+                        Toast.makeText(MedicineData.this, medicineDetailList.get(pos).getMName() + " is deleted", Toast.LENGTH_LONG).show();
                         medicineDetailList.remove(pos);
                         mAdapter.notifyDataSetChanged();
                         deletebtn.setVisibility(View.GONE);
@@ -295,7 +297,7 @@ public class MedicineData extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        Toast.makeText(MedicineData.this,medicineDetailList.get(pos).getMName()+" is deleted",Toast.LENGTH_LONG).show();
+                        Toast.makeText(MedicineData.this, medicineDetailList.get(pos).getMName() + " is deleted", Toast.LENGTH_LONG).show();
                         medicineDetailList.remove(pos);
                         mAdapter.notifyDataSetChanged();
 
@@ -309,7 +311,9 @@ public class MedicineData extends AppCompatActivity {
                 });
                 //alertDialog.show();
                 //Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
-
+            }else {
+                    Toast.makeText(MedicineData.this, "Delete or Unselect the previously selected value first!", Toast.LENGTH_SHORT).show();
+                }
             }
         }));
 

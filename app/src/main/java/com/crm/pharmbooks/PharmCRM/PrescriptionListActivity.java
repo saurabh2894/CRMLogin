@@ -157,16 +157,17 @@ public class PrescriptionListActivity extends AppCompatActivity {
         expListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,final int position, long id) {
-
-                LONG_CLICK_FLAG=1;
-                pos=position;
+                if (LONG_CLICK_FLAG == 0){
+                    LONG_CLICK_FLAG = 1;
+                pos = position;
                 listAdapter.notifyDataSetChanged();
 
                 deletebtn.setVisibility(View.VISIBLE);
                 deletebtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        LONG_CLICK_FLAG=0;
+                        listAdapter.notifyDataSetChanged();
                         listDataHeaderSpaceValue.remove(position);
                         listDataHeaderCommaValue.remove(position);
                         listAdapter.notifyDataSetChanged();
@@ -186,13 +187,18 @@ public class PrescriptionListActivity extends AppCompatActivity {
                         listAdapter.notifyDataSetChanged();
                     }
                 });
-               alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                   @Override
-                   public void onClick(DialogInterface dialog, int which) {
+                alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                   }
-               });
+                    }
+
+                });
                 //alertDialog.show();
+                }else {
+                    Toast.makeText(PrescriptionListActivity.this, "Delete or Unselect the previously selected value first!", Toast.LENGTH_SHORT).show();
+                }
+
                 return true;
             }
         });
