@@ -85,6 +85,8 @@ public class PrescriptionListActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("");
+        getSupportActionBar().setTitle("");
         TextView title = (TextView)toolbar.findViewById(R.id.title);
 
         deletebtn=(ImageButton)findViewById(R.id.delete);
@@ -208,7 +210,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.prescriptionlistactivityactionbar, menu);
+       // inflater.inflate(R.menu.prescriptionlistactivityactionbar, menu);
         return true;
     }
 

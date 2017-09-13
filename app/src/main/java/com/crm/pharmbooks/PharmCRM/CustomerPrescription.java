@@ -119,33 +119,34 @@ public class CustomerPrescription extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
-                LONG_CLICK_FLAG=1;
-                pos=position;
-                pAdapter.notifyDataSetChanged();
+                if(LONG_CLICK_FLAG==0) {
+                    LONG_CLICK_FLAG = 1;
+                    pos = position;
+                    pAdapter.notifyDataSetChanged();
 
-                final ArrayList<PresciptionModel> presciptionDeleteModelList = new ArrayList<>();
-                pDeleteAdapter = new PrescriptionAdapter(presciptionDeleteModelList);
-                pDeleteAdapter.notifyDataSetChanged();
-                //toolbar.inflateMenu(R.menu.toolbar_inflated_menu);
-                //Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
-                deletebtn.setVisibility(View.VISIBLE);
-                deletebtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        PresciptionModel deletedValue=presciptionModelList.get(pos);
-                        PresciptionModel detail = new PresciptionModel(deletedValue.getMedName(),deletedValue.getDosage(),deletedValue.getRefillDate(),deletedValue.getEndDate(),deletedValue.getMedicineid());
-                        presciptionDeleteModelList.add(detail);
-                        pDeleteAdapter.notifyDataSetChanged();
-                        sendDeleteDataList(presciptionDeleteModelList);
-                        LONG_CLICK_FLAG=0;
-                        presciptionModelList.remove(pos);
-                        pAdapter.notifyDataSetChanged();
-                        Toast.makeText(CustomerPrescription.this,deletedValue.getMedName()+" is deleted",Toast.LENGTH_LONG).show();
-                        deletebtn.setVisibility(View.GONE);
+                    final ArrayList<PresciptionModel> presciptionDeleteModelList = new ArrayList<>();
+                    pDeleteAdapter = new PrescriptionAdapter(presciptionDeleteModelList);
+                    pDeleteAdapter.notifyDataSetChanged();
+                    //toolbar.inflateMenu(R.menu.toolbar_inflated_menu);
+                    //Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
+                    deletebtn.setVisibility(View.VISIBLE);
+                    deletebtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            PresciptionModel deletedValue = presciptionModelList.get(pos);
+                            PresciptionModel detail = new PresciptionModel(deletedValue.getMedName(), deletedValue.getDosage(), deletedValue.getRefillDate(), deletedValue.getEndDate(), deletedValue.getMedicineid());
+                            presciptionDeleteModelList.add(detail);
+                            pDeleteAdapter.notifyDataSetChanged();
+                            sendDeleteDataList(presciptionDeleteModelList);
+                            LONG_CLICK_FLAG = 0;
+                            presciptionModelList.remove(pos);
+                            pAdapter.notifyDataSetChanged();
+                            Toast.makeText(CustomerPrescription.this, deletedValue.getMedName() + " is deleted", Toast.LENGTH_LONG).show();
+                            deletebtn.setVisibility(View.GONE);
 
-                    }
-                });
-
+                        }
+                    });
+                }
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(CustomerPrescription.this);
                 alertDialog.setTitle("Remove Entry...");
                 alertDialog.setMessage("Do You Really Want To Remove This Entry?");

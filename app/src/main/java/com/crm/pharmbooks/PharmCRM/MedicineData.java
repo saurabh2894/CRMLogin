@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v7.app.ActionBar;
+//import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -85,7 +85,10 @@ public class MedicineData extends AppCompatActivity {
         deletebtn=(ImageButton)findViewById(R.id.delete);
         back=(ImageButton)findViewById(R.id.back);
         deletebtn.setVisibility(View.GONE);
-        TextView title = (TextView)toolbar.findViewById(R.id.title);
+        TextView title = (TextView)
+                toolbar.findViewById(R.id.title);
+        toolbar.setTitle("Existing");
+        getSupportActionBar().setTitle("");
         SharedPreferences sharedpreferences = this.getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
 
         String restoredText = sharedpreferences.getString("username", null);
@@ -305,19 +308,6 @@ public class MedicineData extends AppCompatActivity {
                     }
                 });
                 //alertDialog.show();
-
-
-
-
-
-
-
-
-
-
-
-
-
                 //Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
 
             }
@@ -472,8 +462,8 @@ public class MedicineData extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
 
-        ActionBar actionBar = getSupportActionBar();;
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        //ActionBar actionBar = getSupportActionBar();;
+        //actionBar.setDisplayHomeAsUpEnabled(true);
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.medicinedetailactionbar, menu);
