@@ -190,7 +190,8 @@ public class CustomerPrescription extends AppCompatActivity {
                         presciptionModelList.add(detail);
 
                     }
-                    Log.d("mytag",jarr+"");
+                    Log.d("responsemodellist",jarr+"");
+                    Log.d("response",response+"");
 
                 }
                 catch (JSONException e) {
@@ -259,12 +260,12 @@ public class CustomerPrescription extends AppCompatActivity {
         catch (JSONException e) {
             e.printStackTrace();
         }
-        responseDetailsJson.put("presciptionEditModelList", String.valueOf(jsonArray));
+        responseDetailsJson.put("presciptionEditModelList",jsonArray);
 
-        Log.d("mytag",responseDetailsJson+"");
+        Log.d("responseDetailsEdit",responseDetailsJson+"");
         Log.d("mytag",presId+"");
         //Log.d("mytag",presciptionEditModelList.size()+"");
-        Log.d("mytag",jsonArray+"");
+        Log.d("jsonArrayEdit",jsonArray+"");
 
 
         return responseDetailsJson;
@@ -313,11 +314,11 @@ public class CustomerPrescription extends AppCompatActivity {
                     //params.put("customerphoneedit",customerphone);
                     params.put("prescid",presId);
                     params.put("counter","0");
-                    params.put("dataadd","{presciptionAddModelList:[{}]}");
-                    params.put("datadelete","{presciptionDeleteModelList:[{}]}");
+                    params.put("dataadd","{\"presciptionAddModelList\":[{}]}");
+                    params.put("datadelete","{\"presciptionDeleteModelList\":[{}]}");
                     params.put("cnumber",customerphone);
                     params.put("dataedit",String.valueOf(getJsonFromMyFormObjectEdit(presciptionEditModelList)));
-
+                    Log.d("in dataeditresponse",String.valueOf(getJsonFromMyFormObjectEdit(presciptionEditModelList)));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -366,8 +367,9 @@ public class CustomerPrescription extends AppCompatActivity {
         }
         responseDetailsJson.put("presciptionAddModelList", jsonArray);
 
-        Log.d("mytag",responseDetailsJson+"");
+        Log.d("responseDetailsAdd",responseDetailsJson+"");
         Log.d("mytag",presId+"");
+        Log.d("jsonArrayAdd",jsonArray+"");
 
         return responseDetailsJson;
 
@@ -411,11 +413,13 @@ public class CustomerPrescription extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 try {
                     params.put("prescid",presId);
-                    params.put("dataedit","{presciptionEditModelList:[]}");
-                    params.put("datadelete","{presciptionDeleteModelList:[]}");
+                    params.put("dataedit","{\"presciptionEditModelList\":[{}]}");
+                    params.put("datadelete","{\"presciptionDeleteModelList\":[{}]}");
                     params.put("counter",String.valueOf(presciptionAddModelList.size()));
-                    params.put("dataadd",getJsonFromMyFormObjectAdd(presciptionAddModelList)+"");
+                    params.put("dataadd",String.valueOf(getJsonFromMyFormObjectAdd(presciptionAddModelList)));
                     params.put("cnumber",customerphone);
+                    Log.d("counter",String.valueOf(presciptionAddModelList.size()));
+                    Log.d("some name",String.valueOf(getJsonFromMyFormObjectAdd(presciptionAddModelList)));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -461,9 +465,10 @@ public class CustomerPrescription extends AppCompatActivity {
         }
         responseDetailsJson.put("presciptionDeleteModelList", jsonArray);
 
-        Log.d("mytag",responseDetailsJson+"");
+        Log.d("responseDetailsDelete",responseDetailsJson+"");
         Log.d("mytag",presId+"");
         //Log.d("mytag",presciptionEditModelList.size()+"");
+        Log.d("jsonArrayDelete",jsonArray+"");
 
 
         return responseDetailsJson;
@@ -511,11 +516,11 @@ public class CustomerPrescription extends AppCompatActivity {
                     //params.put("counter",String.valueOf(presciptionEditModelList.size()));\
                     //params.put("customerphoneedit",customerphone);
                     params.put("prescid",presId);
-                    params.put("dataedit","{presciptionEditModelList:[]}");
-                    params.put("dataadd","{presciptionAddModelList:[]}");
+                    params.put("dataedit","{\"presciptionEditModelList\":[{}]}");
+                    params.put("dataadd","{\"presciptionAddModelList\":[{}]}");
                     params.put("counter","0");
                     params.put("cnumber",customerphone);
-                    params.put("datadelete",getJsonFromMyFormObjectDelete(presciptionDeleteModelList)+"");
+                    params.put("datadelete",String.valueOf(getJsonFromMyFormObjectDelete(presciptionDeleteModelList)+""));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
