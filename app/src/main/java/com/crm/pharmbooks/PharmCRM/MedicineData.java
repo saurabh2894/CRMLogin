@@ -497,7 +497,7 @@ public class MedicineData extends AppCompatActivity {
                     params.put("Cadd",Address);
                     params.put("chemist",username);
                     params.put("counter",String.valueOf(medicineDetailList.size()));
-                    params.put("data",getJsonFromMyFormObject(medicineDetailList)+"");
+                    params.put("data",String.valueOf(getJsonFromMyFormObject(medicineDetailList)+""));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
