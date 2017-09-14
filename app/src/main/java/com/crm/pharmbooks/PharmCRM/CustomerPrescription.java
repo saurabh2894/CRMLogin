@@ -1,8 +1,10 @@
 package com.crm.pharmbooks.PharmCRM;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
@@ -67,10 +69,15 @@ public class CustomerPrescription extends AppCompatActivity {
     RelativeLayout rl;
     String presId,customerphone;
     public static int pos;
+    Vibrator vb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extra = getIntent().getExtras();
+
+         vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
         LONG_CLICK_FLAG=0;
         presId = extra.getString("presId");
         customerphone=extra.getString("customerphone");
@@ -123,6 +130,20 @@ public class CustomerPrescription extends AppCompatActivity {
                     LONG_CLICK_FLAG = 1;
                     pos = position;
                     pAdapter.notifyDataSetChanged();
+
+                   long[] pattern = {0, 1000, 0};
+                    vb.vibrate(pattern,0);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try{
+                                Thread.sleep(100);
+                                vb.cancel();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
 
                     final ArrayList<PresciptionModel> presciptionDeleteModelList = new ArrayList<>();
                     pDeleteAdapter = new PrescriptionAdapter(presciptionDeleteModelList);

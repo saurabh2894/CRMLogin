@@ -1,9 +1,11 @@
 package com.crm.pharmbooks.PharmCRM;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Vibrator;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 //import android.support.v7.app.ActionBar;
@@ -68,6 +70,7 @@ public class MedicineData extends AppCompatActivity {
     String MedicineName_valuedialogbox,MedicineQuantity_valuedialogbox;
     String username;
     String Name,MobileNo,Address;
+    Vibrator vb;
 
 
     @Override
@@ -78,6 +81,9 @@ public class MedicineData extends AppCompatActivity {
 
         setContentView(R.layout.activity_medicine_data);
         LONG_CLICK_FLAG=0;
+
+        vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
         MedicineName = (EditText) findViewById(R.id.MedicineName);
         MedicineQuantity = (EditText) findViewById(R.id.MedicineQuantity);
         addButton = (Button) findViewById(R.id.addButton);
@@ -277,6 +283,22 @@ public class MedicineData extends AppCompatActivity {
                 if (LONG_CLICK_FLAG == 0){
                     LONG_CLICK_FLAG = 1;
                 pos = position;
+
+                    long[] pattern = {0, 1000, 0};
+                    vb.vibrate(pattern,0);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try{
+                                Thread.sleep(100);
+                                vb.cancel();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+
+
                 mAdapter.notifyDataSetChanged();
                 deletebtn.setVisibility(View.VISIBLE);
                 deletebtn.setOnClickListener(new View.OnClickListener() {

@@ -2,10 +2,12 @@ package com.crm.pharmbooks.PharmCRM;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
@@ -71,6 +73,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
     public static int LONG_CLICK_FLAG=0;
     ImageButton deletebtn;
     public static int pos;
+    Vibrator vb;
 
 
 
@@ -82,6 +85,9 @@ public class PrescriptionListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_prescription_list);
 
         LONG_CLICK_FLAG=0;
+
+        vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -162,7 +168,21 @@ public class PrescriptionListActivity extends AppCompatActivity {
                 pos = position;
                 listAdapter.notifyDataSetChanged();
 
-                deletebtn.setVisibility(View.VISIBLE);
+                    long[] pattern = {0, 1000, 0};
+                    vb.vibrate(pattern,0);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try{
+                                Thread.sleep(100);
+                                vb.cancel();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+
+                    deletebtn.setVisibility(View.VISIBLE);
                 deletebtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

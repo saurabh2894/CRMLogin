@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
     String username;
     private OnFragmentInteractionListener mListener;
 
+
     public TransactionalMessage() {
         // Required empty public constructor
     }
@@ -66,11 +68,24 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
         Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
                 Name_var = Name.getText().toString();
                 MobileNo_var = MobileNo.getText().toString();
                 BillAmount_var = BillAmount.getText().toString();
                 Toast.makeText(getActivity().getApplicationContext(),username,Toast.LENGTH_LONG).show();
                 sendR(Name_var, MobileNo_var, BillAmount_var);
+                // Sending the sms here
+                //SendMsg sendMsg = new SendMsg(Name_var,MobileNo_var,BillAmount_var);
+
+                //Dashboard switcing from here
+                MainActivity.LOAD_FRAG_TAG="DashBoard";
+                Fragment fragment = DashBoard.newInstance();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.frame, fragment, "DashBoard");
+                fragmentTransaction.commitAllowingStateLoss();
 
             }
         });

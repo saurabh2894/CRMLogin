@@ -8,13 +8,18 @@ package com.crm.pharmbooks.PharmCRM;
         import java.net.URLConnection;
         import java.net.URLEncoder;
 
-public class SendMsg  {
 
-    public void SendMsg()
+public class SendMsg  {
+    String name,mobiles,amount;
+
+    public SendMsg(String name,String mobiles,String amount)
     {
+        this.name=name;
+        this.mobiles=mobiles;
+        this.amount=amount;
+
         SendSMS();
     }
-
 
 
     public   void SendSMS()
@@ -25,10 +30,11 @@ public class SendMsg  {
             public void run() {
                 try  {
                     String authkey = "165963Ah3LDLrLx596ef669";
-                    String mobiles = "919971141467";
+                    String phone = "91"+mobiles;
                     String senderId = "manyaG";
-                    String message = "Test message";
+                    String message = "Thank you "+name+" for shopping from us!"+"\n+Your bill amount is: Rs."+amount;
                     String route="4";
+
 
                     URLConnection myURLConnection=null;
                     URL myURL=null;
@@ -41,7 +47,7 @@ public class SendMsg  {
 
                     StringBuilder sbPostData= new StringBuilder(mainUrl);
                     sbPostData.append("authkey="+authkey);
-                    sbPostData.append("&mobiles="+mobiles);
+                    sbPostData.append("&mobiles="+phone);
                     sbPostData.append("&message="+encoded_message);
                     sbPostData.append("&route="+route);
                     sbPostData.append("&sender="+senderId);
