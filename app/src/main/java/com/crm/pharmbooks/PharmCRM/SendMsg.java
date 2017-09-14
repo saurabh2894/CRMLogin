@@ -32,7 +32,7 @@ public class SendMsg  {
                     String authkey = "165963Ah3LDLrLx596ef669";
                     String phone = "91"+mobiles;
                     String senderId = "PHMBKS";
-                    String message = "Thank you "+name+" for shopping from us!"+"\n+Your bill amount is: Rs."+amount;
+                    String message = "Thank you "+name+" for shopping from us!"+"\n+Your bill amount is: Rs."+amount+"."+"\nGet well soon.";
                     String route="4";
 
 
