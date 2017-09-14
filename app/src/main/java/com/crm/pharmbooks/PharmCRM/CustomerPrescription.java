@@ -169,61 +169,7 @@ public class CustomerPrescription extends AppCompatActivity {
         }));
 
         getSupportActionBar().setTitle("");
-        String url = "https://pharmcrm.herokuapp.com/api/medicine/";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                recyclerView.setVisibility(View.VISIBLE);
-                rl.setVisibility(View.GONE);
-                pb.setVisibility(View.GONE);
-                txt.setVisibility(View.GONE);
-                try {
-                    JSONArray jarr = new JSONArray(response);
-                    for(int i=0;i<jarr.length();i++){
-                        JSONObject ob1 = jarr.getJSONObject(i);
-                        String endDate= ob1.getString("dosageend");
-                        String dose = ob1.getString("days");
-                        String refill = ob1.getString("lastrefillon");
-                        String medName = ob1.getString("medicinename");
-                        String id = ob1.getString("id");
-                        PresciptionModel detail = new PresciptionModel(medName,dose,refill,endDate,id);
-                        presciptionModelList.add(detail);
-
-                    }
-                    Log.d("responsemodellist",jarr+"");
-                    Log.d("response",response+"");
-
-                }
-                catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                pAdapter.notifyDataSetChanged();
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("prescid",presId);
-                return params;
-            }
-        };
-
-        int MY_SOCKET_TIMEOUT_MS = 50000;
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                MY_SOCKET_TIMEOUT_MS,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        RequestQueue requestQueue = Volley.newRequestQueue(CustomerPrescription.this);
-        requestQueue.add(stringRequest);
-
+        fetchData(0);
     }
 
     @Override
@@ -237,7 +183,71 @@ public class CustomerPrescription extends AppCompatActivity {
         }
     }
 
+        public void fetchData(final int count){
+                if(count==1){
+                    recyclerView.setVisibility(View.GONE);
+                    rl.setVisibility(View.VISIBLE);
+                    pb.setVisibility(View.VISIBLE);
+                    txt.setText("Refreshing Data...");
+                    txt.setVisibility(View.VISIBLE);
+                    presciptionModelList.clear();
+                }
+            String url = "https://pharmcrm.herokuapp.com/api/medicine/";
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    rl.setVisibility(View.GONE);
+                    pb.setVisibility(View.GONE);
+                    txt.setVisibility(View.GONE);
+                    try {
+                        JSONArray jarr = new JSONArray(response);
+                        for(int i=0;i<jarr.length();i++){
+                            JSONObject ob1 = jarr.getJSONObject(i);
+                            String endDate= ob1.getString("dosageend");
+                            String dose = ob1.getString("days");
+                            String refill = ob1.getString("lastrefillon");
+                            String medName = ob1.getString("medicinename");
+                            String id = ob1.getString("id");
+                            PresciptionModel detail = new PresciptionModel(medName,dose,refill,endDate,id);
+                            presciptionModelList.add(detail);
 
+                        }
+                        Log.d("responsemodellist",jarr+"");
+                        Log.d("response",response+"");
+
+                    }
+                    catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    pAdapter.notifyDataSetChanged();
+                }
+            },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("prescid",presId);
+                    return params;
+                }
+            };
+
+            int MY_SOCKET_TIMEOUT_MS = 50000;
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    MY_SOCKET_TIMEOUT_MS,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+            RequestQueue requestQueue = Volley.newRequestQueue(CustomerPrescription.this);
+            requestQueue.add(stringRequest);
+
+        }
     //For Edit Prescription
 
 
@@ -295,6 +305,7 @@ public class CustomerPrescription extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         Toast.makeText(CustomerPrescription.this,response,Toast.LENGTH_LONG).show();
+                        fetchData(1);
                         //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
 
                     }
@@ -398,6 +409,7 @@ public class CustomerPrescription extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         Toast.makeText(CustomerPrescription.this,response,Toast.LENGTH_LONG).show();
+                        fetchData(1);
                         //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
 
                     }
@@ -498,6 +510,7 @@ public class CustomerPrescription extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         Toast.makeText(CustomerPrescription.this,response,Toast.LENGTH_LONG).show();
+                        fetchData(1);
                         //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
 
                     }
@@ -659,70 +672,19 @@ public class CustomerPrescription extends AppCompatActivity {
 
 
                             sendEditDataList(presciptionEditModelList);
+                           // fetchData(1);
                         } else {
                             Toast.makeText(CustomerPrescription.this, "Don't add save values again, make some changes bro!", Toast.LENGTH_SHORT).show();
 
                         }
 
                     }else {
-                        /*
-                        String dateStart = presciptionModelList.get(0).getRefillDate();
-                        String[] date = dateStart.split("-");
-                        int year = Integer.parseInt(date[0]);
-                        int month = Integer.parseInt(date[1]);
-                        int day = Integer.parseInt(date[2]);
-                        int dose = Integer.parseInt(dboxMedDose.getText().toString().trim());
-                        int ndays = day + dose;
-                        int nmonth = month;
-                        int nyear = year;
-                        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 10 || month == 12 || month == 8) {
-                            if (ndays > 31) {
-                                ndays = ndays - 31;
-                                nmonth = month + 1;
-                            }
-                        } else if (month == 2) {
-                            if (year % 4 == 0) {
-                                if (ndays > 29) {
-                                    ndays -= 29;
-                                    nmonth = month + 1;
-                                }
-                            } else {
-                                if (ndays > 28) {
-                                    ndays = ndays - 28;
-                                    nmonth = month + 1;
-                                }
-                            }
-                        } else if (month == 4 || month == 6 || month == 9 || month == 11) {
-                            if (ndays > 30) {
-                                ndays = ndays - 30;
-                                nmonth = month + 1;
-                            }
-                        }
-
-                        if (nmonth > 12) {
-                            nmonth -= 12;
-                        }
-                        String ndate = "";
-                        int flag = 0;
-                        if (nmonth < 10) {
-                            ndate = nyear + "-0" + nmonth + "-" + ndays;
-                            flag = 1;
-                        }
-                        if (ndays < 10) {
-                            ndate = nyear + "-" + nmonth + "-0" + ndays;
-                            flag = 1;
-                        }
-                        if (flag == 0) {
-                            ndate = nyear + "-" + nmonth + "-" + ndays;
-                        }
-
-                        */
                             presciptionAddModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
                             pAddAdapter.notifyDataSetChanged();
-                            presciptionModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
-                            pAdapter.notifyDataSetChanged();
+                           // presciptionModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
+                           // pAdapter.notifyDataSetChanged();
                             sendAddDataList(presciptionAddModelList);
-                            //TODO send a request to server to fetch the lastest entry of prescription list
+                        //fetchData(1);
                     }
 
 
