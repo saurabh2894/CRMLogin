@@ -1,6 +1,8 @@
 package com.crm.pharmbooks.PharmCRM;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /*public class DashBoard extends AppCompatActivity {
 
@@ -40,16 +43,12 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
         return fragment;
     }
 
-    public boolean isInternetAvailable(){
-        try {
-            InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
-            return !ipAddr.equals("");
-
-        } catch (Exception e) {
-            return false;
-        }
-
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,10 +73,9 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
         NoOFCustomersOnboard.setOnClickListener(this);
         NoOfRepeatedCustomers.setOnClickListener(this);
         NoOfMedicinesRefilled.setOnClickListener(this);
-        boolean b =isInternetAvailable();
-        if(!b){
+        boolean b =isNetworkAvailable();
+        if(b==false){
             Toast.makeText(getActivity().getApplicationContext(), "This application requires internet...Please connect to a WiFi or Mobile Network", Toast.LENGTH_SHORT).show();
-
         }
         return rootView;
 
