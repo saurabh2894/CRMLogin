@@ -165,8 +165,13 @@ public class PrescriptionListActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view,final int position, long id) {
                 if (LONG_CLICK_FLAG == 0){
                     LONG_CLICK_FLAG = 1;
+                    if(SEARCH_FLAG==0){
                 pos = position;
-                listAdapter.notifyDataSetChanged();
+                listAdapter.notifyDataSetChanged();}
+                    else{
+                        pos=0;
+                        getAdapter().notifyDataSetChanged();
+                    }
 
                     long[] pattern = {0, 1000, 0};
                     vb.vibrate(pattern,0);
@@ -187,11 +192,21 @@ public class PrescriptionListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         LONG_CLICK_FLAG=0;
-                        listAdapter.notifyDataSetChanged();
-                        listDataHeaderSpaceValue.remove(position);
-                        listDataHeaderCommaValue.remove(position);
-                        listAdapter.notifyDataSetChanged();
+                        if(SEARCH_FLAG==0) {
+                            listAdapter.notifyDataSetChanged();
+                            listDataHeaderSpaceValue.remove(pos);
+                            listDataHeaderCommaValue.remove(pos);
+                            listAdapter.notifyDataSetChanged();
+                        }
+                        else{
 
+                            expListView.setAdapter(listAdapter);
+                            SEARCH_FLAG=0;
+                            SearchBoxExistingRefill.setText("");
+                            listDataHeaderSpaceValue.remove(getIndex());
+                            listDataHeaderCommaValue.remove(getIndex());
+                            listAdapter.notifyDataSetChanged();
+                        }
                         deletebtn.setVisibility(View.GONE);
 
                     }
@@ -275,7 +290,6 @@ public class PrescriptionListActivity extends AppCompatActivity {
         else if(LONG_CLICK_FLAG==1){
             LONG_CLICK_FLAG=0;
             listAdapter.notifyDataSetChanged();
-            deletebtn.setVisibility(View.GONE);
         }
         else {
             super.onBackPressed();
@@ -283,6 +297,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
     }
 
     public void sendR() {
+        deletebtn.setVisibility(View.GONE);
         String url = "https://pharmcrm.herokuapp.com/api/namedata/";
         listDataHeaderCommaValue = new ArrayList<String>();
         listDataHeaderSpaceValue = new ArrayList<String>();
@@ -365,23 +380,39 @@ public class PrescriptionListActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
+    int index;
+    public void setIndex(int i){
+        index=i;
+    }
 
+    public int getIndex(){
+        return index;
+    }
+    ExpandableListAdapter listAdaptersearchfordelete;
+    public void setAdapter(ExpandableListAdapter listAdaptersearch){
+        listAdaptersearchfordelete=listAdaptersearch;
+    }
+    public ExpandableListAdapter getAdapter(){
+        return listAdaptersearchfordelete;
+    }
     public void searchFunction(){
 
         ArrayList<String> numbers = new ArrayList<String>();
-        List<String> listDataHeaderSpaceSearch =  new ArrayList<String>();;
+        List<String> listDataHeaderSpaceSearch =  new ArrayList<String>();
         HashMap<String, List<String>> listDataChild_PrescriptionValueSearch;
         ExpandableListAdapter listAdaptersearch;
+
         if(SEARCH_FLAG==0){
 
             String number=SearchBoxExistingRefill.getText().toString().trim();
             for(int i=0;i<listDataHeaderCommaValue.size();i++){
-                Log.d("list value",listDataHeaderSpaceValue.get(i));
+                Log.d("list value",listDataHeaderCommaValue.get(i));
                 Log.d("index",i+"");
                 String str = listDataHeaderCommaValue.get(i);
                 String[] parts = str.split(",");
-                numbers.add(parts[1]);
-                Log.d("num list",numbers.get(i));
+                if(parts[1].length()!=0&&parts.length!=0)
+                { numbers.add(parts[1]);
+                Log.d("num list",numbers.get(i));}
             }
             int count=0;
             if(numbers.contains(number)){
@@ -391,12 +422,14 @@ public class PrescriptionListActivity extends AppCompatActivity {
                         SEARCH_FLAG=1;
                         count=1;
                         Log.d("evil index",i+"");
+                        setIndex(i);
                         listDataHeaderSpaceSearch.add(listDataHeaderSpaceValue.get(i));
                         listDataChild_PrescriptionValueSearch = new HashMap<String, List<String>>();
                         listDataChild_PrescriptionValueSearch.put(listDataHeaderSpaceValue.get(i),listDataChild_PrescriptionValue.get(listDataHeaderSpaceValue.get(i)));
                         Log.d("index",i+"");
                         Log.d("Value",listDataHeaderSpaceValue.get(i));
                         listAdaptersearch = new ExpandableListAdapter(PrescriptionListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
+                        setAdapter(listAdaptersearch);
                         expListView.setAdapter(listAdaptersearch);
                     }
                 }

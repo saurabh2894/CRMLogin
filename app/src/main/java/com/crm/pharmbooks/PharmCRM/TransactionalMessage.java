@@ -182,9 +182,6 @@ public class TransactionalMessage extends android.support.v4.app.Fragment implem
                 return params;
             }
 
-
-
-
         };
 
         int MY_SOCKET_TIMEOUT_MS = 50000;
