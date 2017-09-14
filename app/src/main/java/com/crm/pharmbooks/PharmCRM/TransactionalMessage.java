@@ -1,6 +1,7 @@
 package com.crm.pharmbooks.PharmCRM;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -78,11 +79,9 @@ public class TransactionalMessage extends android.support.v4.app.Fragment implem
                     Toast.makeText(getActivity().getApplicationContext(), username, Toast.LENGTH_LONG).show();
                     sendR(Name_var, MobileNo_var, BillAmount_var);
                     // Sending the sms here
-                    //SendMsg sendMsg = new SendMsg(Name_var,MobileNo_var,BillAmount_var);
+                    SendMsg sendMsg = new SendMsg(Name_var,MobileNo_var,BillAmount_var);
 
 
-//                      MainActivity main = new MainActivity();
-//                      main.loadFragment();
                 }
                 else{
                     Toast.makeText(getActivity().getApplicationContext(), "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
@@ -154,12 +153,12 @@ public class TransactionalMessage extends android.support.v4.app.Fragment implem
                         }
                         Toast.makeText(getActivity().getApplicationContext(),response,Toast.LENGTH_LONG).show();
                         Toast.makeText(getActivity().getApplicationContext(),msg+""+ result +"",Toast.LENGTH_LONG).show();
+
+
                         //Dashboard switcing from here
-                        Fragment fragment = DashBoard.newInstance();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                        fragmentTransaction.replace(R.id.frame, fragment, "DashBoard");
-                        fragmentTransaction.commitAllowingStateLoss();
+                        //MainActivity.LOAD_FRAG_TAG="";
+                        getActivity().finish();
+                        startActivity(new Intent(getActivity(),MainActivity.class));
                     }
                 },
                 new Response.ErrorListener() {
