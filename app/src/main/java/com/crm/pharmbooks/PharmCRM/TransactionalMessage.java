@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ import java.util.Map;
 import static android.content.Context.MODE_PRIVATE;
 import static com.crm.pharmbooks.PharmCRM.Login.MyPREFERENCES;
 
-public class TransactionalMessage extends android.support.v4.app.Fragment {
+public class TransactionalMessage extends android.support.v4.app.Fragment implements DashBoard.OnFragmentInteractionListener {
 
     EditText Name;
     EditText MobileNo;
@@ -70,22 +71,22 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
             public void onClick(View v) {
 
 
+                if ((!(TextUtils.isEmpty(Name.getText())) && !(TextUtils.isEmpty(MobileNo.getText().toString().trim()))&& !(TextUtils.isEmpty(BillAmount.getText().toString().trim()) ))) {
+                    Name_var = Name.getText().toString();
+                    MobileNo_var = MobileNo.getText().toString();
+                    BillAmount_var = BillAmount.getText().toString();
+                    Toast.makeText(getActivity().getApplicationContext(), username, Toast.LENGTH_LONG).show();
+                    sendR(Name_var, MobileNo_var, BillAmount_var);
+                    // Sending the sms here
+                    //SendMsg sendMsg = new SendMsg(Name_var,MobileNo_var,BillAmount_var);
 
-                Name_var = Name.getText().toString();
-                MobileNo_var = MobileNo.getText().toString();
-                BillAmount_var = BillAmount.getText().toString();
-                Toast.makeText(getActivity().getApplicationContext(),username,Toast.LENGTH_LONG).show();
-                sendR(Name_var, MobileNo_var, BillAmount_var);
-                // Sending the sms here
-                //SendMsg sendMsg = new SendMsg(Name_var,MobileNo_var,BillAmount_var);
 
-                //Dashboard switcing from here
-                MainActivity.LOAD_FRAG_TAG="DashBoard";
-                Fragment fragment = DashBoard.newInstance();
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, fragment, "DashBoard");
-                fragmentTransaction.commitAllowingStateLoss();
+//                      MainActivity main = new MainActivity();
+//                      main.loadFragment();
+                }
+                else{
+                    Toast.makeText(getActivity().getApplicationContext(), "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -102,6 +103,11 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
 
@@ -148,7 +154,12 @@ public class TransactionalMessage extends android.support.v4.app.Fragment {
                         }
                         Toast.makeText(getActivity().getApplicationContext(),response,Toast.LENGTH_LONG).show();
                         Toast.makeText(getActivity().getApplicationContext(),msg+""+ result +"",Toast.LENGTH_LONG).show();
-
+                        //Dashboard switcing from here
+                        Fragment fragment = DashBoard.newInstance();
+                        android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                        fragmentTransaction.replace(R.id.frame, fragment, "DashBoard");
+                        fragmentTransaction.commitAllowingStateLoss();
                     }
                 },
                 new Response.ErrorListener() {
