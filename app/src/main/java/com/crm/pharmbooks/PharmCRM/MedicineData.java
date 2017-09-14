@@ -20,11 +20,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -92,8 +94,7 @@ public class MedicineData extends AppCompatActivity {
         deletebtn=(ImageButton)findViewById(R.id.delete);
         back=(ImageButton)findViewById(R.id.back);
         deletebtn.setVisibility(View.GONE);
-        TextView title = (TextView)
-                toolbar.findViewById(R.id.title);
+        TextView title = (TextView) toolbar.findViewById(R.id.title);
         toolbar.setTitle("Existing");
         getSupportActionBar().setTitle("");
         SharedPreferences sharedpreferences = this.getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
@@ -146,10 +147,14 @@ public class MedicineData extends AppCompatActivity {
 
 
 
+
+
+
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!(TextUtils.isEmpty(MedicineName.getText()) && TextUtils.isEmpty(MedicineQuantity.getText().toString().trim()))) {
+                if (!(TextUtils.isEmpty(MedicineName.getText()) && !(TextUtils.isEmpty(MedicineQuantity.getText().toString().trim())))) {
                     MedicineName_value = MedicineName.getText().toString();
                     MedicineQuantity_value = MedicineQuantity.getText().toString();
                     MedicineDetailModel detail = new MedicineDetailModel(MedicineName_value, Integer.parseInt(MedicineQuantity_value));
@@ -164,6 +169,22 @@ public class MedicineData extends AppCompatActivity {
                 }
             }
         });
+
+        MedicineQuantity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if(i== EditorInfo.IME_ACTION_GO){
+                    AddButtonFunction();
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        });
+
+
+
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mAdapter = new MedicineAdapter(medicineDetailList);
@@ -340,6 +361,20 @@ public class MedicineData extends AppCompatActivity {
             }
         }));
 
+    }
+    public void AddButtonFunction() {
+        if (!(TextUtils.isEmpty(MedicineName.getText()) && TextUtils.isEmpty(MedicineQuantity.getText().toString().trim()))) {
+            MedicineName_value = MedicineName.getText().toString();
+            MedicineQuantity_value = MedicineQuantity.getText().toString();
+            MedicineDetailModel detail = new MedicineDetailModel(MedicineName_value, Integer.parseInt(MedicineQuantity_value));
+            medicineDetailList.add(detail);
+            mAdapter.notifyDataSetChanged();
+            MedicineName.setText("");
+            MedicineQuantity.setText("");
+            MedicineName.requestFocus();
+        } else {
+            Toast.makeText(MedicineData.this, "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void goUp(){

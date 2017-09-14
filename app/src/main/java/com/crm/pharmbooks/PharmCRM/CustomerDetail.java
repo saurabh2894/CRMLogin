@@ -9,11 +9,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -70,38 +73,73 @@ public class CustomerDetail extends AppCompatActivity {
        Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Name_var = Name.getText().toString();
-                MobileNo_var = MobileNo.getText().toString();
-                Address_var = Address.getText().toString();
+
+                if ((!(TextUtils.isEmpty(Name.getText())) && !(TextUtils.isEmpty(MobileNo.getText().toString().trim())) && !(TextUtils.isEmpty(Address.getText().toString().trim())))) {
+                    Name_var = Name.getText().toString();
+                    MobileNo_var = MobileNo.getText().toString();
+                    Address_var = Address.getText().toString();
+
 
                     Pattern p = Pattern.compile("\\d{10}");
                     Matcher m = p.matcher(MobileNo_var);
                     boolean b = m.matches();
-                    if(b){
-                        Toast.makeText(CustomerDetail.this,"10 digits bingo",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(CustomerDetail.this,MedicineData.class);
+                    if (b) {
+                        Toast.makeText(CustomerDetail.this, "10 digits bingo", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(CustomerDetail.this, MedicineData.class);
                         intent.putExtra("Name", String.valueOf(Name_var));
                         intent.putExtra("MobileNo", String.valueOf(MobileNo_var));
                         intent.putExtra("Address", String.valueOf(Address_var));
-                        Log.d("mytag","b is true");
+                        Log.d("mytag", "b is true");
                         //Intent i = new Intent(getApplicationContext(),MedicineData.class);
                         startActivity(intent);
-                    }
-                    else {
+                    } else {
                         Toast.makeText(CustomerDetail.this, "Please enter valid number", Toast.LENGTH_SHORT).show();
-                        Log.d("mytag","b is false");
+                        Log.d("mytag", "b is false");
                     }
 
+                    //sendR(Name_var, MobileNo_var, Address_var);
+                } else {
+                    Toast.makeText(CustomerDetail.this, "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
+                }
+            }
+       });
 
-
-
-
-                //sendR(Name_var, MobileNo_var, Address_var);
-
+        Address.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if(i== EditorInfo.IME_ACTION_GO){
+                    NextFunction();
+                    return true;
+                }
+                else{
+                    return false;
+                }
             }
         });
+    }
 
+    public void NextFunction(){
+        Name_var = Name.getText().toString();
+        MobileNo_var = MobileNo.getText().toString();
+        Address_var = Address.getText().toString();
 
+        Pattern p = Pattern.compile("\\d{10}");
+        Matcher m = p.matcher(MobileNo_var);
+        boolean b = m.matches();
+        if(b){
+            Toast.makeText(CustomerDetail.this,"10 digits bingo",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(CustomerDetail.this,MedicineData.class);
+            intent.putExtra("Name", String.valueOf(Name_var));
+            intent.putExtra("MobileNo", String.valueOf(MobileNo_var));
+            intent.putExtra("Address", String.valueOf(Address_var));
+            Log.d("mytag","b is true");
+            //Intent i = new Intent(getApplicationContext(),MedicineData.class);
+            startActivity(intent);
+        }
+        else {
+            Toast.makeText(CustomerDetail.this, "Please enter valid number", Toast.LENGTH_SHORT).show();
+            Log.d("mytag","b is false");
+        }
     }
 
 

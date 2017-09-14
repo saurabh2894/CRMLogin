@@ -36,6 +36,8 @@
         android:id="@+id/Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:inputType="textPersonName"
         android:hint="Enter Name" />
 
     <EditText
@@ -43,12 +45,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Mobile No"
+        android:imeOptions="actionNext"
         android:inputType="phone" />
 
     <EditText
         android:id="@+id/Address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:imeOptions="actionGo"
+        android:inputType="textPostalAddress"
         android:hint="Address" />
 
 <Button

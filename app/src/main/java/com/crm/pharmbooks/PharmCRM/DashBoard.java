@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.net.InetAddress;
 
 /*public class DashBoard extends AppCompatActivity {
 
@@ -37,9 +40,24 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
         return fragment;
     }
 
+    public boolean isInternetAvailable(){
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
+            return !ipAddr.equals("");
+
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+
     }
 
     @Override
@@ -56,8 +74,17 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
         NoOFCustomersOnboard.setOnClickListener(this);
         NoOfRepeatedCustomers.setOnClickListener(this);
         NoOfMedicinesRefilled.setOnClickListener(this);
+        boolean b =isInternetAvailable();
+        if(!b){
+            Toast.makeText(getActivity().getApplicationContext(), "This application requires internet...Please connect to a WiFi or Mobile Network", Toast.LENGTH_SHORT).show();
+
+        }
         return rootView;
+
+
+
     }
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
