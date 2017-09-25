@@ -60,15 +60,15 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         child = (LinearLayout)convertView.findViewById(R.id.pres_list_layout);
 
-        if(PrescriptionListActivity.CHILDLONG_CLICK_FLAG==1)
-        {
-            if(childPosition==PrescriptionListActivity.pos) {
-                child.setBackgroundColor(Color.parseColor("#9e9e9e"));
-            }
-        }
-        else{
-            child.setBackgroundColor(Color.TRANSPARENT);
-        }
+//        if(PrescriptionListActivity.CHILDLONG_CLICK_FLAG==1)
+//        {
+//            if(childPosition==PrescriptionListActivity.pos) {
+//                child.setBackgroundColor(Color.parseColor("#9e9e9e"));
+//            }
+//        }
+//        else{
+//            child.setBackgroundColor(Color.TRANSPARENT);
+//        }
 
         TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
 

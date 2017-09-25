@@ -407,6 +407,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
         }
         else if(LONG_CLICK_FLAG==1){
             LONG_CLICK_FLAG=0;
+            deletebtn.setVisibility(View.GONE);
             listAdapter.notifyDataSetChanged();
         }
         else if(CHILDLONG_CLICK_FLAG==1){

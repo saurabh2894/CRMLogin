@@ -66,13 +66,13 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MyView
             MedicineDetailModel medicineDetailModel = medicineList.get(position);
             holder.MName.setText(medicineDetailModel.getMName());
             holder.MQuantity.setText(medicineDetailModel.getMQuantity()+"");
-            if(MedicineData.LONG_CLICK_FLAG==1){
-                if(MedicineData.pos==position){
-                    holder.base.setBackgroundColor(Color.parseColor("#9e9e9e"));
-                }
-            }else{
-                holder.base.setBackgroundColor(Color.TRANSPARENT);
-            }
+//            if(MedicineData.LONG_CLICK_FLAG==1){
+//                if(MedicineData.pos==position){
+//                    holder.base.setBackgroundColor(Color.parseColor("#9e9e9e"));
+//                }
+//            }else{
+//                holder.base.setBackgroundColor(Color.TRANSPARENT);
+//            }
 
         }
 
