@@ -19,14 +19,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/logoblack" />
+        app:srcCompat="@drawable/whitelogo2" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="by Medicians"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#455A64"
+        android:textColor="#ffffff"
         android:textStyle="bold"
         android:gravity="right"
         android:textSize="12sp" />

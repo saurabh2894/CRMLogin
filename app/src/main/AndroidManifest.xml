@@ -41,6 +41,7 @@
         </activity>
 
         <activity android:name="com.crm.pharmbooks.PharmCRM.CustomerNameFetch" />
+
         <activity android:name="com.crm.pharmbooks.PharmCRM.PrescriptionListActivity"
             android:parentActivityName="com.crm.pharmbooks.PharmCRM.MainActivity">
         <meta-data
@@ -52,8 +53,20 @@
             android:parentActivityName="com.crm.pharmbooks.PharmCRM.PrescriptionListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.crm.pharmbooks.PharmCRM.PrescriptionListActivity" />
+                android:value="com.crm.pharmbooks.PharmCRM.PrescriptionListActivity"
+                />
         </activity>
+
+
+        <activity android:name="com.crm.pharmbooks.PharmCRM.VisitorInformation"
+            android:parentActivityName="com.crm.pharmbooks.PharmCRM.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
+        </activity>
+
+
+
         <activity android:name="com.crm.pharmbooks.PharmCRM.Login"/>
 
     </application>

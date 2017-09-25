@@ -17,10 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by manyamadan on 04/09/17.
+ * Created by saurabh on 18/09/17.
  */
 
-public class ExpandableListAdapter extends BaseExpandableListAdapter {
+public class ExpandableListAdapterDashboard extends BaseExpandableListAdapter {
 
     private Context _context;
     private List<String> _listDataHeader; // header titles
@@ -29,7 +29,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     LinearLayout base,child;
 
-    public ExpandableListAdapter(Context context, List<String> listDataHeader,
+    public ExpandableListAdapterDashboard(Context context, List<String> listDataHeader,
                                  HashMap<String, List<String>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
@@ -55,20 +55,20 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.prescription_list_row, null);
+            convertView = infalInflater.inflate(R.layout.dashboard_childlist_row, null);
         }
 
-        child = (LinearLayout)convertView.findViewById(R.id.pres_list_layout);
+        child = (LinearLayout)convertView.findViewById(R.id.dashboard_childlist_layout);
 
-        if(PrescriptionListActivity.CHILDLONG_CLICK_FLAG==1)
-        {
-            if(childPosition==PrescriptionListActivity.pos) {
-                child.setBackgroundColor(Color.parseColor("#9e9e9e"));
-            }
-        }
-        else{
-            child.setBackgroundColor(Color.TRANSPARENT);
-        }
+//        if(PrescriptionListActivity.CHILDLONG_CLICK_FLAG==1)
+//        {
+//            if(childPosition==PrescriptionListActivity.pos) {
+//                child.setBackgroundColor(Color.parseColor("#9e9e9e"));
+//            }
+//        }
+//        else{
+//            child.setBackgroundColor(Color.TRANSPARENT);
+//        }
 
         TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
 
@@ -102,22 +102,22 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.customer_list_row, null);
+            convertView = infalInflater.inflate(R.layout.dashboard_parentlist_row, null);
         }
 
-        TextView lblListHeader = (TextView) convertView.findViewById(R.id.CName);
-         base = (LinearLayout)convertView.findViewById(R.id.customer_list_layout);
+        TextView lblListHeader = (TextView) convertView.findViewById(R.id.TitleHead);
+        base = (LinearLayout)convertView.findViewById(R.id.dashboard_parentlist_layout);
 
-        if(PrescriptionListActivity.LONG_CLICK_FLAG==1){
-            if(groupPosition==PrescriptionListActivity.pos){
-                base.setBackgroundColor(Color.parseColor("#9e9e9e"));
-            }
-        }
-
-
-        else if(PrescriptionListActivity.LONG_CLICK_FLAG==1){
-            base.setBackgroundColor(Color.TRANSPARENT);
-        }
+//        if(PrescriptionListActivity.LONG_CLICK_FLAG==1){
+//            if(groupPosition==PrescriptionListActivity.pos){
+//                base.setBackgroundColor(Color.parseColor("#9e9e9e"));
+//            }
+//        }
+//
+//
+//        else if(PrescriptionListActivity.LONG_CLICK_FLAG==1){
+//            base.setBackgroundColor(Color.TRANSPARENT);
+//        }
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
 

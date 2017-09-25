@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import Model.CustomerDetailModel;
 
 /**
- * Created by hp on 28-Aug-17.
+ * Created by Dell on 28-Aug-17.
  */
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyViewHolder> {

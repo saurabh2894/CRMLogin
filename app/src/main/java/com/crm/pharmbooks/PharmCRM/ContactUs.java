@@ -112,8 +112,8 @@ public class ContactUs extends Fragment implements View.OnClickListener{
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
             startActivity(intent);
 
-            }
         }
+    }
 
 
 

@@ -1,6 +1,5 @@
 package com.crm.pharmbooks.PharmCRM;
 
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,14 +18,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -51,14 +48,14 @@ import java.util.Map;
 
 import Adapters.ExpandableListAdapter;
 
+import static android.media.CamcorderProfile.get;
 import static com.crm.pharmbooks.PharmCRM.Login.MyPREFERENCES;
 
 public class PrescriptionListActivity extends AppCompatActivity {
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
-    List<String> listDataHeaderCommaValue;
-    List<String> listDataHeaderSpaceValue;
+    List<String> listDataHeaderValue;
 
     HashMap<String, List<String>> listDataChild_PrescriptionValue;
 
@@ -70,14 +67,10 @@ public class PrescriptionListActivity extends AppCompatActivity {
     private EditText SearchBoxExistingRefill;
     private ImageButton searchicon;
     int SEARCH_FLAG=0;
-    public static int LONG_CLICK_FLAG=0;
+    public static int LONG_CLICK_FLAG=0,CHILDLONG_CLICK_FLAG=0;
     ImageButton deletebtn;
     public static int pos;
     Vibrator vb;
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,41 +126,154 @@ public class PrescriptionListActivity extends AppCompatActivity {
         expListView.setVisibility(View.GONE);
         searchicon.setVisibility(View.GONE);
         SearchBoxExistingRefill.setVisibility(View.GONE);
+
+        //on click for child
+
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
-            public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
                 Intent intent = new Intent(PrescriptionListActivity.this,CustomerPrescription.class);
-                intent.putExtra("presId",listPresId.get(listDataHeaderSpaceValue.get(i)).get(i1));
+                intent.putExtra("presId",listPresId.get(listDataHeaderValue.get(groupPosition)).get(childPosition));
 
 
-                String str = listDataHeaderCommaValue.get(i);
-                String[] parts = str.split(",");
+                String str = listDataHeaderValue.get(groupPosition);
+                String[] parts = str.split(" : ");
                 String stringreq = parts[1];
                 intent.putExtra("customerphone",stringreq);
-
-
                 startActivity(intent);
-                Log.d("mytag",listPresId.get(listDataHeaderSpaceValue.get(i)).get(i1));
+                Log.d("mytag",listPresId.get(listDataHeaderValue.get(groupPosition)).get(childPosition));
 
                 return false;
             }
         });
-     //   prepareListData();
-        sendR();
-
-        listAdapter = new ExpandableListAdapter(this, listDataHeaderSpaceValue, listDataChild_PrescriptionValue);
+        fetchRequest();
 
 
-        // setting list adapter
+        //long click for group and child
+        listAdapter = new ExpandableListAdapter(this, listDataHeaderValue, listDataChild_PrescriptionValue);
         expListView.setAdapter(listAdapter);
-        expListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        getExpandableListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,final int position, long id) {
-                if (LONG_CLICK_FLAG == 0){
-                    LONG_CLICK_FLAG = 1;
+            public boolean onItemLongClick( AdapterView<?> parent, View view, int position, long id) {
+
+                long packedPosition = expListView.getExpandableListPosition(position);
+
+                int itemType = expListView.getPackedPositionType(packedPosition);
+                int groupPosition = expListView.getPackedPositionGroup(packedPosition);
+                int childPosition = expListView.getPackedPositionChild(packedPosition);
+
+
+                // if group item clicked
+                if (itemType == expListView.PACKED_POSITION_TYPE_GROUP) {
+                    //  ...
+                    onGroupLongClick(groupPosition);
+                }
+                //if child item clicked
+                else if (itemType == expListView.PACKED_POSITION_TYPE_CHILD) {
+                    //  ...
+                    onChildLongClick(groupPosition, childPosition);
+                }
+                return false;
+            }
+
+            private void onGroupLongClick(final int groupPosition) {
+
+                    if (LONG_CLICK_FLAG == 0){
+                        LONG_CLICK_FLAG = 1;
+                        if(SEARCH_FLAG==0){
+                            pos = groupPosition;
+                            listAdapter.notifyDataSetChanged();}
+                        else{
+                            pos=0;
+                            getAdapter().notifyDataSetChanged();
+                        }
+
+                        long[] pattern = {0, 1000, 0};
+                        vb.vibrate(pattern,0);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    Thread.sleep(100);
+                                    vb.cancel();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
+
+                        deletebtn.setVisibility(View.VISIBLE);
+                        deletebtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                LONG_CLICK_FLAG=0;
+                                if(SEARCH_FLAG==0) {
+                                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(PrescriptionListActivity.this);
+                                    alertDialog.setTitle("Remove Entry...");
+                                    alertDialog.setMessage("Do You Really Want To Remove This Customer?");
+                                    alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String str = listDataHeaderValue.get(groupPosition);
+                                            String[] parts = str.split(" : ");
+                                            String stringreq = parts[1];
+                                            Log.d("phonenostring",stringreq);
+                                            sendDeleteParentRequest(stringreq);
+
+                                            listAdapter.notifyDataSetChanged();
+                                            listDataHeaderValue.remove(groupPosition);
+                                            listAdapter.notifyDataSetChanged();
+
+                                        }
+                                    });
+                                    alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            deletebtn.setVisibility(View.GONE);
+
+                                        }
+
+                                    });
+                                    alertDialog.show();
+                                    deletebtn.setVisibility(View.GONE);
+
+                                }
+                                else{
+                                    expListView.setAdapter(listAdapter);
+                                    SEARCH_FLAG=0;
+                                    SearchBoxExistingRefill.setText("");
+                                    listDataHeaderValue.remove(getIndex());
+                                    listAdapter.notifyDataSetChanged();
+                                    deletebtn.setVisibility(View.GONE);
+
+                                }
+
+                                deletebtn.setVisibility(View.GONE);
+
+                            }
+
+                        });
+
+                    }else {
+                        Toast.makeText(PrescriptionListActivity.this, "Delete or Unselect the previously selected value first!", Toast.LENGTH_SHORT).show();
+                    }
+
+
+            }
+            private void onChildLongClick(final int groupPosition, final int childPosition) {
+
+                String str = listDataHeaderValue.get(childPosition);
+                Log.d("child click working",str);
+
+                int index = expListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition));
+                expListView.setItemChecked(index,true);
+
+                if (CHILDLONG_CLICK_FLAG == 0){
+                    CHILDLONG_CLICK_FLAG = 1;
                     if(SEARCH_FLAG==0){
-                pos = position;
-                listAdapter.notifyDataSetChanged();}
+                        pos = groupPosition;
+                        listAdapter.notifyDataSetChanged();}
                     else{
                         pos=0;
                         getAdapter().notifyDataSetChanged();
@@ -188,60 +294,72 @@ public class PrescriptionListActivity extends AppCompatActivity {
                     }).start();
 
                     deletebtn.setVisibility(View.VISIBLE);
-                deletebtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        LONG_CLICK_FLAG=0;
-                        if(SEARCH_FLAG==0) {
-                            listAdapter.notifyDataSetChanged();
-                            listDataHeaderSpaceValue.remove(pos);
-                            listDataHeaderCommaValue.remove(pos);
-                            listAdapter.notifyDataSetChanged();
+                    deletebtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            CHILDLONG_CLICK_FLAG=0;
+                            if(SEARCH_FLAG==0) {
+                                AlertDialog.Builder alertDialog = new AlertDialog.Builder(PrescriptionListActivity.this);
+                                alertDialog.setTitle("Remove Entry...");
+                                alertDialog.setMessage("Do You Really Want To Remove This Prescription?");
+                                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        String presID=listPresId.get(listDataHeaderValue.get(groupPosition)).get(childPosition);
+                                        Log.d("presID check",presID);
+                                        sendDeleteChildRequest(presID);
+
+
+                                        String a=listDataChild_PrescriptionValue.get(listDataHeaderValue.get(groupPosition)).get(childPosition);
+
+                                        Log.d("listDataChild",a);
+                                        listAdapter.notifyDataSetChanged();
+                                        listDataChild_PrescriptionValue.get(listDataHeaderValue.get(groupPosition)).remove(childPosition);
+                                        //listDataChild_PrescriptionValue.remove(childPosition);
+                                        listAdapter.notifyDataSetChanged();
+                                        deletebtn.setVisibility(View.GONE);
+
+                                    }
+                                });
+                                alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        deletebtn.setVisibility(View.GONE);
+
+                                    }
+
+                                });
+                                alertDialog.show();
+                                deletebtn.setVisibility(View.GONE);
+
+                            }
+                            else{
+                                expListView.setAdapter(listAdapter);
+                                SEARCH_FLAG=0;
+                                SearchBoxExistingRefill.setText("");
+                                listDataHeaderValue.remove(getIndex());
+                                listAdapter.notifyDataSetChanged();
+                                deletebtn.setVisibility(View.GONE);
+
+                            }
+
+                            deletebtn.setVisibility(View.GONE);
+
                         }
-                        else{
 
-                            expListView.setAdapter(listAdapter);
-                            SEARCH_FLAG=0;
-                            SearchBoxExistingRefill.setText("");
-                            listDataHeaderSpaceValue.remove(getIndex());
-                            listDataHeaderCommaValue.remove(getIndex());
-                            listAdapter.notifyDataSetChanged();
-                        }
-                        deletebtn.setVisibility(View.GONE);
+                    });
 
-                    }
-                });
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(PrescriptionListActivity.this);
-                alertDialog.setTitle("Remove Entry...");
-                alertDialog.setMessage("Do You Really Want To Remove This Customer?");
-                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        listDataHeaderSpaceValue.remove(position);
-                        listDataHeaderCommaValue.remove(position);
-                        listAdapter.notifyDataSetChanged();
-                    }
-                });
-                alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-
-                });
-                //alertDialog.show();
                 }else {
                     Toast.makeText(PrescriptionListActivity.this, "Delete or Unselect the previously selected value first!", Toast.LENGTH_SHORT).show();
                 }
 
-                return true;
+
+
+
             }
         });
-
-
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -274,7 +392,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
                     // navigate up to the logical parent activity.
                     NavUtils.navigateUpTo(this, upIntent);
                 }
-                return true;
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -291,16 +409,130 @@ public class PrescriptionListActivity extends AppCompatActivity {
             LONG_CLICK_FLAG=0;
             listAdapter.notifyDataSetChanged();
         }
+        else if(CHILDLONG_CLICK_FLAG==1){
+            CHILDLONG_CLICK_FLAG=0;
+            listAdapter.notifyDataSetChanged();
+        }
         else {
             super.onBackPressed();
         }
     }
+//////////////for parent delete /////////////
+int res;
 
-    public void sendR() {
+    public void sendDeleteParentRequest(final String number) {
+    String url = "https://pharmcrm.herokuapp.com/api/deleteuser/";
+    StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+            new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                    String msg = null;
+                    try {
+                        JSONObject object = new JSONObject(response);
+                        msg = object.getString("msg");
+                        res = object.getInt("res");
+                        if(res == 1)
+                        {
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(PrescriptionListActivity.this,response,Toast.LENGTH_LONG).show();
+                    Toast.makeText(PrescriptionListActivity.this,msg+""+ res +"",Toast.LENGTH_LONG).show();
+
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(PrescriptionListActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                }
+            })
+    {
+        @Override
+        protected Map<String,String> getParams(){
+            Map<String, String> params = new HashMap<>();
+            params.put("number",number);
+
+            return params;
+        }
+
+    };
+
+    int MY_SOCKET_TIMEOUT_MS = 50000;
+    stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+            MY_SOCKET_TIMEOUT_MS,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+    RequestQueue requestQueue = Volley.newRequestQueue(this);
+    requestQueue.add(stringRequest);
+
+}
+
+//////////////for child delete /////////////
+    int result;
+
+    public void sendDeleteChildRequest(final String prescid) {
+        String url = "https://pharmcrm.herokuapp.com/api/deletepres/";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        String msg = null;
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            msg = object.getString("msg");
+                            result = object.getInt("res");
+                            if(result == 1)
+                            {
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(PrescriptionListActivity.this,response,Toast.LENGTH_LONG).show();
+                        Toast.makeText(PrescriptionListActivity.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(PrescriptionListActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                })
+        {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String, String> params = new HashMap<>();
+                params.put("presid",prescid);
+
+                return params;
+            }
+
+        };
+
+        int MY_SOCKET_TIMEOUT_MS = 50000;
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
+
+
+////fetch Request
+    public void fetchRequest() {
         deletebtn.setVisibility(View.GONE);
         String url = "https://pharmcrm.herokuapp.com/api/namedata/";
-        listDataHeaderCommaValue = new ArrayList<String>();
-        listDataHeaderSpaceValue = new ArrayList<String>();
+        listDataHeaderValue = new ArrayList<String>();
         listDataChild_PrescriptionValue = new HashMap<String, List<String>>();
         listPresId = new HashMap<String , List<String>>();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -316,12 +548,11 @@ public class PrescriptionListActivity extends AppCompatActivity {
 
                         try {
                             JSONArray jsonArray = new JSONArray(response);
-                            for(int i =0; i<jsonArray.length();i++) {
-                                JSONObject object = jsonArray.getJSONObject(i);
+                            for(int groupPosition =0; groupPosition<jsonArray.length();groupPosition++) {
+                                JSONObject object = jsonArray.getJSONObject(groupPosition);
                                 String name = object.getString("custmorname");
                                 String phone = object.getString("custmornumber");
-                                listDataHeaderCommaValue.add(name + ","+ phone);
-                                listDataHeaderSpaceValue.add(name + " : "+ phone);
+                                listDataHeaderValue.add(name + " : "+ phone);
                                 JSONArray array = object.getJSONArray("prescriptionid");
                                 List<String>  prescriptionlist = new ArrayList<String>();
                                 List<String>  prescriptionlistshow = new ArrayList<String>();
@@ -330,17 +561,13 @@ public class PrescriptionListActivity extends AppCompatActivity {
                                     prescriptionlist.add(array.getString(j));
                                     prescriptionlistshow.add("Prescription"+" "+(j+1));
                                 }
+                                listDataChild_PrescriptionValue.put(listDataHeaderValue.get(groupPosition),prescriptionlistshow );
+                                listPresId.put(listDataHeaderValue.get(groupPosition),prescriptionlist );
 
-
-                                listDataChild_PrescriptionValue.put(listDataHeaderSpaceValue.get(i),prescriptionlistshow );
-                                listPresId.put(listDataHeaderSpaceValue.get(i),prescriptionlist );
-
-                                //Log.d("mytag",listDataChild_PrescriptionValue+"");
                                 //Log.d("mytag",prescriptionlistshow+"");
-
-
-
                             }
+                            Log.d("mytag",listDataChild_PrescriptionValue+"");
+
                             listAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -363,8 +590,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
             @Override
             protected Map<String,String> getParams(){
                 Map<String, String> params = new HashMap<>();
-               params.put("chemist",username);
-                //params.put("chemist","balkeerat");
+                params.put("chemist",username);
 
                 return params;
             }
@@ -380,6 +606,9 @@ public class PrescriptionListActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
+
+
+
     int index;
     public void setIndex(int i){
         index=i;
@@ -405,11 +634,11 @@ public class PrescriptionListActivity extends AppCompatActivity {
         if(SEARCH_FLAG==0){
 
             String number=SearchBoxExistingRefill.getText().toString().trim();
-            for(int i=0;i<listDataHeaderCommaValue.size();i++){
-                Log.d("list value",listDataHeaderCommaValue.get(i));
+            for(int i = 0; i< listDataHeaderValue.size(); i++){
+                Log.d("list value", listDataHeaderValue.get(i));
                 Log.d("index",i+"");
-                String str = listDataHeaderCommaValue.get(i);
-                String[] parts = str.split(",");
+                String str = listDataHeaderValue.get(i);
+                String[] parts = str.split(" : ");
                 if(parts[1].length()!=0&&parts.length!=0)
                 { numbers.add(parts[1]);
                 Log.d("num list",numbers.get(i));}
@@ -423,11 +652,11 @@ public class PrescriptionListActivity extends AppCompatActivity {
                         count=1;
                         Log.d("evil index",i+"");
                         setIndex(i);
-                        listDataHeaderSpaceSearch.add(listDataHeaderSpaceValue.get(i));
+                        listDataHeaderSpaceSearch.add(listDataHeaderValue.get(i));
                         listDataChild_PrescriptionValueSearch = new HashMap<String, List<String>>();
-                        listDataChild_PrescriptionValueSearch.put(listDataHeaderSpaceValue.get(i),listDataChild_PrescriptionValue.get(listDataHeaderSpaceValue.get(i)));
+                        listDataChild_PrescriptionValueSearch.put(listDataHeaderValue.get(i),listDataChild_PrescriptionValue.get(listDataHeaderValue.get(i)));
                         Log.d("index",i+"");
-                        Log.d("Value",listDataHeaderSpaceValue.get(i));
+                        Log.d("Value", listDataHeaderValue.get(i));
                         listAdaptersearch = new ExpandableListAdapter(PrescriptionListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
                         setAdapter(listAdaptersearch);
                         expListView.setAdapter(listAdaptersearch);
@@ -455,6 +684,11 @@ public class PrescriptionListActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+
+    public AdapterView getExpandableListView() {
+        return expListView;
     }
 }
 

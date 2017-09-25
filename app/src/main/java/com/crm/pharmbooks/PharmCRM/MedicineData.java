@@ -436,7 +436,7 @@ public class MedicineData extends AppCompatActivity {
         }
         responseDetailsJson.put("medicineDetailList", jsonArray);
 
-        Log.d("mytag",responseDetailsJson+"");
+        Log.d("responseDetailsJson",responseDetailsJson+"");
 
         return responseDetailsJson;
 
