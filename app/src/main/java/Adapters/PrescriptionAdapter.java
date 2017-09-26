@@ -67,13 +67,13 @@ public class PrescriptionAdapter extends RecyclerView.Adapter<PrescriptionAdapte
         holder.medDose.setText(customerDetail.getDosage());
         holder.lastRefill.setText(customerDetail.getRefillDate());
         holder.endDate.setText(customerDetail.getEndDate());
-//        if(CustomerPrescription.LONG_CLICK_FLAG==1){
-//            if(CustomerPrescription.pos==position){
-//                holder.base.setBackgroundColor(Color.parseColor("#9e9e9e"));
-//            }
-//        }else{
-//            holder.base.setBackgroundColor(Color.TRANSPARENT);
-//        }
+        if(CustomerPrescription.LONG_CLICK_FLAG==1){
+            if(CustomerPrescription.pos==position){
+                holder.base.setBackgroundColor(Color.parseColor("#9e9e9e"));
+            }
+        }else{
+            holder.base.setBackgroundColor(Color.TRANSPARENT);
+        }
 
 
     }

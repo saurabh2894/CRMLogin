@@ -110,12 +110,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         if(PrescriptionListActivity.LONG_CLICK_FLAG==1){
             if(groupPosition==PrescriptionListActivity.pos){
-                base.setBackgroundColor(Color.parseColor("#9e9e9e"));
+                base.setBackgroundResource(R.color.colorAccent);
             }
         }
 
 
-        else if(PrescriptionListActivity.LONG_CLICK_FLAG==1){
+        else if(PrescriptionListActivity.LONG_CLICK_FLAG==0){
             base.setBackgroundColor(Color.TRANSPARENT);
         }
         lblListHeader.setTypeface(null, Typeface.BOLD);
