@@ -57,7 +57,6 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
     ArrayList<String> visitinfolist = new ArrayList<String>();
 
 
-
     public DashBoard() {
         // Required empty public constructor
     }
@@ -253,7 +252,6 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                         Noofmedicines = object.getString("no_of_medicine_toberi");
                         JSONArray array1 = object.getJSONArray("visitinfo");
 
-
                         for(int i=0;i<array1.length();i++) {
 
 
@@ -272,9 +270,6 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                         Log.d("response",response+"");
                         Log.d("visitinfolist",visitinfolist+"");
 
-                        //intent.putStringArrayListExtra("visitinfolist", (ArrayList<String>)visitinfolist);
-                        //Bundle bundle = getActivity().getIntent().getExtras();
-                        //visitinfolist=bundle.getStringArrayList("visitinfolist");
 
 
 
