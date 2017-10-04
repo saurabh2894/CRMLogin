@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by manyamadan on 04/09/17.
+ * Created by Dell on 04/09/17.
  */
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
@@ -57,21 +57,22 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.prescription_list_row, null);
         }
-
+        TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
         child = (LinearLayout)convertView.findViewById(R.id.pres_list_layout);
 
-//        if(PrescriptionListActivity.CHILDLONG_CLICK_FLAG==1)
-//        {
-//            if(childPosition==PrescriptionListActivity.pos) {
-//                child.setBackgroundColor(Color.parseColor("#9e9e9e"));
-//            }
-//        }
-//        else{
-//            child.setBackgroundColor(Color.TRANSPARENT);
-//        }
+        if(PrescriptionListActivity.CHILDLONG_CLICK_FLAG==1){
+            if((childPosition==PrescriptionListActivity.childpos) &&(groupPosition==PrescriptionListActivity.grouppos)){
+                child.setBackgroundResource(R.color.colorAccent);
+            }
+        }
 
-        TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
 
+        else if(PrescriptionListActivity.CHILDLONG_CLICK_FLAG==0){
+            child.setBackgroundColor(Color.TRANSPARENT);
+        }
+
+
+        txtListChild.setTypeface(null, Typeface.BOLD);
         txtListChild.setText(childText);
         return convertView;
     }
@@ -106,7 +107,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.CName);
-         base = (LinearLayout)convertView.findViewById(R.id.customer_list_layout);
+        base = (LinearLayout)convertView.findViewById(R.id.customer_list_layout);
 
         if(PrescriptionListActivity.LONG_CLICK_FLAG==1){
             if(groupPosition==PrescriptionListActivity.pos){

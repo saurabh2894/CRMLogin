@@ -302,5 +302,6 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
+
     }
 }

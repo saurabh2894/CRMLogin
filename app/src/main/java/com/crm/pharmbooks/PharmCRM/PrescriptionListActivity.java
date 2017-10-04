@@ -56,10 +56,9 @@ public class PrescriptionListActivity extends AppCompatActivity {
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeaderValue;
-
     HashMap<String, List<String>> listDataChild_PrescriptionValue;
-
     HashMap<String, List<String>> listPresId;
+
     String username;
     ProgressBar pb;
     TextView txt;
@@ -69,7 +68,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
     int SEARCH_FLAG=0;
     public static int LONG_CLICK_FLAG=0,CHILDLONG_CLICK_FLAG=0;
     ImageButton deletebtn;
-    public static int pos;
+    public static int pos,childpos,grouppos;
     Vibrator vb;
 
     @Override
@@ -132,16 +131,18 @@ public class PrescriptionListActivity extends AppCompatActivity {
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
-                Intent intent = new Intent(PrescriptionListActivity.this,CustomerPrescription.class);
-                intent.putExtra("presId",listPresId.get(listDataHeaderValue.get(groupPosition)).get(childPosition));
 
+                if(CHILDLONG_CLICK_FLAG==0) {
+                    Intent intent = new Intent(PrescriptionListActivity.this, CustomerPrescription.class);
+                    intent.putExtra("presId", listPresId.get(listDataHeaderValue.get(groupPosition)).get(childPosition));
 
-                String str = listDataHeaderValue.get(groupPosition);
-                String[] parts = str.split(" : ");
-                String stringreq = parts[1];
-                intent.putExtra("customerphone",stringreq);
-                startActivity(intent);
-                Log.d("mytag",listPresId.get(listDataHeaderValue.get(groupPosition)).get(childPosition));
+                    String str = listDataHeaderValue.get(groupPosition);
+                    String[] parts = str.split(" : ");
+                    String stringreq = parts[1];
+                    intent.putExtra("customerphone", stringreq);
+                    startActivity(intent);
+                    Log.d("mytag", listPresId.get(listDataHeaderValue.get(groupPosition)).get(childPosition));
+                }
 
                 return false;
             }
@@ -263,8 +264,8 @@ public class PrescriptionListActivity extends AppCompatActivity {
             }
             private void onChildLongClick(final int groupPosition, final int childPosition) {
 
-                String str = listDataHeaderValue.get(childPosition);
-                Log.d("child click working",str);
+//                String str = listDataHeaderValue.get(childPosition);
+//                Log.d("child click working",str);
 
                 int index = expListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition));
                 expListView.setItemChecked(index,true);
@@ -272,10 +273,11 @@ public class PrescriptionListActivity extends AppCompatActivity {
                 if (CHILDLONG_CLICK_FLAG == 0){
                     CHILDLONG_CLICK_FLAG = 1;
                     if(SEARCH_FLAG==0){
-                        pos = groupPosition;
+                        childpos = childPosition;
+                        grouppos= groupPosition;
                         listAdapter.notifyDataSetChanged();}
                     else{
-                        pos=0;
+                        childpos=0;
                         getAdapter().notifyDataSetChanged();
                     }
 
@@ -412,12 +414,14 @@ public class PrescriptionListActivity extends AppCompatActivity {
         }
         else if(CHILDLONG_CLICK_FLAG==1){
             CHILDLONG_CLICK_FLAG=0;
+            deletebtn.setVisibility(View.GONE);
             listAdapter.notifyDataSetChanged();
         }
         else {
             super.onBackPressed();
         }
     }
+
 //////////////for parent delete /////////////
 int res;
 
@@ -527,7 +531,6 @@ int res;
         requestQueue.add(stringRequest);
 
     }
-
 
 ////fetch Request
     public void fetchRequest() {
@@ -660,6 +663,7 @@ int res;
                         Log.d("Value", listDataHeaderValue.get(i));
                         listAdaptersearch = new ExpandableListAdapter(PrescriptionListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
                         setAdapter(listAdaptersearch);
+                        sendDeleteParentRequest(number);
                         expListView.setAdapter(listAdaptersearch);
                     }
                 }
@@ -686,7 +690,6 @@ int res;
 
         }
     }
-
 
     public AdapterView getExpandableListView() {
         return expListView;
