@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,10 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.crm.pharmbooks.PharmCRM.Login.MyPREFERENCES;
 
 
+/**
+ * Created by Dell on 18/09/17.
+ */
+
 public class DashBoard extends Fragment  implements View.OnClickListener{
 
 
@@ -55,6 +61,10 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
     HashMap<String, List<String>> listDataChild_Value;
     String Noofuserstoberefilled,Noofusers,Noofmedicines;
     ArrayList<String> visitinfolist = new ArrayList<String>();
+
+    ProgressBar pb;
+    TextView txt;
+    RelativeLayout rl;
 
 
     public DashBoard() {
@@ -78,6 +88,8 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         fetchListData();
         fetchDashboardData();
 
@@ -97,6 +109,9 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
 
         View rootView = inflater.inflate(R.layout.activity_dash_board, container, false);
 
+        rl=(RelativeLayout)rootView.findViewById(R.id.rel);
+        pb= (ProgressBar) rootView.findViewById(R.id.pb) ;
+        txt=(TextView) rootView.findViewById(R.id.loadingtxt);
 
         NoOfCustomersToBeRefilled = (Button) rootView.findViewById(R.id.NoOfCustomersToBeRefilled);
         NoOFCustomersOnboard = (Button) rootView.findViewById(R.id.NoOFCustomersOnboard);
@@ -180,6 +195,11 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                
+                expListView.setVisibility(View.VISIBLE);
+                rl.setVisibility(View.GONE);
+                pb.setVisibility(View.GONE);
+                txt.setVisibility(View.GONE);
 
                 try {
 
@@ -189,6 +209,7 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                         JSONObject object = jsonArray.getJSONObject(groupPosition);
                         String name = object.getString("custmorname");
                         String phone = object.getString("custmornumber");
+
                         listDataHeaderValue.add(name + " : "+ phone);
                         JSONArray array1 = object.getJSONArray("data");
                         List<String> prescriptionlist = new ArrayList<String>();
@@ -197,8 +218,13 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                             JSONObject dataobject = array1.getJSONObject(i);
                             String medicineName = dataobject.getString("medicinename");
                             String dosageenddate = dataobject.getString("dosageenddate");
+                            String medicineid = dataobject.getString("id");
+                            String prescriptionid = dataobject.getString("prescid");
+                            //{"medicineDetailList":[{"medicine":"417","days":10},{"medicine":"417","days":10}]}
+
                             prescriptionlist.add("Medicine Name: " + medicineName + "\nDosage End Date: " + dosageenddate);
                             listDataChild_Value.put(listDataHeaderValue.get(groupPosition), prescriptionlist);
+                            Log.d("yolo",medicineid +"    "+prescriptionid);
                         }
                     }
                     Log.d("dashboardlistcheck",response+"");

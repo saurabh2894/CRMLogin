@@ -72,8 +72,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
 
-        txtListChild.setTypeface(null, Typeface.BOLD);
+        //txtListChild.setTypeface(null, Typeface.BOLD);
         txtListChild.setText(childText);
+        txtListChild.setTextSize(15);
+
         return convertView;
     }
 
@@ -121,6 +123,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
+        lblListHeader.setTextSize(24);
+
 
         return convertView;
     }

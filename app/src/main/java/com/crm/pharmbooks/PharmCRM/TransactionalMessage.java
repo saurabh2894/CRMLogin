@@ -79,7 +79,7 @@ public class TransactionalMessage extends android.support.v4.app.Fragment implem
                     Toast.makeText(getActivity().getApplicationContext(), username, Toast.LENGTH_LONG).show();
                     sendR(Name_var, MobileNo_var, BillAmount_var);
                     // Sending the sms here
-                    SendMsg sendMsg = new SendMsg(Name_var,MobileNo_var,BillAmount_var);
+                    //SendMsg sendMsg = new SendMsg(Name_var,MobileNo_var,BillAmount_var);
 
 
                 }

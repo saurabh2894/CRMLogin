@@ -62,10 +62,10 @@ public class VisitorInformation extends AppCompatActivity {
 
     private ArrayList<String> visitinfolist;
 
-//    ProgressBar pb;
-//    TextView txt;
-//    RelativeLayout rl;
-    ListView listView;
+    ProgressBar pb;
+    TextView txt;
+    RelativeLayout rl;
+      ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +80,9 @@ public class VisitorInformation extends AppCompatActivity {
         Log.d("nice", String.valueOf(visitinfolist));
         setContentView(R.layout.activity_visitor_information);
 
-//        rl = (RelativeLayout) findViewById(R.id.rel);
-//        pb = (ProgressBar) findViewById(R.id.pb);
-//        txt = (TextView) findViewById(R.id.loadingtxt);
+        rl = (RelativeLayout) findViewById(R.id.rel);
+        pb = (ProgressBar) findViewById(R.id.pb);
+        txt = (TextView) findViewById(R.id.loadingtxt);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         TextView title = (TextView) toolbar.findViewById(R.id.title);
@@ -91,10 +91,15 @@ public class VisitorInformation extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, android.R.id.text1, visitinfolist);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, android.R.id.text1, visitinfolist);
 
         // Assign adapter to ListView
         listView.setAdapter(adapter);
+
+        listView.setVisibility(View.VISIBLE);
+        rl.setVisibility(View.GONE);
+        pb.setVisibility(View.GONE);
+        txt.setVisibility(View.GONE);
 
         // ListView Item Click Listener
 

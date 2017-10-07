@@ -34,6 +34,25 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/rel"
+            android:layout_height="match_parent">
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/pb"
+                android:layout_centerInParent="true"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Loading"
+                android:layout_below="@id/pb"
+                android:id="@+id/loadingtxt" />
+        </RelativeLayout>
+
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,24 +63,7 @@
         </ListView>
 
 
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:id="@+id/rel"-->
-            <!--android:layout_height="match_parent">-->
-        <!--<ProgressBar-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/pb"-->
-            <!--android:layout_centerInParent="true"/>-->
 
-        <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:gravity="center_horizontal"-->
-            <!--android:text="Loading"-->
-            <!--android:layout_below="@id/pb"-->
-            <!--android:id="@+id/loadingtxt" />-->
-        <!--</RelativeLayout>-->
     </LinearLayout>
 
 

@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by saurabh on 18/09/17.
+ * Created by Dell on 18/09/17.
  */
 
 public class ExpandableListAdapterDashboard extends BaseExpandableListAdapter {
@@ -57,22 +57,24 @@ public class ExpandableListAdapterDashboard extends BaseExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.dashboard_childlist_row, null);
         }
-
+        TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
         child = (LinearLayout)convertView.findViewById(R.id.dashboard_childlist_layout);
 
-//        if(PrescriptionListActivity.CHILDLONG_CLICK_FLAG==1)
-//        {
-//            if(childPosition==PrescriptionListActivity.pos) {
-//                child.setBackgroundColor(Color.parseColor("#9e9e9e"));
+//        if(PrescriptionListActivity.CHILDLONG_CLICK_FLAG==1){
+//            if((childPosition==PrescriptionListActivity.childpos) &&(groupPosition==PrescriptionListActivity.grouppos)){
+//                child.setBackgroundResource(R.color.colorAccent);
 //            }
 //        }
-//        else{
+//
+//
+//        else if(PrescriptionListActivity.CHILDLONG_CLICK_FLAG==0){
 //            child.setBackgroundColor(Color.TRANSPARENT);
 //        }
 
-        TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
-
+        //txtListChild.setTypeface(null, Typeface.BOLD);
         txtListChild.setText(childText);
+        txtListChild.setTextSize(15);
+
         return convertView;
     }
 
@@ -110,16 +112,18 @@ public class ExpandableListAdapterDashboard extends BaseExpandableListAdapter {
 
 //        if(PrescriptionListActivity.LONG_CLICK_FLAG==1){
 //            if(groupPosition==PrescriptionListActivity.pos){
-//                base.setBackgroundColor(Color.parseColor("#9e9e9e"));
+//                base.setBackgroundResource(R.color.colorAccent);
 //            }
 //        }
 //
 //
-//        else if(PrescriptionListActivity.LONG_CLICK_FLAG==1){
+//        else if(PrescriptionListActivity.LONG_CLICK_FLAG==0){
 //            base.setBackgroundColor(Color.TRANSPARENT);
 //        }
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
+        lblListHeader.setTextSize(23);
+
 
         return convertView;
     }
