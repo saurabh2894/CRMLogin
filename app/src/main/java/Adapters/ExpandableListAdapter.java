@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.crm.pharmbooks.PharmCRM.PrescriptionListActivity;
 import com.crm.pharmbooks.PharmCRM.R;
+import com.crm.pharmbooks.PharmCRM.RefillActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,19 +59,28 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.prescription_list_row, null);
         }
         TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
-        child = (LinearLayout)convertView.findViewById(R.id.pres_list_layout);
+        child = (LinearLayout) convertView.findViewById(R.id.pres_list_layout);
 
-        if(PrescriptionListActivity.CHILDLONG_CLICK_FLAG==1){
-            if((childPosition==PrescriptionListActivity.childpos) &&(groupPosition==PrescriptionListActivity.grouppos)){
-                child.setBackgroundResource(R.color.colorAccent);
+
+        if (PrescriptionListActivity.ACTIVITY_FLAG.equals("Presc")) {
+            if (PrescriptionListActivity.CHILDLONG_CLICK_FLAG == 1 && PrescriptionListActivity.LONG_CLICK_FLAG == 0) {
+                if ((childPosition == PrescriptionListActivity.childpos) && (groupPosition == PrescriptionListActivity.grouppos)) {
+                    child.setBackgroundResource(R.color.colorAccent);
+                }
+            } else if (PrescriptionListActivity.CHILDLONG_CLICK_FLAG == 0) {
+                child.setBackgroundColor(Color.TRANSPARENT);
+            }
+        } else if (PrescriptionListActivity.ACTIVITY_FLAG.equals("Refill")){
+
+         if (RefillActivity.REFILL_FLAG == 1) {
+            if (RefillActivity.child_pos.contains(childPosition) && RefillActivity.group_pos.contains(groupPosition)) {
+                child.setBackgroundColor(Color.parseColor("#FFFF00"));
+            }
+            else {
+                child.setBackgroundColor(Color.TRANSPARENT);
             }
         }
-
-
-        else if(PrescriptionListActivity.CHILDLONG_CLICK_FLAG==0){
-            child.setBackgroundColor(Color.TRANSPARENT);
-        }
-
+    }
 
         //txtListChild.setTypeface(null, Typeface.BOLD);
         txtListChild.setText(childText);
@@ -109,21 +119,33 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.CName);
-        base = (LinearLayout)convertView.findViewById(R.id.customer_list_layout);
+        base = (LinearLayout) convertView.findViewById(R.id.customer_list_layout);
 
-        if(PrescriptionListActivity.LONG_CLICK_FLAG==1){
-            if(groupPosition==PrescriptionListActivity.pos){
-                base.setBackgroundResource(R.color.colorAccent);
+        if (PrescriptionListActivity.ACTIVITY_FLAG.equals("Presc")){
+            if (PrescriptionListActivity.LONG_CLICK_FLAG == 1 && PrescriptionListActivity.CHILDLONG_CLICK_FLAG == 0) {
+                if (groupPosition == PrescriptionListActivity.pos) {
+                    base.setBackgroundResource(R.color.colorAccent);
+                }
+            } else if (PrescriptionListActivity.LONG_CLICK_FLAG == 0) {
+                base.setBackgroundColor(Color.TRANSPARENT);
             }
-        }
+            lblListHeader.setTypeface(null, Typeface.BOLD);
+            lblListHeader.setText(headerTitle);
+            lblListHeader.setTextSize(24);
 
-
-        else if(PrescriptionListActivity.LONG_CLICK_FLAG==0){
-            base.setBackgroundColor(Color.TRANSPARENT);
+        }else if(PrescriptionListActivity.ACTIVITY_FLAG.equals("Refill")){
+            if (RefillActivity.REFILL_FLAG == 1) {
+                if (RefillActivity.group_pos.contains(groupPosition)) {
+                    base.setBackgroundColor(Color.parseColor("#FFFF00"));
+                }
+                else {
+                    base.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
+            lblListHeader.setTypeface(null, Typeface.BOLD);
+            lblListHeader.setText(headerTitle);
+            lblListHeader.setTextSize(24);
         }
-        lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(headerTitle);
-        lblListHeader.setTextSize(24);
 
 
         return convertView;

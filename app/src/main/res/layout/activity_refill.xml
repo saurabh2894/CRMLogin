@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#f4f4f4">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:title="Existing"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="REFILL"
+                android:textColor="#ffffff" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/SearchBoxExistingRefill"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginLeft="8dp"
+            android:imeOptions="actionSearch"
+            android:layout_weight="1"
+            android:hint="Enter Customer Number"
+            android:inputType="number" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".15"
+            android:background="@android:color/transparent"
+            android:layout_marginRight="16dp"
+            android:id="@+id/searchicon"
+            android:src="@drawable/searchicon"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/rel"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pb"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Loading"
+            android:layout_below="@id/pb"
+            android:id="@+id/loadingtxt" />
+    </RelativeLayout>
+
+    <ExpandableListView
+        android:id="@+id/refillCustomerList"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:choiceMode = "singleChoice"
+        android:listSelector = "@drawable/selector_list_item"
+        />
+
+</LinearLayout>

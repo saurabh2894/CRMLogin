@@ -127,7 +127,9 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
         NoOfRepeatedCustomers.setOnClickListener(this);
         NoOfMedicinesRefilled.setOnClickListener(this);
         VisitInfo.setOnClickListener(this);
-
+        RefillActivity.customer_presc_list.clear();
+        RefillActivity.customer_med_id_list.clear();
+        RefillActivity.customer_presc_list.clear();
 
         boolean b =isNetworkAvailable();
         if(b==false){
@@ -209,6 +211,7 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                         JSONObject object = jsonArray.getJSONObject(groupPosition);
                         String name = object.getString("custmorname");
                         String phone = object.getString("custmornumber");
+                        RefillActivity.customer_number_list.add(phone);
 
                         listDataHeaderValue.add(name + " : "+ phone);
                         JSONArray array1 = object.getJSONArray("data");
@@ -219,7 +222,9 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                             String medicineName = dataobject.getString("medicinename");
                             String dosageenddate = dataobject.getString("dosageenddate");
                             String medicineid = dataobject.getString("id");
+                            RefillActivity.customer_med_id_list.add(medicineid);
                             String prescriptionid = dataobject.getString("prescid");
+                            RefillActivity.customer_presc_list.add(prescriptionid);
                             //{"medicineDetailList":[{"medicine":"417","days":10},{"medicine":"417","days":10}]}
 
                             prescriptionlist.add("Medicine Name: " + medicineName + "\nDosage End Date: " + dosageenddate);

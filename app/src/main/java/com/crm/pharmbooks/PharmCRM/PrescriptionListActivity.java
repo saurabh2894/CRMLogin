@@ -58,7 +58,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
     List<String> listDataHeaderValue;
     HashMap<String, List<String>> listDataChild_PrescriptionValue;
     HashMap<String, List<String>> listPresId;
-
+    public static String ACTIVITY_FLAG="Presc";
     String username;
     ProgressBar pb;
     TextView txt;
@@ -75,7 +75,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prescription_list);
-
+        ACTIVITY_FLAG="Presc";
         LONG_CLICK_FLAG=0;
 
         vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -132,7 +132,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
 
-                if(CHILDLONG_CLICK_FLAG==0) {
+                if(CHILDLONG_CLICK_FLAG==0&&LONG_CLICK_FLAG==0) {
                     Intent intent = new Intent(PrescriptionListActivity.this, CustomerPrescription.class);
                     intent.putExtra("presId", listPresId.get(listDataHeaderValue.get(groupPosition)).get(childPosition));
 
@@ -145,6 +145,16 @@ public class PrescriptionListActivity extends AppCompatActivity {
                 }
 
                 return false;
+            }
+        });
+        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
+                if(LONG_CLICK_FLAG==0&&CHILDLONG_CLICK_FLAG==0){
+                    return false;
+                }
+                else
+                    return true;
             }
         });
         fetchRequest();
@@ -180,7 +190,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
 
             private void onGroupLongClick(final int groupPosition) {
 
-                    if (LONG_CLICK_FLAG == 0){
+                    if (LONG_CLICK_FLAG == 0&&CHILDLONG_CLICK_FLAG==0){
                         LONG_CLICK_FLAG = 1;
                         if(SEARCH_FLAG==0){
                             pos = groupPosition;
@@ -270,11 +280,12 @@ public class PrescriptionListActivity extends AppCompatActivity {
                 int index = expListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition));
                 expListView.setItemChecked(index,true);
 
-                if (CHILDLONG_CLICK_FLAG == 0){
+                if (CHILDLONG_CLICK_FLAG == 0&&LONG_CLICK_FLAG==0){
                     CHILDLONG_CLICK_FLAG = 1;
                     if(SEARCH_FLAG==0){
                         childpos = childPosition;
                         grouppos= groupPosition;
+                        Log.d("position",childPosition +"       "+ groupPosition + "");
                         listAdapter.notifyDataSetChanged();}
                     else{
                         childpos=0;
@@ -695,4 +706,5 @@ int res;
         return expListView;
     }
 }
+
 

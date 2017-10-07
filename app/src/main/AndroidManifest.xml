@@ -11,7 +11,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -19,56 +18,53 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.crm.pharmbooks.PharmCRM.SplashScreen">
+        <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.crm.pharmbooks.PharmCRM.CustomerDetail"
-            android:parentActivityName="com.crm.pharmbooks.PharmCRM.MainActivity">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
-        </activity>
-
-        <activity android:name="com.crm.pharmbooks.PharmCRM.MainActivity" />
-
-        <activity android:name="com.crm.pharmbooks.PharmCRM.MedicineData">
-
-        </activity>
-
-        <activity android:name="com.crm.pharmbooks.PharmCRM.CustomerNameFetch" />
-
-        <activity android:name="com.crm.pharmbooks.PharmCRM.PrescriptionListActivity"
-            android:parentActivityName="com.crm.pharmbooks.PharmCRM.MainActivity">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
-        </activity>
-
-        <activity android:name="com.crm.pharmbooks.PharmCRM.CustomerPrescription"
-            android:parentActivityName="com.crm.pharmbooks.PharmCRM.PrescriptionListActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.crm.pharmbooks.PharmCRM.PrescriptionListActivity"
-                />
-        </activity>
-
-
-        <activity android:name="com.crm.pharmbooks.PharmCRM.VisitorInformation"
-            android:parentActivityName="com.crm.pharmbooks.PharmCRM.MainActivity">
+        <activity
+            android:name=".CustomerDetail"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
         </activity>
-
-
-
-        <activity android:name="com.crm.pharmbooks.PharmCRM.Login"/>
-
+        <activity android:name=".MainActivity" />
+        <activity android:name=".MedicineData" />
+        <activity android:name=".CustomerNameFetch" />
+        <activity
+            android:name=".PrescriptionListActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
+        </activity>
+        <activity
+            android:name=".CustomerPrescription"
+            android:parentActivityName=".PrescriptionListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.crm.pharmbooks.PharmCRM.PrescriptionListActivity" />
+        </activity>
+        <activity
+            android:name=".VisitorInformation"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
+        </activity>
+        <activity android:name=".Login" />
+        <activity
+            android:name=".RefillActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
+        </activity>
+        <activity android:name=".PrescriptionRefillActivity"></activity>
     </application>
 
 </manifest>
