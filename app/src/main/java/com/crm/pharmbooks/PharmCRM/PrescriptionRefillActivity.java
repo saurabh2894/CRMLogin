@@ -126,74 +126,6 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
             public void onLongClick(View view, int position) {
 
             }
-
-
-            // Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
-
-
-//            @Override
-//            public void onLongClick(View view, int position) {
-//                if(LONG_CLICK_FLAG==0) {
-//                    LONG_CLICK_FLAG = 1;
-//                    pos = position;
-//                    pAdapter.notifyDataSetChanged();
-//
-//                    long[] pattern = {0, 1000, 0};
-//                    vb.vibrate(pattern,0);
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            try{
-//                                Thread.sleep(100);
-//                                vb.cancel();
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }).start();
-//
-//                    final ArrayList<PresciptionModel> presciptionDeleteModelList = new ArrayList<>();
-//                    pDeleteAdapter = new PrescriptionAdapter(presciptionDeleteModelList);
-//                    pDeleteAdapter.notifyDataSetChanged();
-//                    //toolbar.inflateMenu(R.menu.toolbar_inflated_menu);
-//                    //Toast.makeText(getApplicationContext(), medicineDetail.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
-//                    deletebtn.setVisibility(View.VISIBLE);
-//                    deletebtn.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            PresciptionModel deletedValue = presciptionModelList.get(pos);
-//                            PresciptionModel detail = new PresciptionModel(deletedValue.getMedName(), deletedValue.getDosage(), deletedValue.getRefillDate(), deletedValue.getEndDate(), deletedValue.getMedicineid());
-//                            presciptionDeleteModelList.add(detail);
-//                            pDeleteAdapter.notifyDataSetChanged();
-//                            sendDeleteDataList(presciptionDeleteModelList);
-//                            LONG_CLICK_FLAG = 0;
-//                            presciptionModelList.remove(pos);
-//                            pAdapter.notifyDataSetChanged();
-//                            Toast.makeText(CustomerPrescription.this, deletedValue.getMedName() + " is deleted", Toast.LENGTH_LONG).show();
-//                            deletebtn.setVisibility(View.GONE);
-//
-//                        }
-//                    });
-//                }else{
-//                    Toast.makeText(CustomerPrescription.this,"Delete or Unselect the previously selected value first!", Toast.LENGTH_SHORT).show();
-//                }
-//                AlertDialog.Builder alertDialog = new AlertDialog.Builder(CustomerPrescription.this);
-//                alertDialog.setTitle("Remove Entry...");
-//                alertDialog.setMessage("Do You Really Want To Remove This Entry?");
-//                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                    }
-//                });
-//                alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                    }
-//                });
-//                //alertDialog.show();
-//            }
         }));
 
         getSupportActionBar().setTitle("");
@@ -219,6 +151,8 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
             txt.setText("Refreshing Data...");
             txt.setVisibility(View.VISIBLE);
             refillModelList.clear();
+            Log.d("My tag 004","I am the list data after clearing!");
+            Log.d("My tag004",refillModelList+"");
         }
         String url = "https://pharmcrm.herokuapp.com/api/medicine/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -238,19 +172,22 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                         String refill = ob1.getString("lastrefillon");
                         String medName = ob1.getString("medicinename");
                         String id = ob1.getString("id");
+                        Log.d("Mytag 006","Days "+i+" = "+dose);
                         RefillModel detail = new RefillModel(medName,dose,refill,endDate,id);
                         refillModelList.add(detail);
+                        Log.d("My tag 005","Refill list   "+refillModelList.get(i).getDosage());
+                        rAdapter.notifyDataSetChanged();
 
                     }
-                    Log.d("responsemodellist",jarr+"");
-                    Log.d("response",response+"");
+//                    Log.d("responsemodellist",jarr+"");
+//                    Log.d("response",response+"");
 
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                rAdapter.notifyDataSetChanged();
+
             }
         },
                 new Response.ErrorListener() {
@@ -327,12 +264,14 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                             result= object.getInt("result");
                             if(result == 1)
                             {
-
+                                Log.d("My tag001","I am in the block where result code is 1");
 
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        Log.d("My tag 002","I was here bro!\nTu galat hai");
                         Toast.makeText(PrescriptionRefillActivity.this,response,Toast.LENGTH_LONG).show();
                         fetchData(1);
                         //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
@@ -376,7 +315,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-
+        Log.d("My tag 003","I am leaving this function bro!");
     }
 
 
@@ -455,8 +394,6 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                 ArrayList<RefillModel> refillModelListEdit = new ArrayList<>();
 
                 ArrayList<String> med = new ArrayList<String>();
-
-                rAdapter = new RefillAdapter(refillModelList);
 
                 String medname = dboxMedName.getText().toString().trim();
                 String meddose = dboxMedDose.getText().toString().trim();
