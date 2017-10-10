@@ -64,7 +64,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
         </activity>
-        <activity android:name=".PrescriptionRefillActivity"></activity>
+        <activity android:name=".PrescriptionRefillActivity"
+            android:parentActivityName=".RefillActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.crm.pharmbooks.PharmCRM.RefillActivity" /></activity>
     </application>
 
 </manifest>

@@ -73,14 +73,21 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         } else if (PrescriptionListActivity.ACTIVITY_FLAG.equals("Refill")){
 
          if (RefillActivity.REFILL_FLAG == 1) {
-            if (RefillActivity.child_pos.contains(childPosition) && RefillActivity.group_pos.contains(groupPosition)) {
-                child.setBackgroundColor(Color.parseColor("#FFFF00"));
-            }
+             if (RefillActivity.child_pos.containsKey(groupPosition)) {
+                 if (RefillActivity.child_pos.get(groupPosition).contains(childPosition)) {
+                     child.setBackgroundColor(Color.parseColor("#FFFF00"));
+                 }else {
+                     child.setBackgroundColor(Color.TRANSPARENT);
+                 }
+             }else {
+                 child.setBackgroundColor(Color.TRANSPARENT);
+             }
+         }
             else {
                 child.setBackgroundColor(Color.TRANSPARENT);
             }
         }
-    }
+
 
         //txtListChild.setTypeface(null, Typeface.BOLD);
         txtListChild.setText(childText);
@@ -135,7 +142,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         }else if(PrescriptionListActivity.ACTIVITY_FLAG.equals("Refill")){
             if (RefillActivity.REFILL_FLAG == 1) {
-                if (RefillActivity.group_pos.contains(groupPosition)) {
+                if (RefillActivity.child_pos.containsKey(groupPosition)) {
                     base.setBackgroundColor(Color.parseColor("#FFFF00"));
                 }
                 else {

@@ -55,7 +55,8 @@ public class RefillActivity extends AppCompatActivity {
     static ArrayList<String> customer_med_id_list = new ArrayList<>();
     ExpandableListAdapter listAdapter;
     public static ArrayList<Integer> group_pos = new ArrayList<>();
-    public static ArrayList<Integer> child_pos = new ArrayList<>();
+    //public static ArrayList<Integer> child_pos = new ArrayList<>();
+    public static HashMap<Integer,List<Integer>> child_pos = new HashMap<>();
     public static int REFILL_FLAG=0;
     ExpandableListView expListView;
     List<String> listDataHeaderValue;
@@ -220,23 +221,30 @@ public class RefillActivity extends AppCompatActivity {
                                 JSONObject object = jsonArray.getJSONObject(groupPosition);
                                 String name = object.getString("custmorname");
                                 String phone = object.getString("custmornumber");
-
                                 listDataHeaderValue.add(name + " : "+ phone);
+                                Log.d("Customer log",listDataHeaderValue+"");
+
                                 if(customer_number_list.contains(phone)){
                                     REFILL_FLAG=1;
                                     group_pos.add(listDataHeaderValue.size()-1);
                                     Log.d("Refill matched",(listDataHeaderValue.size()-1)+"");
+
                                 }
                                 JSONArray array = object.getJSONArray("prescriptionid");
                                 List<String>  prescriptionlist = new ArrayList<String>();
                                 List<String>  prescriptionlistshow = new ArrayList<String>();
+                                List<Integer>  childlistshow = new ArrayList<Integer>();
                                 for(int j = 0; j<array.length();j++)
                                 {
                                     prescriptionlist.add(array.getString(j));
                                     if(customer_presc_list.contains(array.getString(j))){
                                         REFILL_FLAG=1;
-                                        child_pos.add(j);
+                                        childlistshow.add(j);
+                                        child_pos.put(groupPosition,childlistshow );
+
                                         Log.d("Refill matched presc",j+"");
+                                        Log.d("childpos",child_pos+"");
+
                                     }
                                     prescriptionlistshow.add("Prescription"+" "+(j+1));
                                 }

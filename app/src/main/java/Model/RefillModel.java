@@ -1,21 +1,23 @@
 package Model;
 
 /**
- * Created by hp on 9/4/2017.
+ * Created by Dell on 09-Oct-17.
  */
 
-public class PresciptionModel {
+public class RefillModel {
+
     private String medName,dosage,refillDate,endDate,medicineid;
-    public PresciptionModel(){
+    public RefillModel(){
         //reqd. public constructor
     }
 
-    public PresciptionModel(String medName,String dosage,String refillDate,String endDate,String medicineid){
+    public RefillModel(String medName,String dosage,String refillDate,String endDate,String medicineid){
         this.medName=medName;
         this.dosage=dosage;
         this.refillDate=refillDate;
         this.endDate=endDate;
         this.medicineid=medicineid;
+
     }
 
     public String getMedName() {
@@ -31,8 +33,6 @@ public class PresciptionModel {
     }
 
     public String getEndDate() {return endDate; }
+
     public String getMedicineid() {return medicineid; }
-
 }
-
-

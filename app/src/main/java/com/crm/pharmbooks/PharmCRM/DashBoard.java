@@ -100,6 +100,9 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
         // Inflate the layout for this fragment
 
         SharedPreferences sharedpreferences = this.getActivity().getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
+        RefillActivity.customer_presc_list.clear();
+        RefillActivity.customer_med_id_list.clear();
+        RefillActivity.customer_number_list.clear();
         String restoredText = sharedpreferences.getString("username", null);
         if (restoredText != null) {
             username = sharedpreferences.getString("username", "No name defined");//"No name defined" is the default value.
@@ -127,9 +130,7 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
         NoOfRepeatedCustomers.setOnClickListener(this);
         NoOfMedicinesRefilled.setOnClickListener(this);
         VisitInfo.setOnClickListener(this);
-        RefillActivity.customer_presc_list.clear();
-        RefillActivity.customer_med_id_list.clear();
-        RefillActivity.customer_presc_list.clear();
+
 
         boolean b =isNetworkAvailable();
         if(b==false){
@@ -225,7 +226,6 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                             RefillActivity.customer_med_id_list.add(medicineid);
                             String prescriptionid = dataobject.getString("prescid");
                             RefillActivity.customer_presc_list.add(prescriptionid);
-                            //{"medicineDetailList":[{"medicine":"417","days":10},{"medicine":"417","days":10}]}
 
                             prescriptionlist.add("Medicine Name: " + medicineName + "\nDosage End Date: " + dosageenddate);
                             listDataChild_Value.put(listDataHeaderValue.get(groupPosition), prescriptionlist);

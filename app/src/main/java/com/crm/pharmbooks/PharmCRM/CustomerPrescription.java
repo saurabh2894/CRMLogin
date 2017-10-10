@@ -53,14 +53,13 @@ import Model.PresciptionModel;
 public class CustomerPrescription extends AppCompatActivity {
 
     private ArrayList<PresciptionModel> presciptionModelList = new ArrayList<>();
-    private ArrayList<PresciptionModel> presciptionRefillModelList = new ArrayList<>();
 
 
     private RecyclerView recyclerView;
     Toolbar toolbar;
     public static int LONG_CLICK_FLAG=0;
     ImageButton deletebtn;
-    private PrescriptionAdapter pAdapter,pEditAdapter,pAddAdapter,pDeleteAdapter,refillAdapter;
+    private PrescriptionAdapter pAdapter,pEditAdapter,pAddAdapter,pDeleteAdapter;
     EditText dboxMedName,dboxMedDose,dboxMedStart,dboxMedEnd;
     String medNameEditbox="",medDoseEditbox="",medStartEditbox="",medEndEditbox="",medIdEditbox="";
 
@@ -97,7 +96,6 @@ public class CustomerPrescription extends AppCompatActivity {
         TextView title = (TextView)toolbar.findViewById(R.id.title);
 
         pAdapter = new PrescriptionAdapter(presciptionModelList);
-        refillAdapter = new PrescriptionAdapter(presciptionRefillModelList);
 
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -239,18 +237,12 @@ public class CustomerPrescription extends AppCompatActivity {
 
 
 
-//                            String RefillDose =presciptionModelList.get(i).getDosage();
-//                            String RefillDate=presciptionModelList.get(i).getRefillDate();
-//                            String RefillMedId=presciptionModelList.get(i).getMedicineid();
-//                            PresciptionModel refilldata = new PresciptionModel("0",RefillDose,RefillDate,"0",RefillMedId);
-//                            presciptionRefillModelList.add(refilldata);
-//                            refillAdapter.notifyDataSetChanged();
 
 
 
                         }
 
-//                        sendRefillDataList(presciptionRefillModelList);
+
                         Log.d("responsemodellist",jarr+"");
                         Log.d("response",response+"");
 
