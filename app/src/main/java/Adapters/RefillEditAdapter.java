@@ -54,9 +54,6 @@ public class RefillEditAdapter extends ArrayAdapter<RefillEditModel> {
         inc = (Button)listItemView.findViewById(R.id.increment);
         dec = (Button)listItemView.findViewById(R.id.decrement);
         if(PrescriptionRefillActivity.clicked_pos==position) {
-
-            dose.setText(currentWord.getDosage());
-
             inc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

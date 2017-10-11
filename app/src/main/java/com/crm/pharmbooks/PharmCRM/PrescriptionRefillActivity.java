@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -53,6 +54,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import Adapters.EditRefillAdapter;
 import Adapters.RefillAdapter;
 import Adapters.RefillEditAdapter;
 import Model.RefillEditModel;
@@ -78,8 +80,8 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
     //TextView  dboxMedName,dboxMedStart,dboxMedEnd;
     //String medNameEditbox="",medDoseEditbox="",medStartEditbox="",medEndEditbox="",medIdEditbox="";
     NumberPicker picker;
-    ListView refill_list;
-    RefillEditAdapter readapter;
+    RecyclerView refill_list;
+    EditRefillAdapter reAdapter;
     int Flag=0;
     boolean res;
     public static int clicked_pos=-1;
@@ -170,19 +172,23 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                         editModelList.add(ob);
                     }
 
-                    refill_list = (ListView)findViewById(R.id.list_refill);
+                    refill_list = (RecyclerView) findViewById(R.id.list_refill);
+                    reAdapter = new EditRefillAdapter(editModelList);
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                    refill_list.setLayoutManager(mLayoutManager);
 
-                    readapter = new RefillEditAdapter(PrescriptionRefillActivity.this,editModelList);
-                    refill_list.setAdapter(readapter);
-                    readapter.notifyDataSetChanged();
-                    refill_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    refill_list.addItemDecoration(new DividerItemDecoration(PrescriptionRefillActivity.this, LinearLayoutManager.VERTICAL));
+                    refill_list.setItemAnimator(new DefaultItemAnimator());
+                    // set the adapter
+                    refill_list.setAdapter(reAdapter);
+
+                    refill_list.addOnItemTouchListener(new RecyclerTouchListenerRefill((getApplicationContext()), refill_list, new ClickListenerRefilling() {
                         @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            clicked_pos=i;
-                            readapter.notifyDataSetChanged();
-                            Log.d("Clicked Item",i+"");
+                        public void onTouch(View v, int position) {
+                            clicked_pos=position;
+                            Log.d("Clicked Item",clicked_pos+"");
                         }
-                    });
+                    }));
 
                 }else{
                     Toast.makeText(getApplicationContext(),"Long click and select the medicines to refill",Toast.LENGTH_LONG).show();

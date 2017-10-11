@@ -31,11 +31,12 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/list_refill"
         android:layout_width="match_parent"
         android:descendantFocusability="blocksDescendants"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         />
     </LinearLayout>
     <android.support.design.widget.FloatingActionButton
