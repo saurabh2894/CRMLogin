@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +31,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,9 +98,7 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
         // Inflate the layout for this fragment
 
         SharedPreferences sharedpreferences = this.getActivity().getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
-        RefillActivity.customer_presc_list.clear();
-        RefillActivity.customer_med_id_list.clear();
-        RefillActivity.customer_number_list.clear();
+
         String restoredText = sharedpreferences.getString("username", null);
         if (restoredText != null) {
             username = sharedpreferences.getString("username", "No name defined");//"No name defined" is the default value.
@@ -212,7 +208,6 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                         JSONObject object = jsonArray.getJSONObject(groupPosition);
                         String name = object.getString("custmorname");
                         String phone = object.getString("custmornumber");
-                        RefillActivity.customer_number_list.add(phone);
 
                         listDataHeaderValue.add(name + " : "+ phone);
                         JSONArray array1 = object.getJSONArray("data");
@@ -223,9 +218,7 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                             String medicineName = dataobject.getString("medicinename");
                             String dosageenddate = dataobject.getString("dosageenddate");
                             String medicineid = dataobject.getString("id");
-                            RefillActivity.customer_med_id_list.add(medicineid);
                             String prescriptionid = dataobject.getString("prescid");
-                            RefillActivity.customer_presc_list.add(prescriptionid);
 
                             prescriptionlist.add("Medicine Name: " + medicineName + "\nDosage End Date: " + dosageenddate);
                             listDataChild_Value.put(listDataHeaderValue.get(groupPosition), prescriptionlist);

@@ -58,17 +58,17 @@
         </activity>
         <activity android:name=".Login" />
         <activity
-            android:name=".RefillActivity"
+            android:name=".RefillListActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
         </activity>
         <activity android:name=".PrescriptionRefillActivity"
-            android:parentActivityName=".RefillActivity">
+            android:parentActivityName=".RefillListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.crm.pharmbooks.PharmCRM.RefillActivity" /></activity>
+                android:value="com.crm.pharmbooks.PharmCRM.RefillListActivity" /></activity>
     </application>
 
 </manifest>

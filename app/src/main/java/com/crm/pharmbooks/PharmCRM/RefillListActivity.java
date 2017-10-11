@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Vibrator;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
@@ -48,7 +47,7 @@ import Adapters.ExpandableListAdapter;
 
 import static com.crm.pharmbooks.PharmCRM.Login.MyPREFERENCES;
 
-public class RefillActivity extends AppCompatActivity {
+public class RefillListActivity extends AppCompatActivity {
 
     static ArrayList<String> customer_number_list = new ArrayList<>();
     static ArrayList<String> customer_presc_list = new ArrayList<>();
@@ -128,7 +127,7 @@ public class RefillActivity extends AppCompatActivity {
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
 
 
-                    Intent intent = new Intent(RefillActivity.this, PrescriptionRefillActivity.class);
+                    Intent intent = new Intent(RefillListActivity.this, PrescriptionRefillActivity.class);
                     intent.putExtra("presId", listPresId.get(listDataHeaderValue.get(groupPosition)).get(childPosition));
 
                     String str = listDataHeaderValue.get(groupPosition);
@@ -142,7 +141,7 @@ public class RefillActivity extends AppCompatActivity {
                 return false;
             }
         });
-
+        fetchListData();
         fetchRequest();
         listAdapter = new ExpandableListAdapter(this, listDataHeaderValue, listDataChild_PrescriptionValue);
         expListView.setAdapter(listAdapter);
@@ -295,6 +294,77 @@ public class RefillActivity extends AppCompatActivity {
     }
 
 
+    public void fetchListData(){
+
+        String url = "https://pharmcrm.herokuapp.com/api/latestlist/";
+
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+
+                try {
+
+                    JSONArray jsonArray = new JSONArray(response);
+
+                    for(int groupPosition =0; groupPosition<jsonArray.length();groupPosition++) {
+                        JSONObject object = jsonArray.getJSONObject(groupPosition);
+                        String name = object.getString("custmorname");
+                        String phone = object.getString("custmornumber");
+                        customer_number_list.add(phone);
+
+
+                        JSONArray array1 = object.getJSONArray("data");
+
+                        for(int i=0;i<array1.length();i++) {
+
+                            JSONObject dataobject = array1.getJSONObject(i);
+                            String medicineName = dataobject.getString("medicinename");
+                            String dosageenddate = dataobject.getString("dosageenddate");
+                            String medicineid = dataobject.getString("id");
+                            customer_med_id_list.add(medicineid);
+                            String prescriptionid = dataobject.getString("prescid");
+                            customer_presc_list.add(prescriptionid);
+
+
+                        }
+                    }
+
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(RefillListActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("chemist",username);
+                return params;
+            }
+        };
+
+        int MY_SOCKET_TIMEOUT_MS = 50000;
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueue requestQueue = Volley.newRequestQueue(RefillListActivity.this);
+        requestQueue.add(stringRequest);
+    }
+
+
 
     int index;
     public void setIndex(int i){
@@ -344,21 +414,21 @@ public class RefillActivity extends AppCompatActivity {
                         listDataChild_PrescriptionValueSearch.put(listDataHeaderValue.get(i),listDataChild_PrescriptionValue.get(listDataHeaderValue.get(i)));
                         Log.d("index",i+"");
                         Log.d("Value", listDataHeaderValue.get(i));
-                        listAdaptersearch = new ExpandableListAdapter(RefillActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
+                        listAdaptersearch = new ExpandableListAdapter(RefillListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
                         setAdapter(listAdaptersearch);
                         expListView.setAdapter(listAdaptersearch);
                     }
                 }
 
             }else{
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(RefillActivity.this);
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(RefillListActivity.this);
                 alertDialog.setTitle("Oops...");
                 alertDialog.setMessage("This customer does not exist!\nDo you want to add this customer?");
                 alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         finish();
-                        startActivity(new Intent(RefillActivity.this,CustomerDetail.class));
+                        startActivity(new Intent(RefillListActivity.this,CustomerDetail.class));
                     }
                 });
                 alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {

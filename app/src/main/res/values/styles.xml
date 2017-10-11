@@ -14,4 +14,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="NumberPickerTextColorStyle">
+    <item name="android:textColorPrimary">#000</item>
+</style>
 </resources>

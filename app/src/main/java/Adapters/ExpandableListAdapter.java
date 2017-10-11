@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.crm.pharmbooks.PharmCRM.PrescriptionListActivity;
 import com.crm.pharmbooks.PharmCRM.R;
-import com.crm.pharmbooks.PharmCRM.RefillActivity;
+import com.crm.pharmbooks.PharmCRM.RefillListActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -72,9 +72,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             }
         } else if (PrescriptionListActivity.ACTIVITY_FLAG.equals("Refill")){
 
-         if (RefillActivity.REFILL_FLAG == 1) {
-             if (RefillActivity.child_pos.containsKey(groupPosition)) {
-                 if (RefillActivity.child_pos.get(groupPosition).contains(childPosition)) {
+         if (RefillListActivity.REFILL_FLAG == 1) {
+             if (RefillListActivity.child_pos.containsKey(groupPosition)) {
+                 if (RefillListActivity.child_pos.get(groupPosition).contains(childPosition)) {
                      child.setBackgroundColor(Color.parseColor("#FFFF00"));
                  }else {
                      child.setBackgroundColor(Color.TRANSPARENT);
@@ -141,8 +141,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             lblListHeader.setTextSize(24);
 
         }else if(PrescriptionListActivity.ACTIVITY_FLAG.equals("Refill")){
-            if (RefillActivity.REFILL_FLAG == 1) {
-                if (RefillActivity.child_pos.containsKey(groupPosition)) {
+            if (RefillListActivity.REFILL_FLAG == 1) {
+                if (RefillListActivity.child_pos.containsKey(groupPosition)) {
                     base.setBackgroundColor(Color.parseColor("#FFFF00"));
                 }
                 else {

@@ -635,7 +635,7 @@ public class CustomerPrescription extends AppCompatActivity {
         }
         else{
             alertDialog.setTitle("Add New...");
-            btn="Add";
+            btn="ADD";
             dboxMedName.setText("");
             dboxMedDose.setText("");
             dboxMedId.setVisibility(View.GONE);

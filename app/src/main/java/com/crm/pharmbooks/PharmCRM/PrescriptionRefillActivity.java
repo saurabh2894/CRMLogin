@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
@@ -24,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -41,6 +44,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +57,10 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
 
     private ArrayList<RefillModel> refillModelList = new ArrayList<>();
 
+    ArrayList<RefillModel> refillModelListEdit = new ArrayList<>();
+
+    //ArrayList<String> med = new ArrayList<String>();
+
 
     private RecyclerView recyclerView;
     Toolbar toolbar;
@@ -60,10 +68,11 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
 //    ImageButton deletebtn;
     private RefillAdapter rAdapter;
     EditText dboxMedDose;
-    TextView  dboxMedName,dboxMedStart,dboxMedEnd;
-    String medNameEditbox="",medDoseEditbox="",medStartEditbox="",medEndEditbox="",medIdEditbox="";
-
-//    FloatingActionButton fab;
+   // public static int LONG_CLICK_FLAG=0;
+    //TextView  dboxMedName,dboxMedStart,dboxMedEnd;
+    //String medNameEditbox="",medDoseEditbox="",medStartEditbox="",medEndEditbox="",medIdEditbox="";
+    NumberPicker picker;
+    FloatingActionButton fab;
     ProgressBar pb;
     TextView txt;
     RelativeLayout rl;
@@ -75,8 +84,6 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prescription_refill);
-
-
 
         Bundle extra = getIntent().getExtras();
 
@@ -93,7 +100,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
         recyclerView.setVisibility(View.GONE);
         pb= (ProgressBar) findViewById(R.id.pb) ;
         txt=(TextView) findViewById(R.id.loadingtxt);
-//        fab=(FloatingActionButton)findViewById(R.id.fab1);
+        fab=(FloatingActionButton)findViewById(R.id.fab1);
         toolbar= (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         TextView title = (TextView)toolbar.findViewById(R.id.title);
@@ -108,23 +115,60 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         // set the adapter
         recyclerView.setAdapter(rAdapter);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showCustomDialog(-1);
-//            }
-//        });
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(LONG_CLICK_FLAG==1) {
+                    refillModelListEdit.clear();
+                    for (int i = 0; i < refillModelList.size(); i++) {
+                        if (refillModelList.get(i).getCheck()) {
+                            refillModelListEdit.add(refillModelList.get(i));
+                        }
+                    }
+
+                    sendRefillDataList(refillModelListEdit);
+                    LONG_CLICK_FLAG=0;
+                    rAdapter.notifyDataSetChanged();
+                    Intent i = new Intent (PrescriptionRefillActivity.this,RefillListActivity.class);
+                    finish();
+                    startActivity(i);
+
+                }else{
+                    Toast.makeText(getApplicationContext(),"Long click and select the medicines to refill",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
             @Override
-            public void onClick(View view, int position) {
-
+            public void onClick(View view, int position) throws NoSuchFieldException, IllegalAccessException {
                 pos=position;
+
+                if(LONG_CLICK_FLAG==0){
                 showCustomDialog(pos);
+                }
+                else{
+                    RefillModel m = refillModelList.get(pos);
+                    if(m.getCheck()){
+                        Log.d("pos of click",pos+"");
+
+                        m.setCheck(false);
+
+                    }
+                    else {
+                        Log.d("pos of click in e",pos+"");
+
+                        m.setCheck(true);
+                    }
+                    refillModelList.remove(pos);
+                    refillModelList.add(pos,m);
+                    rAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void onLongClick(View view, int position) {
-
+                LONG_CLICK_FLAG=1;
+                rAdapter.notifyDataSetChanged();
             }
         }));
 
@@ -173,7 +217,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                         String medName = ob1.getString("medicinename");
                         String id = ob1.getString("id");
                         Log.d("Mytag 006","Days "+i+" = "+dose);
-                        RefillModel detail = new RefillModel(medName,dose,refill,endDate,id);
+                        RefillModel detail = new RefillModel(medName,dose,refill,endDate,id,false);
                         refillModelList.add(detail);
                         Log.d("My tag 005","Refill list   "+refillModelList.get(i).getDosage());
                         rAdapter.notifyDataSetChanged();
@@ -266,6 +310,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                             {
                                 Log.d("My tag001","I am in the block where result code is 1");
 
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -326,172 +371,78 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
 
 
 
-    public void showCustomDialog(final int pos){
+    public void showCustomDialog(final int pos) throws NoSuchFieldException, IllegalAccessException {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(PrescriptionRefillActivity.this);
         // Get the layout inflater
         LayoutInflater linf = LayoutInflater.from(getApplicationContext());
-        final View inflator = linf.inflate(R.layout.prescription_refill_dialogbox, null);
+        final View inflator = linf.inflate(R.layout.refill_number_picker, null);
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
 
         // Setting Dialog Title
 
-
+        //final TextView showText = (TextView) inflator.findViewById(R.id.showText);
+        picker = (NumberPicker)inflator.findViewById(R.id.number_picker);
         // Setting Dialog Message
         // Setting Icon to Dialog
         alertDialog.setView(inflator);
 
-        final TextView dboxMedId,ds,de,dm,m;
+        picker.setMinValue(1);
+        picker.setMaxValue(9999);
 
-        dboxMedName = (TextView) inflator.findViewById(R.id.dboxMedName);
-        dboxMedDose = (EditText) inflator.findViewById(R.id.dboxMedDose);
-        dboxMedStart = (TextView) inflator.findViewById(R.id.dboxMedStart);
-        dboxMedEnd = (TextView) inflator.findViewById(R.id.dboxMedEnd);
-        dboxMedId = (TextView) inflator.findViewById(R.id.dboxMedId);
-        ds=(TextView)inflator.findViewById(R.id.toRemove1);
-        de=(TextView)inflator.findViewById(R.id.toRemove2);
-        dm=(TextView)inflator.findViewById(R.id.medId);
-        m=(TextView)inflator.findViewById(R.id.medIdColon);
+        //Gets whether the selector wheel wraps when reaching the min/max value.
+        picker.setWrapSelectorWheel(true);
+
+        Field selectorWheelPaintField = picker.getClass().getDeclaredField("mSelectorWheelPaint");
+        selectorWheelPaintField.setAccessible(true);
+        ((Paint)selectorWheelPaintField.get(picker)).setColor(Color.parseColor("#000000"));
+
+        //Set a value change listener for NumberPicker
+        picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal){
+                //Display the newly selected number from picker
+                //showText.setText("Selected Number : " + newVal);
+            }
+        });
 
         String btn="";
         if(pos!=-1) {
-            alertDialog.setTitle("Edit Dosage...");
-            medNameEditbox = refillModelList.get(pos).getMedName();
-            medDoseEditbox = refillModelList.get(pos).getDosage();
-            medStartEditbox = refillModelList.get(pos).getRefillDate();
-            medEndEditbox = refillModelList.get(pos).getEndDate();
-            medIdEditbox = refillModelList.get(pos).getMedicineid();
-            btn="EDIT";
-            dboxMedName.setText(medNameEditbox);
-            dboxMedDose.setText(medDoseEditbox);
-            ds.setVisibility(View.GONE);
-            de.setVisibility(View.GONE);
-            dboxMedStart.setVisibility(View.GONE);
-            dboxMedEnd.setVisibility(View.GONE);
-            dboxMedId.setText(medIdEditbox);
+            alertDialog.setTitle("Select Dosage...");
+            btn="SET";
 
         }
-//        else{
-//            alertDialog.setTitle("Add New...");
-//            btn="Add";
-//            dboxMedName.setText("");
-//            dboxMedDose.setText("");
-//            dboxMedId.setVisibility(View.GONE);
-//            dboxMedStart.setVisibility(View.GONE);
-//            dboxMedEnd.setVisibility(View.GONE);
-//            ds.setVisibility(View.GONE);
-//            de.setVisibility(View.GONE);
-//            dm.setVisibility(View.GONE);
-//            m.setVisibility(View.GONE);
-//        }
-
 
         // Setting Positive "Yes" Button
         alertDialog.setPositiveButton(btn, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
-
-                ArrayList<RefillModel> refillModelListEdit = new ArrayList<>();
-
-                ArrayList<String> med = new ArrayList<String>();
-
-                String medname = dboxMedName.getText().toString().trim();
-                String meddose = dboxMedDose.getText().toString().trim();
-                String medstart = dboxMedStart.getText().toString().trim();
-                String medend = dboxMedEnd.getText().toString().trim();
-                String medId = dboxMedId.getText().toString().trim();
-                if (!(TextUtils.isEmpty(medname) && TextUtils.isEmpty(meddose)) ) {
                     if (pos != -1) {
-                        if (!(medNameEditbox.equals(medname) && medDoseEditbox.equals(meddose))) {
+                            RefillModel obj = refillModelList.get(pos);
                             refillModelList.remove(pos);
-                            refillModelList.add(pos, new RefillModel(medname, meddose, medStartEditbox, medEndEditbox, medId));
-                            refillModelListEdit.add(new RefillModel(medname, meddose, medStartEditbox, medEndEditbox, medId));
+                            obj.setDosage(String.valueOf(picker.getValue()));
+                            refillModelList.add(pos, obj);
                             rAdapter.notifyDataSetChanged();
 
-
-                            //code for Prescription Edit List
-
-                            String medNameEdit = dboxMedName.getText().toString().trim();
-                            String meddoseEdit = dboxMedDose.getText().toString().trim();
-                            String medstartEdit = dboxMedStart.getText().toString().trim();
-                            String medendEdit = dboxMedEnd.getText().toString().trim();
-                            String medIdEdit = dboxMedId.getText().toString().trim();
-
-
-                            if (med.contains(medIdEdit)) {
-                                int pos = 0;
-                                for (int i = 0; i < med.size(); i++) {
-                                    if (med.get(i).equals(medIdEdit)) {
-                                        pos = i;
-                                    }
-                                }
-                                refillModelList.remove(pos);
-                                refillModelList.add(pos, new RefillModel(medNameEdit, meddoseEdit, medStartEditbox, medEndEditbox, medIdEdit));
-                                rAdapter.notifyDataSetChanged();
-                                Log.d("mytag", "You were right1");
-
-                            } else {
-                                med.add(medIdEdit);
-                                refillModelList.add(new RefillModel(medNameEdit, meddoseEdit, medStartEditbox, medEndEditbox, medIdEdit));
-                                rAdapter.notifyDataSetChanged();
-                                Log.d("mytag", "You were right");
-
-                            }
-
-
-                             sendRefillDataList(refillModelListEdit);
-                             //fetchData(1);
-                        } else {
-                            Toast.makeText(PrescriptionRefillActivity.this, "Don't add save values again, make some changes bro!", Toast.LENGTH_SHORT).show();
-
-                        }
-
                     }
-//                    else {
-//                        presciptionAddModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
-//                        pAddAdapter.notifyDataSetChanged();
-//                        // presciptionModelList.add(new PresciptionModel(medname, meddose, "0", "0", "0"));
-//                        // pAdapter.notifyDataSetChanged();
-//                        sendAddDataList(presciptionAddModelList);
-//                        //fetchData(1);
-//                    }
-
-
-                    // Write your code here to invoke YES event
-
-                }
-
-
-
-                else{
-                    Toast.makeText(PrescriptionRefillActivity.this, "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
-                }
+                    else{
+                        Toast.makeText(PrescriptionRefillActivity.this, "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
+                    }
             }
         });
 
         // Setting Negative "NO" Button
-        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Write your code here to invoke NO event
                 Toast.makeText(PrescriptionRefillActivity.this, "You clicked on NO", Toast.LENGTH_SHORT).show();
                 dialog.cancel();
             }
         });
-
         alertDialog.show();
-
-
-
-
-
-
-                /*CustomDialogClass cdd=new CustomDialogClass(position,MedicineData.this);
-                cdd.show();
-                if(cdd.isShowing()) {
-                    Log.d("mytag","medicine data dialog box call working");
-
-                }*/
     }
+
+
 
 
     @Override

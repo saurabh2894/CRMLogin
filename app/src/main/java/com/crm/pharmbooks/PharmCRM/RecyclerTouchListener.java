@@ -38,7 +38,13 @@ import android.view.View;
 
             View child = rv.findChildViewUnder(e.getX(), e.getY());
             if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildPosition(child));
+                try {
+                    clickListener.onClick(child, rv.getChildPosition(child));
+                } catch (NoSuchFieldException e1) {
+                    e1.printStackTrace();
+                } catch (IllegalAccessException e1) {
+                    e1.printStackTrace();
+                }
             }
             return false;
         }

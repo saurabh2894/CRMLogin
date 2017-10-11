@@ -83,7 +83,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
             startActivity(new Intent(getActivity(),CustomerDetail.class));
         }
         else if(view == repeat){
-            startActivity(new Intent(getActivity(),RefillActivity.class));
+            startActivity(new Intent(getActivity(),RefillListActivity.class));
         }
     }
 
