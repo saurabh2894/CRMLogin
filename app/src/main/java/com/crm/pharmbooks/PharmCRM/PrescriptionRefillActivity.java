@@ -412,8 +412,6 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
             btn="SET";
 
         }
-
-
         // Setting Positive "Yes" Button
         alertDialog.setPositiveButton(btn, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
