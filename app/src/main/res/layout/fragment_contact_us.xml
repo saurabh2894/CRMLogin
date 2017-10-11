@@ -8,8 +8,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/logoblack"
-        android:layout_margin="24dp"/>
-
+        android:layout_margin="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Contact Us At"
+        android:layout_marginBottom="40dp"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:layout_above="@+id/layout1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,17 +43,15 @@
             android:gravity="center"
             android:textSize="20sp"
             android:id="@+id/email"
+            android:padding="10dip"
+            android:background="@drawable/round_edittext"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             />
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Contact Us At"
-        android:layout_marginBottom="30dp"
-        android:layout_above="@id/layout1"
-        android:textColor="@android:color/black"
-        android:gravity="center"
-        android:textSize="24sp"/>
+
 
 
     <LinearLayout
@@ -68,6 +76,12 @@
         android:layout_margin="8dp"
         android:textSize="20sp"
         android:id="@+id/phone"
+        android:padding="10dip"
+        android:background="@drawable/round_edittext"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         />
     </LinearLayout>
     <LinearLayout
@@ -91,6 +105,12 @@
             android:layout_margin="8dp"
             android:textSize="20sp"
             android:id="@+id/address"
+            android:padding="10dip"
+            android:background="@drawable/round_edittext"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             />
     </LinearLayout>
 </RelativeLayout>

@@ -85,7 +85,8 @@
                     android:onClick="clickButton"
                     android:tag="4"
                     android:text="Visitor Information"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    />
 
 
             </LinearLayout>

@@ -49,14 +49,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="Username" />
+        android:hint="Username"
+        android:padding="10dip"
+        android:background="@drawable/round_edittext"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
 
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:hint="Password" />
+        android:hint="Password"
+        android:padding="10dip"
+        android:background="@drawable/round_edittext"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
     <Button
 
         android:layout_marginTop="10dp"
@@ -64,6 +75,10 @@
         android:layout_height="wrap_content"
         android:text=" Sign in"
         android:id="@+id/Signin"
+        android:background = "@drawable/round_button"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
         />
 
 

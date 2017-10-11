@@ -47,7 +47,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
 
     <EditText
         android:id="@+id/SearchBoxExistingRefill"
@@ -57,7 +58,12 @@
         android:imeOptions="actionSearch"
         android:layout_weight="1"
         android:hint="Enter Customer Number"
-        android:inputType="number" />
+        android:inputType="number"
+        android:padding="10dip"
+        android:background="@drawable/round_edittext"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
 
     <ImageButton
         android:layout_width="0dp"

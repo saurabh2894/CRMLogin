@@ -4,27 +4,57 @@
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:weightSum="1">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout1"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_marginTop="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logoblack"
+            android:layout_marginLeft="20dp"
+            />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name" />
+        android:hint="Name"
+        android:padding="10dip"
+        android:background="@drawable/round_edittext"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        />
 
     <EditText
         android:id="@+id/MobileNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Mobile No"
-        android:inputType="phone" />
+        android:inputType="phone"
+        android:padding="10dip"
+        android:background="@drawable/round_edittext"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
 
     <EditText
         android:id="@+id/BillAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Bill Amount"
-        android:inputType="number" />
+        android:inputType="number"
+        android:padding="10dip"
+        android:background="@drawable/round_edittext"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
 
     <Button
         android:layout_width="match_parent"
@@ -32,5 +62,10 @@
         android:layout_marginTop="10dp"
         android:text="Next"
         android:id="@+id/Next"
+        android:background = "@drawable/round_button"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+
         />
 </LinearLayout>

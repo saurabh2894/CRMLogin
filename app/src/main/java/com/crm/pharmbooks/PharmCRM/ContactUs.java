@@ -101,7 +101,7 @@ public class ContactUs extends Fragment implements View.OnClickListener{
         else if(view==phone){
             Intent intent = new Intent(Intent.ACTION_DIAL);
             intent.setData(Uri.parse("tel:" +"011-65808808"));
-                //startActivity(Intent.createChooser(intent, "Make a Call"));
+            //startActivity(Intent.createChooser(intent, "Make a Call"));
             startActivity(intent);
         }
         else if(view==address){

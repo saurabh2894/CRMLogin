@@ -30,7 +30,13 @@
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
-
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/logoblack"
+        android:layout_weight="0.43"
+        android:layout_marginTop="55dp"/>
 
     <EditText
         android:id="@+id/Name"
@@ -38,7 +44,13 @@
         android:layout_height="wrap_content"
         android:imeOptions="actionNext"
         android:inputType="textPersonName"
-        android:hint="Enter Name" />
+        android:hint="Enter Name"
+        android:padding="10dip"
+        android:background="@drawable/round_edittext"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="30dp"/>
 
     <EditText
         android:id="@+id/MobileNo"
@@ -46,7 +58,12 @@
         android:layout_height="wrap_content"
         android:hint="Mobile No"
         android:imeOptions="actionNext"
-        android:inputType="phone" />
+        android:inputType="phone"
+        android:padding="10dip"
+        android:background="@drawable/round_edittext"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
 
     <EditText
         android:id="@+id/Address"
@@ -54,7 +71,12 @@
         android:layout_height="wrap_content"
         android:imeOptions="actionGo"
         android:inputType="textPostalAddress"
-        android:hint="Address" />
+        android:hint="Address"
+        android:padding="10dip"
+        android:background="@drawable/round_edittext"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
 
 <Button
     android:layout_width="match_parent"
@@ -62,5 +84,9 @@
     android:layout_marginTop="10dp"
     android:text="Next"
     android:id="@+id/Next"
+    android:background = "@drawable/round_button"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="100dp"
+    android:layout_marginRight="100dp"
     />
 </LinearLayout>
