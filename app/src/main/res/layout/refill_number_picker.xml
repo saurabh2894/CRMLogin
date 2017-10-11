@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
 <!--<TextView-->
@@ -9,18 +9,28 @@
     <!--android:textSize="15sp"-->
     <!--android:textColor="#000"-->
     <!--android:layout_height="wrap_content"-->
-    <!--android:id="@+id/showText"-->
+    <!--android:id="@+id/medName"-->
     <!--android:text="Select Dosage..."-->
     <!--/>-->
 
     <NumberPicker
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/number_picker"
         android:scaleX="2.0"
+        android:layout_centerHorizontal="true"
         android:divider="#000000"
         android:showDividers="middle"
         android:scaleY="2.0"
         />
 
-</LinearLayout>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/number_picker"
+        android:id="@+id/unviversalSelection"
+        android:textColor="#000"
+        android:text="Use this for all medicines"
+        />
+
+</RelativeLayout>

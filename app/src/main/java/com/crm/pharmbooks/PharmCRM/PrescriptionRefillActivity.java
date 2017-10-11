@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
@@ -24,8 +25,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -50,6 +54,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Adapters.RefillAdapter;
+import Adapters.RefillEditAdapter;
+import Model.RefillEditModel;
 import Model.RefillModel;
 
 public class PrescriptionRefillActivity extends AppCompatActivity {
@@ -72,7 +78,15 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
     //TextView  dboxMedName,dboxMedStart,dboxMedEnd;
     //String medNameEditbox="",medDoseEditbox="",medStartEditbox="",medEndEditbox="",medIdEditbox="";
     NumberPicker picker;
-    FloatingActionButton fab;
+    ListView refill_list;
+    RefillEditAdapter readapter;
+    int Flag=0;
+    boolean res;
+    public static int clicked_pos=-1;
+    boolean next;
+    ArrayList<RefillEditModel> editModelList = new ArrayList<>();
+    CheckBox unviseral_selection_box;
+    FloatingActionButton fab,fab1;
     ProgressBar pb;
     TextView txt;
     RelativeLayout rl;
@@ -116,22 +130,59 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
         // set the adapter
         recyclerView.setAdapter(rAdapter);
         fab.setOnClickListener(new View.OnClickListener() {
+            boolean univeral;
+            String universaldosage;
+            int Flag=0;
             @Override
             public void onClick(View view) {
                 if(LONG_CLICK_FLAG==1) {
+                    setContentView(R.layout.edit_dose_activity);
+                    fab1=(FloatingActionButton)findViewById(R.id.sendReq);
+                    fab1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            for(int i=0;i<editModelList.size();i++){
+                                int days = Integer.parseInt(editModelList.get(i).getDosage());
+                                int inc = editModelList.get(i).getIncrement();
+                                int dec = editModelList.get(i).getDecrement();
+                                days+=(inc-dec);
+                                editModelList.get(i).setDosage(String.valueOf(days));
+                            }
+
+                            sendRefillDataList(editModelList);
+                            Intent i = new Intent (PrescriptionRefillActivity.this,RefillListActivity.class);
+                            finish();
+                            startActivity(i);
+                            LONG_CLICK_FLAG = 0;
+                            rAdapter.notifyDataSetChanged();
+                        }
+                    });
                     refillModelListEdit.clear();
                     for (int i = 0; i < refillModelList.size(); i++) {
                         if (refillModelList.get(i).getCheck()) {
                             refillModelListEdit.add(refillModelList.get(i));
                         }
                     }
+                    for(int i=0;i<refillModelListEdit.size();i++){
+                        RefillModel ob1 = refillModelListEdit.get(i);
+                        RefillEditModel ob = new RefillEditModel(ob1.getMedicineid(),ob1.getMedName(),ob1.getDosage(),0,0);
+                        editModelList.add(ob);
+                    }
 
-                    sendRefillDataList(refillModelListEdit);
-                    LONG_CLICK_FLAG=0;
-                    rAdapter.notifyDataSetChanged();
-                    Intent i = new Intent (PrescriptionRefillActivity.this,RefillListActivity.class);
-                    finish();
-                    startActivity(i);
+                    refill_list = (ListView)findViewById(R.id.list_refill);
+
+                    readapter = new RefillEditAdapter(PrescriptionRefillActivity.this,editModelList);
+                    refill_list.setAdapter(readapter);
+                    readapter.notifyDataSetChanged();
+                    refill_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            clicked_pos=i;
+                            readapter.notifyDataSetChanged();
+                            Log.d("Clicked Item",i+"");
+                        }
+                    });
 
                 }else{
                     Toast.makeText(getApplicationContext(),"Long click and select the medicines to refill",Toast.LENGTH_LONG).show();
@@ -144,7 +195,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                 pos=position;
 
                 if(LONG_CLICK_FLAG==0){
-                showCustomDialog(pos);
+                //showCustomDialog(pos);
                 }
                 else{
                     RefillModel m = refillModelList.get(pos);
@@ -262,7 +313,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
 
     //For Refill Prescription
 
-    public JSONObject getJsonFromMyFormObjectRefill(ArrayList<RefillModel> refillModelList) throws JSONException {
+    public JSONObject getJsonFromMyFormObjectRefill(ArrayList<RefillEditModel> refillModelList) throws JSONException {
         JSONObject responseDetailsJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         try {
@@ -273,7 +324,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                 formDetailsJson.put("days", String.valueOf(refillModelList.get(i).getDosage()));
                 //formDetailsJson.put("refilldate", String.valueOf(refillModelList.get(i).getRefillDate()));
                 //formDetailsJson.put("enddate"+(i+1), String.valueOf(refillModelList.get(i).getEndDate()));
-                formDetailsJson.put("medicine", String.valueOf(refillModelList.get(i).getMedicineid()));
+                formDetailsJson.put("medicine", String.valueOf(refillModelList.get(i).getId()));
                 jsonArray.put(formDetailsJson);
             }
         }
@@ -294,7 +345,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
     }
 
 
-    public void sendRefillDataList(final ArrayList<RefillModel> refillModelList) {
+    public void sendRefillDataList(final ArrayList<RefillEditModel> refillModelList) {
         String url = "https://pharmcrm.herokuapp.com/api/repeatmed/";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -312,6 +363,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
 
 
                             }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -371,74 +423,107 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
 
 
 
-    public void showCustomDialog(final int pos) throws NoSuchFieldException, IllegalAccessException {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(PrescriptionRefillActivity.this);
-        // Get the layout inflater
-        LayoutInflater linf = LayoutInflater.from(getApplicationContext());
-        final View inflator = linf.inflate(R.layout.refill_number_picker, null);
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
+    public boolean showCustomDialog(final int pos) throws NoSuchFieldException, IllegalAccessException, InterruptedException {
 
-        // Setting Dialog Title
+                res=false;
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(PrescriptionRefillActivity.this);
+                // Get the layout inflater
+                LayoutInflater linf = LayoutInflater.from(getApplicationContext());
+                final View inflator = linf.inflate(R.layout.refill_number_picker, null);
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
 
-        //final TextView showText = (TextView) inflator.findViewById(R.id.showText);
-        picker = (NumberPicker)inflator.findViewById(R.id.number_picker);
-        // Setting Dialog Message
-        // Setting Icon to Dialog
-        alertDialog.setView(inflator);
+                // Setting Dialog Title
 
-        picker.setMinValue(1);
-        picker.setMaxValue(9999);
+                //final TextView showText = (TextView) inflator.findViewById(R.id.medName);
+                picker = (NumberPicker)inflator.findViewById(R.id.number_picker);
+                unviseral_selection_box = (CheckBox)inflator.findViewById(R.id.unviversalSelection);
+                // Setting Dialog Message
+                // Setting Icon to Dialog
+                alertDialog.setView(inflator);
 
-        //Gets whether the selector wheel wraps when reaching the min/max value.
-        picker.setWrapSelectorWheel(true);
+                picker.setMinValue(1);
+                picker.setMaxValue(9999);
+                Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+                for(Field pf : pickerFields){
+                    if(pf.getName().equals("mSelectionDivider")){
+                        pf.setAccessible(true);
+                        try{
+                            ColorDrawable colorDrawable= new ColorDrawable(Color.parseColor("#000000"));
+                            pf.set(picker,colorDrawable);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                }
+                //Gets whether the selector wheel wraps when reaching the min/max value.
+                picker.setWrapSelectorWheel(true);
 
-        Field selectorWheelPaintField = picker.getClass().getDeclaredField("mSelectorWheelPaint");
-        selectorWheelPaintField.setAccessible(true);
-        ((Paint)selectorWheelPaintField.get(picker)).setColor(Color.parseColor("#000000"));
+                Field selectorWheelPaintField = null;
+                try {
+                    selectorWheelPaintField = picker.getClass().getDeclaredField("mSelectorWheelPaint");
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                }
+                selectorWheelPaintField.setAccessible(true);
+                try {
+                    ((Paint)selectorWheelPaintField.get(picker)).setColor(Color.parseColor("#000000"));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
 
-        //Set a value change listener for NumberPicker
-        picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal){
-                //Display the newly selected number from picker
-                //showText.setText("Selected Number : " + newVal);
-            }
-        });
+                //Set a value change listener for NumberPicker
+                picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                    @Override
+                    public void onValueChange(NumberPicker picker, int oldVal, int newVal){
+                        //Display the newly selected number from picker
+                        //showText.setText("Selected Number : " + newVal);
+                    }
+                });
 
-        String btn="";
-        if(pos!=-1) {
-            alertDialog.setTitle("Select Dosage...");
-            btn="SET";
+                String btn="";
+                if(pos!=-1) {
+                    alertDialog.setTitle("Select Dosage for "+refillModelList.get(pos).getMedName());
+                    btn="SET";
 
-        }
-        // Setting Positive "Yes" Button
-        alertDialog.setPositiveButton(btn, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
+                }
+                // Setting Positive "Yes" Button
+                alertDialog.setPositiveButton(btn, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int which) {
 
-                    if (pos != -1) {
+                        if (pos != -1) {
                             RefillModel obj = refillModelList.get(pos);
                             refillModelList.remove(pos);
                             obj.setDosage(String.valueOf(picker.getValue()));
                             refillModelList.add(pos, obj);
+                            if(unviseral_selection_box.isChecked())
+                                res=true;
+                            else
+                                res=false;
+                            Flag=1;
                             rAdapter.notifyDataSetChanged();
 
-                    }
-                    else{
-                        Toast.makeText(PrescriptionRefillActivity.this, "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
-                    }
-            }
-        });
 
-        // Setting Negative "NO" Button
-        alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // Write your code here to invoke NO event
-                Toast.makeText(PrescriptionRefillActivity.this, "You clicked on NO", Toast.LENGTH_SHORT).show();
-                dialog.cancel();
-            }
-        });
-        alertDialog.show();
+                        }
+                        else{
+                            Toast.makeText(PrescriptionRefillActivity.this, "Please Enter Some Values!!!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                // Setting Negative "NO" Button
+                alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke NO event
+                        Toast.makeText(PrescriptionRefillActivity.this, "You clicked on NO", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                });
+                    alertDialog.show();
+
+
+        return res;
     }
 
 
