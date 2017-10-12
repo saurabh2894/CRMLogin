@@ -21,11 +21,12 @@ import android.view.View;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onSingleTapUp(MotionEvent e) {
-                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if (child != null && clickListener != null) {
-                        clickListener.onTouch(child, recyclerView.getChildPosition(child));
-                    }
-                    return false;
+//                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+//                    if (child != null && clickListener != null) {
+//                        clickListener.onTouch(child, recyclerView.getChildPosition(child));
+//                    }
+//                    return false;
+                    return true;
                 }
 
                 @Override
@@ -38,16 +39,11 @@ import android.view.View;
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
 
-//            View child = rv.findChildViewUnder(e.getX(), e.getY());
-//            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-//                try {
-//                    clickListener.onClick(child, rv.getChildPosition(child));
-//                } catch (NoSuchFieldException e1) {
-//                    e1.printStackTrace();
-//                } catch (IllegalAccessException e1) {
-//                    e1.printStackTrace();
-//                }
-//            }
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+                clickListener.onTouch(child, rv.getChildPosition(child));
+
+            }
             return false;
         }
 

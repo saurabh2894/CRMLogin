@@ -173,7 +173,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                     }
 
                     refill_list = (RecyclerView) findViewById(R.id.list_refill);
-                    reAdapter = new EditRefillAdapter(editModelList);
+                    reAdapter = new EditRefillAdapter(editModelList,getApplicationContext());
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                     refill_list.setLayoutManager(mLayoutManager);
 
@@ -182,13 +182,36 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                     // set the adapter
                     refill_list.setAdapter(reAdapter);
 
-                    refill_list.addOnItemTouchListener(new RecyclerTouchListenerRefill((getApplicationContext()), refill_list, new ClickListenerRefilling() {
+//                    refill_list.addOnItemTouchListener(new RecyclerTouchListenerRefill((getApplicationContext()), refill_list, new ClickListenerRefilling() {
+//                        @Override
+//                        public void onTouch(View v, int position) {
+//                            if(clicked_pos!=position) {
+//                                clicked_pos = position;
+//                                reAdapter.notifyDataSetChanged();
+//                            }
+//                            Log.d("Clicked Item",clicked_pos+"");
+//                        }
+//                    }));
+                    /*refill_list.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
                         @Override
-                        public void onTouch(View v, int position) {
-                            clicked_pos=position;
-                            Log.d("Clicked Item",clicked_pos+"");
+                        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                            View child = rv.findChildViewUnder(e.getX(), e.getY());
+                            Log.d("child pos",rv.getChildPosition(child)+"");
+                               clicked_pos = rv.getChildPosition(child);
+                              reAdapter.notifyDataSetChanged();
+                            return true;
                         }
-                    }));
+
+                        @Override
+                        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+                        }
+
+                        @Override
+                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                        }
+                    });*/
 
                 }else{
                     Toast.makeText(getApplicationContext(),"Long click and select the medicines to refill",Toast.LENGTH_LONG).show();
