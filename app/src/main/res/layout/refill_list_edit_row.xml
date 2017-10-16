@@ -8,10 +8,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp">
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             >
             <TextView
@@ -26,41 +27,52 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
             >
 
             <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Dosage : "
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="Dosage  "
                 android:textSize="20sp"
 
                 />
 
-            <Button
-                android:layout_width="50dp"
+            <ImageButton
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:id="@+id/decrement"
+                android:background="@drawable/image_button_back"
                 android:focusable="false"
-                android:text="-"/>
+                android:scaleType="center"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_decrement"/>
 
             <TextView
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_width="wrap_content"
                 android:text="20"
+                android:gravity="center"
                 android:textColor="#000"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:id="@+id/med_dose"
                 android:textSize="20sp"
                 />
 
-            <Button
-                android:layout_width="50dp"
+            <ImageButton
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/increment"
                 android:focusable="false"
-                android:text="+"/>
+                android:scaleType="center"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_increment"
+                android:background="@drawable/image_button_back"/>
         </LinearLayout>
 
     </LinearLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="55dip"
+    android:orientation="horizontal"
+    android:id="@+id/pres_list_layout"
+    >
+
+    <TextView
+        android:id="@+id/lblListItem"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17dip"
+        android:paddingTop="5dp"
+        android:layout_weight="1"
+        android:paddingBottom="5dp"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/marker"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_five_day_marker"
+        />
+
+
+</LinearLayout>

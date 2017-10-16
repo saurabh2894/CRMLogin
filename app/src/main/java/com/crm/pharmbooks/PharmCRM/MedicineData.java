@@ -154,7 +154,7 @@ public class MedicineData extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!(TextUtils.isEmpty(MedicineName.getText()) && !(TextUtils.isEmpty(MedicineQuantity.getText().toString().trim())))) {
+                if (!(TextUtils.isEmpty(MedicineName.getText()) && (TextUtils.isEmpty(MedicineQuantity.getText().toString().trim())))) {
                     MedicineName_value = MedicineName.getText().toString();
                     MedicineQuantity_value = MedicineQuantity.getText().toString();
                     MedicineDetailModel detail = new MedicineDetailModel(MedicineName_value, Integer.parseInt(MedicineQuantity_value));
@@ -250,7 +250,7 @@ public class MedicineData extends AppCompatActivity {
 
 
                             // Write your code here to invoke YES event
-                            Toast.makeText(MedicineData.this, "You clicked on YES and added  " + MedicineName_valuedialogbox, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MedicineData.this, "You added  " + MedicineName_valuedialogbox, Toast.LENGTH_SHORT).show();
                         }
 
 
@@ -265,7 +265,7 @@ public class MedicineData extends AppCompatActivity {
                 alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Write your code here to invoke NO event
-                        Toast.makeText(MedicineData.this, "You clicked on NO", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MedicineData.this, "You clicked on NO", Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }
                 });
@@ -287,7 +287,7 @@ public class MedicineData extends AppCompatActivity {
                 }*/
 
                 MedicineDetailModel medicineDetailModel = new MedicineDetailModel(MedicineName_value,Integer.parseInt(MedicineQuantity_value));
-                Toast.makeText(getApplicationContext(), medicineDetailModel.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), medicineDetailModel.getMName() + " is selected!", Toast.LENGTH_SHORT).show();
 
 
 
@@ -473,19 +473,19 @@ public class MedicineData extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(MedicineData.this,response,Toast.LENGTH_LONG).show();
+                       // Toast.makeText(MedicineData.this,response,Toast.LENGTH_LONG).show();
                         Log.d("notify","I'm here bro");
 //                        for(int i=0;i<medicineDetailList.size();i++)
 //                            medicineDetailList.remove(i);
                         medicineDetailList.clear();
                         mAdapter.notifyDataSetChanged();
-                        //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
+                        Toast.makeText(MedicineData.this,"Prescription Saved",Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MedicineData.this,error.toString(),Toast.LENGTH_LONG).show();
+                        //Toast.makeText(MedicineData.this,error.toString(),Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override

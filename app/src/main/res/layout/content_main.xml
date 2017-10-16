@@ -1,12 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/frame"
+    android:orientation="vertical"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.crm.pharmbooks.PharmCRM.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:context="com.crm.pharmbooks.PharmCRM.MainActivity">
 
-</FrameLayout>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="DashBoard"
+                android:textSize="20dp"
+                android:gravity="center"
+                android:id="@+id/title"
+                android:textColor="#fff"
+                android:fontFamily="serif"/>
+
+            <ImageButton
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_about_us"
+                android:id="@+id/about_us"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"
+                android:background="@android:color/transparent"
+                />
+
+            <ImageButton
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:id="@+id/contact_us"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_contact_us"
+                android:background="@android:color/transparent"
+                android:layout_toLeftOf="@id/about_us"
+                android:layout_marginRight="16dp"
+                />
+        </RelativeLayout>
+
+
+        </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/frame"
+        android:layout_weight="1"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="horizontal">
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/dashboard"
+            android:src="@drawable/ic_dashboard"
+            android:background="@android:color/transparent"
+            />
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/refill"
+            android:src="@drawable/ic_refill"
+            android:background="@android:color/transparent"
+            />
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/customer"
+            android:src="@drawable/ic_customer"
+            android:background="@android:color/transparent"
+            />
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/transaction"
+            android:src="@drawable/ic_transaction"
+            android:background="@android:color/transparent"
+            />
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/loyalty"
+            android:src="@drawable/ic_loyalty"
+            android:background="@android:color/transparent"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

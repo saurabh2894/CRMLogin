@@ -19,7 +19,7 @@ import android.content.Context;
 public class NewFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
-    Button addNew,repeat,existing,customer;
+    Button repeat,existing,customer;
 
     public NewFragment() {
         // Required empty public constructor
@@ -42,11 +42,11 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new, container, false);
         existing = (Button) rootView.findViewById(R.id.existing);
-        repeat = (Button) rootView.findViewById(R.id.repeat);
+        //repeat = (Button) rootView.findViewById(R.id.repeat);
         customer = (Button) rootView.findViewById(R.id.customer);
 
         existing.setOnClickListener(this);
-        repeat.setOnClickListener(this);
+       // repeat.setOnClickListener(this);
         customer.setOnClickListener(this);
         return rootView;
     }
@@ -82,9 +82,9 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         else if(view == customer){
             startActivity(new Intent(getActivity(),CustomerDetail.class));
         }
-        else if(view == repeat){
-            startActivity(new Intent(getActivity(),RefillListActivity.class));
-        }
+//        else if(view == repeat){
+//            startActivity(new Intent(getActivity(),RefillListActivity.class));
+//        }
     }
 
 

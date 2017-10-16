@@ -100,7 +100,9 @@
         android:layout_gravity="center_horizontal"
         android:text="add"
         android:padding="10dip"
-        android:background="@drawable/round_edittext"
+        android:background="@drawable/round_button"
+        android:textColor="#fff"
+        android:textSize="16dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"/>

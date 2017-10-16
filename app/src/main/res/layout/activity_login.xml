@@ -75,6 +75,8 @@
         android:layout_height="wrap_content"
         android:text=" Sign in"
         android:id="@+id/Signin"
+        android:textColor="#fff"
+        android:textSize="18dp"
         android:background = "@drawable/round_button"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="100dp"

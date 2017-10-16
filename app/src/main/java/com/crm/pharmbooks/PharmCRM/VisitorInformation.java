@@ -115,7 +115,7 @@ public class VisitorInformation extends AppCompatActivity {
                 String  itemValue    = (String) listView.getItemAtPosition(position);
 
                 // Show Alert
-                Toast.makeText(getApplicationContext(),"Position :"+(itemPosition+1)+"\nListItem : "+itemValue,Toast.LENGTH_LONG).show();
+               // Toast.makeText(getApplicationContext(),"Position :"+(itemPosition+1)+"\nListItem : "+itemValue,Toast.LENGTH_LONG).show();
 
             }
 

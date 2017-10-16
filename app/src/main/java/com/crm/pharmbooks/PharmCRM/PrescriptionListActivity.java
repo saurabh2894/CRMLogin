@@ -254,6 +254,11 @@ public class PrescriptionListActivity extends AppCompatActivity {
                                     expListView.setAdapter(listAdapter);
                                     SEARCH_FLAG=0;
                                     SearchBoxExistingRefill.setText("");
+                                    String str = listDataHeaderValue.get(getIndex());
+                                    String[] parts = str.split(" : ");
+                                    String number = parts[1];
+                                    sendDeleteParentRequest(number);
+                                    Log.d("deleting this ",number);
                                     listDataHeaderValue.remove(getIndex());
                                     listAdapter.notifyDataSetChanged();
                                     deletebtn.setVisibility(View.GONE);
@@ -351,6 +356,7 @@ public class PrescriptionListActivity extends AppCompatActivity {
                                 expListView.setAdapter(listAdapter);
                                 SEARCH_FLAG=0;
                                 SearchBoxExistingRefill.setText("");
+
                                 listDataHeaderValue.remove(getIndex());
                                 listAdapter.notifyDataSetChanged();
                                 deletebtn.setVisibility(View.GONE);
@@ -455,8 +461,8 @@ int res;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(PrescriptionListActivity.this,response,Toast.LENGTH_LONG).show();
-                    Toast.makeText(PrescriptionListActivity.this,msg+""+ res +"",Toast.LENGTH_LONG).show();
+                    //Toast.makeText(PrescriptionListActivity.this,response,Toast.LENGTH_LONG).show();
+                    //Toast.makeText(PrescriptionListActivity.this,msg+""+ res +"",Toast.LENGTH_LONG).show();
 
                 }
             },
@@ -510,8 +516,8 @@ int res;
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(PrescriptionListActivity.this,response,Toast.LENGTH_LONG).show();
-                        Toast.makeText(PrescriptionListActivity.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
+                        //Toast.makeText(PrescriptionListActivity.this,response,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(PrescriptionListActivity.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
 
                     }
                 },
@@ -674,7 +680,7 @@ int res;
                         Log.d("Value", listDataHeaderValue.get(i));
                         listAdaptersearch = new ExpandableListAdapter(PrescriptionListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
                         setAdapter(listAdaptersearch);
-                        sendDeleteParentRequest(number);
+
                         expListView.setAdapter(listAdaptersearch);
                     }
                 }

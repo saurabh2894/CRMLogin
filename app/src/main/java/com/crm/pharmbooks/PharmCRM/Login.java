@@ -103,8 +103,8 @@ public class Login extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(Login.this,response,Toast.LENGTH_LONG).show();
-                        Toast.makeText(Login.this,msg+""+ res +"",Toast.LENGTH_LONG).show();
+                        //Toast.makeText(Login.this,response,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(Login.this,msg+""+ res +"",Toast.LENGTH_LONG).show();
 
                     }
                 },

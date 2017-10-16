@@ -76,10 +76,10 @@ public class TransactionalMessage extends android.support.v4.app.Fragment implem
                     Name_var = Name.getText().toString();
                     MobileNo_var = MobileNo.getText().toString();
                     BillAmount_var = BillAmount.getText().toString();
-                    Toast.makeText(getActivity().getApplicationContext(), username, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity().getApplicationContext(), username, Toast.LENGTH_LONG).show();
                     sendR(Name_var, MobileNo_var, BillAmount_var);
                     // Sending the sms here
-                    //SendMsg sendMsg = new SendMsg(Name_var,MobileNo_var,BillAmount_var);
+                    SendMsg sendMsg = new SendMsg(Name_var,MobileNo_var,BillAmount_var);
 
 
                 }
@@ -151,8 +151,8 @@ public class TransactionalMessage extends android.support.v4.app.Fragment implem
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(getActivity().getApplicationContext(),response,Toast.LENGTH_LONG).show();
-                        Toast.makeText(getActivity().getApplicationContext(),msg+""+ result +"",Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getActivity().getApplicationContext(),response,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getActivity().getApplicationContext(),msg+""+ result +"",Toast.LENGTH_LONG).show();
 
 
                         //Dashboard switcing from here

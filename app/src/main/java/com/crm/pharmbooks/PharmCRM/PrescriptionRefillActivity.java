@@ -74,6 +74,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
     Toolbar toolbar;
     public static int LONG_CLICK_FLAG=0;
 //    ImageButton deletebtn;
+    public int SWAP_FLAG=0;
     private RefillAdapter rAdapter;
     EditText dboxMedDose;
    // public static int LONG_CLICK_FLAG=0;
@@ -139,6 +140,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(LONG_CLICK_FLAG==1) {
                     setContentView(R.layout.edit_dose_activity);
+                    SWAP_FLAG=1;
                     fab1=(FloatingActionButton)findViewById(R.id.sendReq);
                     fab1.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -153,7 +155,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                             }
 
                             sendRefillDataList(editModelList);
-                            Intent i = new Intent (PrescriptionRefillActivity.this,RefillListActivity.class);
+                            Intent i = new Intent (PrescriptionRefillActivity.this,MainActivity.class);
                             finish();
                             startActivity(i);
                             LONG_CLICK_FLAG = 0;
@@ -224,7 +226,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                 pos=position;
 
                 if(LONG_CLICK_FLAG==0){
-                //showCustomDialog(pos);
+                    Toast.makeText(PrescriptionRefillActivity.this,"Long Click and Select Items to refill",Toast.LENGTH_SHORT).show();
                 }
                 else{
                     RefillModel m = refillModelList.get(pos);
@@ -258,11 +260,26 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(LONG_CLICK_FLAG==1){
+        if(LONG_CLICK_FLAG==1&&SWAP_FLAG==0){
             LONG_CLICK_FLAG=0;
+            for(int i=0;i<refillModelList.size();i++) {
+                RefillModel m = refillModelList.get(pos);
+                if (m.getCheck()) {
+                    Log.d("pos of click", pos + "");
+
+                    m.setCheck(false);
+
+                }
+                refillModelList.remove(pos);
+                refillModelList.add(pos, m);
+                //rAdapter.notifyDataSetChanged();
+            }
             rAdapter.notifyDataSetChanged();
 //            deletebtn.setVisibility(View.GONE);
-        }else {
+        }else if(SWAP_FLAG==1){
+            super.onBackPressed();
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -398,7 +415,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                         }
 
                         Log.d("My tag 002","I was here bro!\nTu galat hai");
-                        Toast.makeText(PrescriptionRefillActivity.this,response,Toast.LENGTH_LONG).show();
+                       // Toast.makeText(PrescriptionRefillActivity.this,response,Toast.LENGTH_LONG).show();
                         fetchData(1);
                         //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
 
@@ -545,7 +562,7 @@ public class PrescriptionRefillActivity extends AppCompatActivity {
                 alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Write your code here to invoke NO event
-                        Toast.makeText(PrescriptionRefillActivity.this, "You clicked on NO", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(PrescriptionRefillActivity.this, "You clicked on NO", Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }
                 });

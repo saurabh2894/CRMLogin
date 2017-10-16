@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">serif</item>
+        <item name="android:actionOverflowButtonStyle">@style/OptionsMenu</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">true</item>
     </style>
@@ -17,4 +19,14 @@
     <style name="NumberPickerTextColorStyle">
     <item name="android:textColorPrimary">#000</item>
 </style>
+
+    <style name="NavigationViewStyle">
+        <item name="android:textSize">25sp</item>
+        <item name="android:listPreferredItemHeight">40dp</item>
+    </style>
+
+    <style name="OptionsMenu">
+        <item name="android:src">@drawable/ic_options_menu</item>
+    </style>
+
 </resources>

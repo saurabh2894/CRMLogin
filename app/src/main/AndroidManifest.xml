@@ -57,18 +57,18 @@
                 android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
         </activity>
         <activity android:name=".Login" />
-        <activity
-            android:name=".RefillListActivity"
+        <!--<activity-->
+            <!--android:name=".RefillListActivity"-->
+            <!--android:parentActivityName=".MainActivity">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />-->
+        <!--</activity>-->
+        <activity android:name=".PrescriptionRefillActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.crm.pharmbooks.PharmCRM.MainActivity" />
-        </activity>
-        <activity android:name=".PrescriptionRefillActivity"
-            android:parentActivityName=".RefillListActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.crm.pharmbooks.PharmCRM.RefillListActivity" /></activity>
+                android:value="com.crm.pharmbooks.PharmCRM.MainActivity" /></activity>
     </application>
 
 </manifest>

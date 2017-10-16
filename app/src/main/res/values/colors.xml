@@ -3,6 +3,7 @@
     <color name="colorPrimary">#27526f</color>
     <color name="colorPrimaryDark">#295068</color>
     <color name="colorAccent">#ff529cce</color>
+
     <color name="MName">#000000</color>
     <color name="CustomerName">#000000</color>
     <color name="MQuantity">#000000</color>

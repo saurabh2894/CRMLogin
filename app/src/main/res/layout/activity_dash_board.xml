@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/dashboard"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context="com.crm.pharmbooks.PharmCRM.DashBoard"
-        android:background="#ddd">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dashboard"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.crm.pharmbooks.PharmCRM.DashBoard"
+    android:background="#ddd">
+
 
         <LinearLayout
 
@@ -18,65 +20,179 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
 
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="115dp"
-                android:layout_gravity="center">
-
-                <Button
-                    android:id="@+id/NoOfCustomersToBeRefilled"
-                    android:layout_width="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="130dp"
+                android:layout_marginBottom="16dp"
+                >
+                <android.support.v7.widget.CardView
+                    android:layout_width="200dp"
                     android:layout_height="match_parent"
+                    android:elevation="50dp"
+                    android:background="#fff"
                     android:layout_weight="1"
-                    android:onClick="clickButton"
-                    android:tag="1"
-                    android:text="No Of Customers To Be Refilled"
-                    android:textSize="20sp" />
+                    android:shape="ring"
+                    android:layout_margin="4dp"
+                    android:innerRadius="0dp"
+                    android:thicknessRatio="1.9"
+                    app:cardCornerRadius="15dp"
 
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                    <Button
+                        android:id="@+id/NoOfCustomersToBeRefilled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                       android:background="@android:color/transparent"
+                        android:onClick="clickButton"
+                        android:layout_gravity="center"
+                        android:tag="1"
+                        android:text=""
+                        android:layout_weight="1"
+                        android:textSize="50sp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="No Of Customers To Be Refilled"
+                            android:textSize="20sp"
+                            android:padding="8dp"
+                            android:gravity="center"
+
+                            />
+                    </LinearLayout>
+</android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:elevation="50dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="15dp"
+                    android:layout_margin="4dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
                 <Button
                     android:id="@+id/NoOFCustomersOnboard"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:onClick="clickButton"
                     android:tag="2"
-                    android:text="No Of Customers Onboard"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="115dp"
-                android:layout_gravity="center">
-
-                <Button
-                    android:id="@+id/NoOfRepeatedCustomers"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:onClick="clickButton"
-                    android:tag="3"
+                    android:text=""
+                    android:background="@android:color/transparent"
+                    android:textSize="50sp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="No Of Customers On Board"
+                            android:textSize="20sp"
+                            android:padding="8dp"
+                            android:gravity="center"
+                            />
+                    </LinearLayout>
+</android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:elevation="50dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="15dp"
+                    android:layout_margin="4dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                    <Button
+                        android:id="@+id/NoOfRepeatedCustomers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:onClick="clickButton"
+                        android:tag="3"
+                        android:background="@android:color/transparent"
+                        android:text=" "
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:textSize="50sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="No Of Repeated Customers"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:padding="8dp"
+                    android:gravity="center"
+                    />
+            </LinearLayout>
+                </android.support.v7.widget.CardView>
 
-                <Button
-                    android:id="@+id/NoOfMedicinesRefilled"
-                    android:layout_width="match_parent"
+                <android.support.v7.widget.CardView
+                    android:layout_width="200dp"
                     android:layout_height="match_parent"
+                    android:elevation="50dp"
                     android:layout_weight="1"
-                    android:onClick="clickButton"
-                    android:tag="4"
-                    android:text="No of Medicines Refilled"
-                    android:textSize="20sp" />
+                    app:cardCornerRadius="15dp"
+                    android:layout_margin="4dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                    <Button
+                        android:id="@+id/NoOfMedicinesRefilled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:onClick="clickButton"
+                        android:tag="4"
+                        android:text=""
+                        android:textSize="50sp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="No Of Medicines To be Refilled"
+                            android:textSize="20sp"
+                            android:padding="8dp"
+                            android:gravity="center"
+                            />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
 
             </LinearLayout>
+
+            </HorizontalScrollView>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                >
 
-
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:elevation="50dp"
+                    app:cardCornerRadius="20dp"
+                    android:layout_weight="1"
+                    android:layout_marginRight="4dp"
+                    >
                 <Button
                     android:id="@+id/VisitInfo"
                     android:layout_width="match_parent"
@@ -84,10 +200,11 @@
                     android:layout_weight="1"
                     android:onClick="clickButton"
                     android:tag="4"
+                    android:background="#fff"
                     android:text="Visitor Information"
                     android:textSize="20sp"
                     />
-
+</android.support.v7.widget.CardView>
 
             </LinearLayout>
 
@@ -125,6 +242,16 @@
                     android:id="@+id/loadingtxt" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/empty_list">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="No Upcoming Refills in Next 5 Days"/>
+            </RelativeLayout>
 
                 <ExpandableListView
                     android:id="@+id/lvExp"

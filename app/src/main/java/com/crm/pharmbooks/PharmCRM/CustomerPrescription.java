@@ -335,9 +335,9 @@ public class CustomerPrescription extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(CustomerPrescription.this,response,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(CustomerPrescription.this,response,Toast.LENGTH_LONG).show();
                         fetchData(1);
-                        //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
+                        Toast.makeText(CustomerPrescription.this,"Item Edited",Toast.LENGTH_LONG).show();
 
                     }
                 },
@@ -439,9 +439,9 @@ public class CustomerPrescription extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(CustomerPrescription.this,response,Toast.LENGTH_LONG).show();
+                       // Toast.makeText(CustomerPrescription.this,response,Toast.LENGTH_LONG).show();
                         fetchData(1);
-                        //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
+                        Toast.makeText(CustomerPrescription.this,"Item Added",Toast.LENGTH_LONG).show();
 
                     }
                 },
@@ -540,9 +540,9 @@ public class CustomerPrescription extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(CustomerPrescription.this,response,Toast.LENGTH_LONG).show();
+                       // Toast.makeText(CustomerPrescription.this,response,Toast.LENGTH_LONG).show();
                         fetchData(1);
-                        //Toast.makeText(MedicineData.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
+                        Toast.makeText(CustomerPrescription.this,"Item Deleted",Toast.LENGTH_LONG).show();
 
                     }
                 },
@@ -735,7 +735,7 @@ public class CustomerPrescription extends AppCompatActivity {
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Write your code here to invoke NO event
-                Toast.makeText(CustomerPrescription.this, "You clicked on NO", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CustomerPrescription.this, "You clicked on NO", Toast.LENGTH_SHORT).show();
                 dialog.cancel();
             }
         });

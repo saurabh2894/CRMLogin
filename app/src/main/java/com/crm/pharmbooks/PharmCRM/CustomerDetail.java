@@ -83,7 +83,7 @@ public class CustomerDetail extends AppCompatActivity {
                     Matcher m = p.matcher(MobileNo_var);
                     boolean b = m.matches();
                     if (b) {
-                        Toast.makeText(CustomerDetail.this, "10 digits bingo", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(CustomerDetail.this, "10 digits bingo", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(CustomerDetail.this, MedicineData.class);
                         intent.putExtra("Name", String.valueOf(Name_var));
                         intent.putExtra("MobileNo", String.valueOf(MobileNo_var));
@@ -126,7 +126,7 @@ public class CustomerDetail extends AppCompatActivity {
         Matcher m = p.matcher(MobileNo_var);
         boolean b = m.matches();
         if(b){
-            Toast.makeText(CustomerDetail.this,"10 digits bingo",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(CustomerDetail.this,"10 digits bingo",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(CustomerDetail.this,MedicineData.class);
             intent.putExtra("Name", String.valueOf(Name_var));
             intent.putExtra("MobileNo", String.valueOf(MobileNo_var));
@@ -142,75 +142,6 @@ public class CustomerDetail extends AppCompatActivity {
     }
 
 
-
-    /*
-    public void sendR(final String Name_var, final String MobileNo_var, final String Address_var){
-
-
-        String url = "https://pharmcrm.herokuapp.com/api/save/";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        String msg = null;
-                        try {
-                            JSONObject object = new JSONObject(response);
-                            msg = object.getString("msg");
-                            result = object.getInt("res");
-                            if(result == 1)
-                            {
-
-                                SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedpreferences.edit();
-
-                                editor.putString("Name", String.valueOf(Name));
-                                editor.putString("MobileNo", String.valueOf(MobileNo));
-                                editor.putString("Address", String.valueOf(Address));
-                                editor.commit();
-
-                                Intent i = new Intent(getApplicationContext(),MedicineData.class);
-                                startActivity(i);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        Toast.makeText(CustomerDetail.this,response,Toast.LENGTH_LONG).show();
-                        Toast.makeText(CustomerDetail.this,msg+""+ result +"",Toast.LENGTH_LONG).show();
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(CustomerDetail.this,error.toString(),Toast.LENGTH_LONG).show();
-                    }
-                }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String, String> params = new HashMap<>();
-                //params.put("Cname",Name_var);
-                //params.put("Cnumber",MobileNo_var);
-                //params.put("Cadd",Address_var);
-                //params.put("chemist",username);
-
-                return params;
-            }
-
-        };
-
-        int MY_SOCKET_TIMEOUT_MS = 50000;
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                MY_SOCKET_TIMEOUT_MS,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-
-    }
-
-    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

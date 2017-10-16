@@ -46,6 +46,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/colorPrimary"
-        app:srcCompat="@drawable/send_refill"
+        app:srcCompat="@drawable/ic_send_req"
         />
 </android.support.design.widget.CoordinatorLayout>

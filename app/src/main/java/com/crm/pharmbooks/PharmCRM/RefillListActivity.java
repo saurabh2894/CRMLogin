@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,10 +13,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -44,15 +47,17 @@ import java.util.List;
 import java.util.Map;
 
 import Adapters.ExpandableListAdapter;
+import Adapters.ExpandableRefillListAdapter;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.crm.pharmbooks.PharmCRM.Login.MyPREFERENCES;
 
-public class RefillListActivity extends AppCompatActivity {
+public class RefillListActivity extends Fragment {
 
     static ArrayList<String> customer_number_list = new ArrayList<>();
     static ArrayList<String> customer_presc_list = new ArrayList<>();
     static ArrayList<String> customer_med_id_list = new ArrayList<>();
-    ExpandableListAdapter listAdapter;
+    ExpandableRefillListAdapter listAdapter;
     public static ArrayList<Integer> group_pos = new ArrayList<>();
     //public static ArrayList<Integer> child_pos = new ArrayList<>();
     public static HashMap<Integer,List<Integer>> child_pos = new HashMap<>();
@@ -70,25 +75,42 @@ public class RefillListActivity extends AppCompatActivity {
     private ImageButton searchicon;
     int SEARCH_FLAG=0;
     //public static int LONG_CLICK_FLAG=0,CHILDLONG_CLICK_FLAG=0;
-    ImageButton deletebtn;
+    //ImageButton deletebtn;
     //public static int pos,childpos,grouppos;
     //Vibrator vb;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_refill);
-        PrescriptionListActivity.ACTIVITY_FLAG="Refill";
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("");
-        getSupportActionBar().setTitle("");
-        TextView title = (TextView) toolbar.findViewById(R.id.title);
+    public RefillListActivity(){
+        //reqd. empty constructor
+    }
 
-        rl = (RelativeLayout) findViewById(R.id.rel);
-        pb = (ProgressBar) findViewById(R.id.pb);
-        txt = (TextView) findViewById(R.id.loadingtxt);
-        SearchBoxExistingRefill = (EditText) findViewById(R.id.SearchBoxExistingRefill);
+    public static RefillListActivity newInstance() {
+        RefillListActivity fragment = new RefillListActivity();
+        Bundle args = new Bundle();
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);}
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+
+        View rootView = inflater.inflate(R.layout.activity_refill, container, false);
+        PrescriptionListActivity.ACTIVITY_FLAG="Refill";
+
+        group_pos.clear();
+        child_pos.clear();
+        customer_number_list.clear();
+        customer_presc_list.clear();
+        customer_med_id_list.clear();
+        rl = (RelativeLayout) rootView.findViewById(R.id.rel);
+        pb = (ProgressBar) rootView.findViewById(R.id.pb);
+        txt = (TextView) rootView.findViewById(R.id.loadingtxt);
+        SearchBoxExistingRefill = (EditText) rootView.findViewById(R.id.SearchBoxExistingRefill);
         SearchBoxExistingRefill.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -100,7 +122,7 @@ public class RefillListActivity extends AppCompatActivity {
                 }
             }
         });
-        searchicon = (ImageButton) findViewById(R.id.searchicon);
+        searchicon = (ImageButton) rootView.findViewById(R.id.searchicon);
         searchicon.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -110,12 +132,12 @@ public class RefillListActivity extends AppCompatActivity {
         });
 
 
-        SharedPreferences sharedpreferences = this.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        SharedPreferences sharedpreferences = getActivity().getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         String restoredText = sharedpreferences.getString("username", null);
         if (restoredText != null) {
             username = sharedpreferences.getString("username", "No name defined");//"No name defined" is the default value.
         }
-        expListView = (ExpandableListView) findViewById(R.id.refillCustomerList);
+        expListView = (ExpandableListView) rootView.findViewById(R.id.refillCustomerList);
         expListView.setVisibility(View.GONE);
         searchicon.setVisibility(View.GONE);
         SearchBoxExistingRefill.setVisibility(View.GONE);
@@ -127,7 +149,7 @@ public class RefillListActivity extends AppCompatActivity {
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
 
 
-                    Intent intent = new Intent(RefillListActivity.this, PrescriptionRefillActivity.class);
+                    Intent intent = new Intent(getActivity(), PrescriptionRefillActivity.class);
                     intent.putExtra("presId", listPresId.get(listDataHeaderValue.get(groupPosition)).get(childPosition));
 
                     String str = listDataHeaderValue.get(groupPosition);
@@ -143,59 +165,60 @@ public class RefillListActivity extends AppCompatActivity {
         });
         fetchListData();
         fetchRequest();
-        listAdapter = new ExpandableListAdapter(this, listDataHeaderValue, listDataChild_PrescriptionValue);
+        listAdapter = new ExpandableRefillListAdapter(getActivity(), listDataHeaderValue, listDataChild_PrescriptionValue);
         expListView.setAdapter(listAdapter);
+        return rootView;
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//
+//
+//        ActionBar actionBar = ().getSupportActionBar();;
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//
+//        MenuInflater inflater = getMenuInflater();
+//        // inflater.inflate(R.menu.prescriptionlistactivityactionbar, menu);
+//        return true;
+//    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            // Respond to the action bar's Up/Home button
+//            case android.R.id.home:
+//                Intent upIntent = NavUtils.getParentActivityIntent(this);
+//                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+//                    // This activity is NOT part of this app's task, so create a new task
+//                    // when navigating up, with a synthesized back stack.
+//                    TaskStackBuilder.create(this)
+//                            // Add all of this activity's parents to the back stack
+//                            .addNextIntentWithParentStack(upIntent)
+//                            // Navigate up to the closest parent
+//                            .startActivities();
+//                } else {
+//                    // This activity is part of this app's task, so simply
+//                    // navigate up to the logical parent activity.
+//                    NavUtils.navigateUpTo(this, upIntent);
+//                }
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
-        ActionBar actionBar = getSupportActionBar();;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        MenuInflater inflater = getMenuInflater();
-        // inflater.inflate(R.menu.prescriptionlistactivityactionbar, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                Intent upIntent = NavUtils.getParentActivityIntent(this);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    // This activity is NOT part of this app's task, so create a new task
-                    // when navigating up, with a synthesized back stack.
-                    TaskStackBuilder.create(this)
-                            // Add all of this activity's parents to the back stack
-                            .addNextIntentWithParentStack(upIntent)
-                            // Navigate up to the closest parent
-                            .startActivities();
-                } else {
-                    // This activity is part of this app's task, so simply
-                    // navigate up to the logical parent activity.
-                    NavUtils.navigateUpTo(this, upIntent);
-                }
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        if(SEARCH_FLAG==1){
-            expListView.setAdapter(listAdapter);
-            SEARCH_FLAG=0;
-            SearchBoxExistingRefill.setText("");
-        }
-        else {
-            super.onBackPressed();
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//        if(SEARCH_FLAG==1){
+//            expListView.setAdapter(listAdapter);
+//            SEARCH_FLAG=0;
+//            SearchBoxExistingRefill.setText("");
+//        }
+//        else {
+//            super.onBackPressed();
+//        }
+//    }
    ////fetch Request
     public void fetchRequest() {
         //deletebtn.setVisibility(View.GONE);
@@ -207,12 +230,6 @@ public class RefillListActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        expListView.setVisibility(View.VISIBLE);
-                        searchicon.setVisibility(View.VISIBLE);
-                        SearchBoxExistingRefill.setVisibility(View.VISIBLE);
-                        rl.setVisibility(View.GONE);
-                        pb.setVisibility(View.GONE);
-                        txt.setVisibility(View.GONE);
 
                         try {
                             JSONArray jsonArray = new JSONArray(response);
@@ -249,7 +266,12 @@ public class RefillListActivity extends AppCompatActivity {
                                 }
                                 listDataChild_PrescriptionValue.put(listDataHeaderValue.get(groupPosition),prescriptionlistshow );
                                 listPresId.put(listDataHeaderValue.get(groupPosition),prescriptionlist );
-
+                                expListView.setVisibility(View.VISIBLE);
+                                searchicon.setVisibility(View.VISIBLE);
+                                SearchBoxExistingRefill.setVisibility(View.VISIBLE);
+                                rl.setVisibility(View.GONE);
+                                pb.setVisibility(View.GONE);
+                                txt.setVisibility(View.GONE);
                                 //Log.d("mytag",prescriptionlistshow+"");
                             }
                             Log.d("mytag",listDataChild_PrescriptionValue+"");
@@ -288,7 +310,7 @@ public class RefillListActivity extends AppCompatActivity {
                 MY_SOCKET_TIMEOUT_MS,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
 
     }
@@ -343,7 +365,7 @@ public class RefillListActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(RefillListActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(),error.toString(),Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
@@ -360,7 +382,7 @@ public class RefillListActivity extends AppCompatActivity {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        RequestQueue requestQueue = Volley.newRequestQueue(RefillListActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
     }
 
@@ -414,21 +436,21 @@ public class RefillListActivity extends AppCompatActivity {
                         listDataChild_PrescriptionValueSearch.put(listDataHeaderValue.get(i),listDataChild_PrescriptionValue.get(listDataHeaderValue.get(i)));
                         Log.d("index",i+"");
                         Log.d("Value", listDataHeaderValue.get(i));
-                        listAdaptersearch = new ExpandableListAdapter(RefillListActivity.this, listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
+                        listAdaptersearch = new ExpandableListAdapter(getActivity(), listDataHeaderSpaceSearch, listDataChild_PrescriptionValueSearch);
                         setAdapter(listAdaptersearch);
                         expListView.setAdapter(listAdaptersearch);
                     }
                 }
 
             }else{
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(RefillListActivity.this);
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                 alertDialog.setTitle("Oops...");
                 alertDialog.setMessage("This customer does not exist!\nDo you want to add this customer?");
                 alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                        startActivity(new Intent(RefillListActivity.this,CustomerDetail.class));
+                        getActivity().finish();
+                        startActivity(new Intent(getActivity(),CustomerDetail.class));
                     }
                 });
                 alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {

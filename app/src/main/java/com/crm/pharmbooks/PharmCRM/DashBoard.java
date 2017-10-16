@@ -59,10 +59,11 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
     HashMap<String, List<String>> listDataChild_Value;
     String Noofuserstoberefilled,Noofusers,Noofmedicines;
     ArrayList<String> visitinfolist = new ArrayList<String>();
-
+    int flag=0;
+    int noOfRepeatedCustomer=0;
     ProgressBar pb;
     TextView txt;
-    RelativeLayout rl;
+    RelativeLayout rl,r2;
 
 
     public DashBoard() {
@@ -109,6 +110,7 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
         View rootView = inflater.inflate(R.layout.activity_dash_board, container, false);
 
         rl=(RelativeLayout)rootView.findViewById(R.id.rel);
+        r2=(RelativeLayout)rootView.findViewById(R.id.empty_list);
         pb= (ProgressBar) rootView.findViewById(R.id.pb) ;
         txt=(TextView) rootView.findViewById(R.id.loadingtxt);
 
@@ -117,16 +119,19 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
         NoOfRepeatedCustomers = (Button) rootView.findViewById(R.id.NoOfRepeatedCustomers);
         NoOfMedicinesRefilled = (Button) rootView.findViewById(R.id.NoOfMedicinesRefilled);
         VisitInfo= (Button) rootView.findViewById(R.id.VisitInfo);
+        VisitInfo.setVisibility(View.GONE);
 
 
-
-
+        //r2.setVisibility(View.GONE);
         NoOfCustomersToBeRefilled.setOnClickListener(this);
         NoOFCustomersOnboard.setOnClickListener(this);
         NoOfRepeatedCustomers.setOnClickListener(this);
         NoOfMedicinesRefilled.setOnClickListener(this);
         VisitInfo.setOnClickListener(this);
-
+        NoOfCustomersToBeRefilled.setVisibility(View.GONE);
+        NoOFCustomersOnboard.setVisibility(View.GONE);
+        NoOfRepeatedCustomers.setVisibility(View.GONE);
+        NoOfMedicinesRefilled.setVisibility(View.GONE);
 
         boolean b =isNetworkAvailable();
         if(b==false){
@@ -205,6 +210,8 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                     JSONArray jsonArray = new JSONArray(response);
 
                     for(int groupPosition =0; groupPosition<jsonArray.length();groupPosition++) {
+
+
                         JSONObject object = jsonArray.getJSONObject(groupPosition);
                         String name = object.getString("custmorname");
                         String phone = object.getString("custmornumber");
@@ -213,7 +220,8 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                         JSONArray array1 = object.getJSONArray("data");
                         List<String> prescriptionlist = new ArrayList<String>();
                         for(int i=0;i<array1.length();i++) {
-
+                            flag=1;
+                            r2.setVisibility(View.GONE);
                             JSONObject dataobject = array1.getJSONObject(i);
                             String medicineName = dataobject.getString("medicinename");
                             String dosageenddate = dataobject.getString("dosageenddate");
@@ -229,6 +237,7 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                     Log.d("parent valuecheck",listDataHeaderValue+"");
                     Log.d("child valuecheck",listDataChild_Value+"");
                     listAdapter.notifyDataSetChanged();
+
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
@@ -258,6 +267,10 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
+//        if(flag==0){
+//            expListView.setVisibility(View.GONE);
+//            r2.setVisibility(View.VISIBLE);
+//        }
     }
 
     public void fetchDashboardData(){
@@ -285,12 +298,20 @@ public class DashBoard extends Fragment  implements View.OnClickListener{
                             String No_of_Visit = dataobject.getString("No_of_Visit");
 
                             visitinfolist.add("Customer Name: " +custmorname + "\nCustomer Number: " + custmornumber+ "\nNo of visit: " + No_of_Visit);
+                            if(Integer.parseInt(No_of_Visit)>1){
+                                noOfRepeatedCustomer++;
+                            }
 
                         }
 
-                        NoOfCustomersToBeRefilled.setText("No Of Customers To Be Refilled: "+Noofuserstoberefilled);
-                        NoOFCustomersOnboard.setText("No Of Customers On board: "+Noofusers);
-                        NoOfMedicinesRefilled.setText("No Of Medicines Refilled: "+Noofmedicines);
+                        NoOfCustomersToBeRefilled.setText(Noofuserstoberefilled);
+                        NoOFCustomersOnboard.setText(Noofusers);
+                        NoOfRepeatedCustomers.setText(noOfRepeatedCustomer+"");
+                        NoOfMedicinesRefilled.setText(Noofmedicines);
+                    NoOfCustomersToBeRefilled.setVisibility(View.VISIBLE);
+                    NoOFCustomersOnboard.setVisibility(View.VISIBLE);
+                    NoOfRepeatedCustomers.setVisibility(View.VISIBLE);
+                    NoOfMedicinesRefilled.setVisibility(View.VISIBLE);
                         Log.d("response",response+"");
                         Log.d("visitinfolist",visitinfolist+"");
 

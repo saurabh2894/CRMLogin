@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,13 +43,13 @@ import Model.RefillModel;
     public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView medName;
             public TextView medDose;
-            public Button inc,dec;
+            public ImageButton inc,dec;
             public MyViewHolder(View view) {
                 super(view);
                 medName = (TextView) view.findViewById(R.id.med_name);
                 medDose= (TextView) view.findViewById(R.id.med_dose);
-                inc = (Button)view.findViewById(R.id.increment);
-                dec = (Button)view.findViewById(R.id.decrement);
+                inc = (ImageButton)view.findViewById(R.id.increment);
+                dec = (ImageButton)view.findViewById(R.id.decrement);
 
             }
         }
